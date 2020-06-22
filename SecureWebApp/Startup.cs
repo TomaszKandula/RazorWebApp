@@ -1,52 +1,63 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SecureWebApp.Extensions.ConnectionService;
 
 namespace SecureWebApp
 {
+
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        public IConfiguration FConfiguration { get; }
+
+        public Startup(IConfiguration AConfiguration)
         {
-            Configuration = configuration;
+            FConfiguration = AConfiguration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection AServices)
         {
-            services.AddRazorPages();
+
+            // Add MVC
+            AServices.AddMvc(Option => Option.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            
+            AServices.AddRazorPages();
+
+            // Register (a'priori) connection service holding connection string(s) to database(s)
+            AServices.AddScoped<IConnectionService, ConnectionService>();
+
+            // Operational database
+            //AServices.AddDbContext<MainDbModel>();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder AApplication, IWebHostEnvironment AEnvironment)
         {
-            if (env.IsDevelopment())
+
+            if (AEnvironment.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                AApplication.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                AApplication.UseExceptionHandler("/Error");
             }
 
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            AApplication.UseStaticFiles();
+            AApplication.UseRouting();
+            AApplication.UseAuthorization();
+            AApplication.UseEndpoints(Endpoints =>
             {
-                endpoints.MapRazorPages();
+                Endpoints.MapRazorPages();
             });
+
         }
+
     }
+
 }

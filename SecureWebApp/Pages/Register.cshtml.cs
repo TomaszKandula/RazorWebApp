@@ -8,17 +8,20 @@ using Microsoft.Extensions.Logging;
 
 namespace SecureWebApp.Pages
 {
-    public class PrivacyModel : PageModel
-    {
-        private readonly ILogger<PrivacyModel> _logger;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+    public class RegisterModel : PageModel
+    {
+
+        public RegisterModel()
         {
-            _logger = logger;
+
         }
 
         public void OnGet()
         {
+
         }
+
     }
+
 }
