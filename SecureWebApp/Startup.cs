@@ -27,7 +27,8 @@ namespace SecureWebApp
             AServices.AddMvc(Option => Option.EnableEndpointRouting = false)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             
-            AServices.AddRazorPages();
+            // Add runtime compilation
+            AServices.AddRazorPages().AddRazorRuntimeCompilation();
 
             // Register (a'priori) connection service holding connection string(s) to database(s)
             AServices.AddScoped<IConnectionService, ConnectionService>();
@@ -52,6 +53,7 @@ namespace SecureWebApp
             AApplication.UseStaticFiles();
             AApplication.UseRouting();
             AApplication.UseAuthorization();
+            AApplication.UseBrowserLink();
             AApplication.UseEndpoints(Endpoints =>
             {
                 Endpoints.MapRazorPages();
