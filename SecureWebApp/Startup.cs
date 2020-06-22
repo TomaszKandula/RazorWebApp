@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SecureWebApp.Extensions.ConnectionService;
+using SecureWebApp.Models.Database;
 
 namespace SecureWebApp
 {
@@ -32,7 +33,7 @@ namespace SecureWebApp
             AServices.AddScoped<IConnectionService, ConnectionService>();
 
             // Operational database
-            //AServices.AddDbContext<MainDbModel>();
+            AServices.AddDbContext<MainDbContext>();
 
         }
 
