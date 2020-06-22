@@ -1,6 +1,16 @@
 ﻿@page
 @model RegisterModel
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+    }
+}
+
+
 <h1>@ViewData["Title"]</h1>
 
 

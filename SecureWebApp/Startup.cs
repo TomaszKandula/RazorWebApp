@@ -28,7 +28,11 @@ namespace SecureWebApp
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             
             // Add runtime compilation
-            AServices.AddRazorPages().AddRazorRuntimeCompilation();
+            AServices.AddRazorPages()
+                .AddRazorRuntimeCompilation();
+
+            // XSRF
+            AServices.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             // Register (a'priori) connection service holding connection string(s) to database(s)
             AServices.AddScoped<IConnectionService, ConnectionService>();

@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Service\" />
+  </ItemGroup>
+
 </Project>
