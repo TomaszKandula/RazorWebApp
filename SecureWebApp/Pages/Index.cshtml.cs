@@ -5,21 +5,35 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using SecureWebApp.Extensions.AppLogger;
+using SecureWebApp.Models.Database;
 
 namespace SecureWebApp.Pages
 {
+
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
+        private readonly IAppLogger    FAppLogger;
+        private readonly MainDbContext FMainDbContext;
+
+        public IndexModel(
+            IAppLogger    AAppLogger,
+            MainDbContext AMainDbContext
+        )
         {
-            _logger = logger;
+            FAppLogger     = AAppLogger;
+            FMainDbContext = AMainDbContext;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
 
+
+
+            return Page();
+
         }
+
     }
 }

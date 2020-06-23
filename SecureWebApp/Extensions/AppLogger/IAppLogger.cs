@@ -4,7 +4,7 @@
     /// <summary>
     /// Logger service that allows to store messages from application.
     /// </summary>
-    interface IAppLogger
+    public interface IAppLogger
     {
 
         /// <summary>
