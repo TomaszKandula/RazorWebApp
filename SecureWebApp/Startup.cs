@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SecureWebApp.Extensions.ConnectionService;
 using SecureWebApp.Models.Database;
+using SecureWebApp.Extensions.AppLogger;
+using SecureWebApp.Extensions.ConnectionService;
 
 namespace SecureWebApp
 {
@@ -33,6 +34,9 @@ namespace SecureWebApp
 
             // XSRF
             AServices.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
+
+            // Add logger service
+            AServices.AddSingleton<IAppLogger, AppLogger>();
 
             // Register (a'priori) connection service holding connection string(s) to database(s)
             AServices.AddScoped<IConnectionService, ConnectionService>();
