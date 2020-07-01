@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 using SecureWebApp.Extensions.AppLogger;
-using SecureWebApp.Models.Database;
 
 namespace SecureWebApp.Pages
 {
@@ -14,24 +9,25 @@ namespace SecureWebApp.Pages
     public class IndexModel : PageModel
     {
 
-        private readonly IAppLogger    FAppLogger;
-        private readonly MainDbContext FMainDbContext;
+        private readonly IAppLogger FAppLogger;
 
-        public IndexModel(
-            IAppLogger    AAppLogger,
-            MainDbContext AMainDbContext
-        )
+        public IndexModel(IAppLogger AAppLogger)
         {
-            FAppLogger     = AAppLogger;
-            FMainDbContext = AMainDbContext;
+            FAppLogger = AAppLogger;
         }
 
         public IActionResult OnGet()
         {
 
-
-
-            return Page();
+            try 
+            {
+                return Page();
+            }
+            catch (Exception E) 
+            {
+                FAppLogger.LogFatality("[IndexModel.OnGet]: an error has been thrown: " + E.Message + " (" + E.StackTrace + ").");
+                throw;
+            }
 
         }
 

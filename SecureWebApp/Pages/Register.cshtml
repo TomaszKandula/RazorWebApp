@@ -10,6 +10,133 @@
     }
 }
 
+<section>
 
-<h1>Register page here</h1>
+    <div class="container mt-6 mb-6">
 
+        <div class="columns is-mobile mt-6 mb-6">
+
+            <div class="column is-6 is-offset-3 box">
+
+                <div class="column is-8 is-offset-2">
+
+                    <div class="container mt-4">
+                        <h1 class="title">Signup Today!</h1>
+                        <h2 class="subtitle">The Ultimate Place</h2>
+                    </div>
+
+                    <!-- First name -->
+
+                    <div class="field mt-6">
+                        <label class="label">First name</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Min. 5 chars." pattern="[a-zA-Z0-9]+" minlength="5" maxlength="50" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Last name -->
+
+                    <div class="field mt-4">
+                        <label class="label">Last name</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Min. 5 chars." pattern="[a-zA-Z0-9]+" minlength="5" maxlength="50" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Nickname -->
+
+                    <div class="field mt-4">
+                        <label class="label">Nickname</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" type="text" placeholder="Min. 5 chars." pattern="[a-zA-Z0-9]+" minlength="5" maxlength="50" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Email address -->
+
+                    <div class="field mt-4">
+                        <label class="label">Email address</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" type="email" placeholder="Min. 5 chars." pattern="/\S+@@\S+\.\S+/" minlength="5" maxlength="255" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- User password -->
+
+                    <div class="field mt-4">
+                        <label class="label">Password</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input" type="password" placeholder="Min. 8 chars." minlength="8" maxlength="255" required>
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-key"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Country -->
+
+                    <div class="field mt-4">
+                        <label class="label">Country</label>
+                        <div class="control">
+                            <div class="select">
+                                <select>
+                                    @foreach (var Country in Model.CountryList)
+                                    {
+                                        <option value="@Country.Id">@Country.Name</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- City -->
+
+                    <div class="field mt-4">
+                        <label class="label">City</label>
+                        <div class="control">
+                            <div class="select">
+                                <select disabled>
+                                    <option value="">Select country</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+
+                    <div class="container mt-6 is-grouped">
+                        <div class="control">
+                            <button class="button is-info is-fullwidth" id="BtnSubmit">Create account</button>
+                        </div>
+                    </div>
+
+                    <!-- Terms of use -->
+
+                    <div class="field mt-6 mb-6 is-size-7">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            I accept the <a href="#" target="_blank">Terms of Service</a> and have read the <a a href="#" target="_blank">Services Privacy Policy</a>.
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

@@ -32,6 +32,9 @@ namespace SecureWebApp
             AServices.AddRazorPages()
                 .AddRazorRuntimeCompilation();
 
+            // Add API controllers
+            AServices.AddControllers();
+
             // XSRF
             AServices.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
@@ -65,6 +68,7 @@ namespace SecureWebApp
             AApplication.UseEndpoints(Endpoints =>
             {
                 Endpoints.MapRazorPages();
+                Endpoints.MapControllers();
             });
 
         }

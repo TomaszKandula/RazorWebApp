@@ -4,5 +4,127 @@
     ViewData["Title"] = "Home page";
 }
 
+<section class="hero is-medium is-info">
 
-<h1>Main page here</h1>
+    <div class="hero-body">
+
+        <div class="container">
+
+            <h1 class="title">
+                Example application in NET Core 3.1.
+            </h1>
+
+            <h2 class="subtitle">
+                Secure WebApp
+            </h2>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section">
+
+    <div class="container mt-3 mb-3">
+
+        <h1 class="title">The purpose</h1>
+
+        <h2 class="subtitle">
+            Why this has been created in first place?
+        </h2>
+
+        <p>
+            This simply web application has been built as an example of an application that is in compliance with security best practices describded in article
+            <a href="https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc" target="_blank">SQL Injection</a> posted on Medium.com. Therefore, following the guidance:
+        </p>
+
+        <div class="content">
+            <ol>
+                <li>
+                    User input is validated on the front-end and on the back-end.
+                </li>
+                <li>
+                    For any dynamic SQL, we use parameterization, so we do not concatenating SQL instructions with data.
+                </li>
+                <li>
+                    User password is hashed and salted with <a href="https://auth0.com/blog/hashing-in-action-understanding-bcrypt/" target="_blank">BCrypt</a>.
+                    We do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures, this would be the alternative approach, most likely implemented by DBA.
+                </li>
+            </ol>
+        </div>
+
+        <p>
+            Currently, this example application focuses more on the back-end than on the front-end. The CSS framework with no jQuery or JavaScript has been selected, so the custom plain JavaScript logic could be written manually.
+            More detailed explanation is written in project WikiPages.
+        </p>
+
+    </div>
+
+    <div class="is-divider"></div>
+
+    <div class="container mt-3 mb-3">
+
+        <h1 class="title">The example</h1>
+
+        <h2 class="subtitle">
+            How does it work?
+        </h2>
+
+        <p>
+            There are only three web pages. Register page allow to create new user account and login page allow to login to the given account. Once the account is created we display modal window with the confirmation.
+            However, if the user is logged, then we setup a 15 minutes session and redirect back to this page.
+        </p>
+        <p>
+            The example maybe later expanded.
+        </p>
+
+    </div>
+
+    <div class="is-divider"></div>
+
+    <div class="container mt-3 mb-3">
+
+        <h1 class="title">The technology</h1>
+
+        <h2 class="subtitle">
+            What has been used?
+        </h2>
+
+        <p>
+            Front-end:
+        </p>
+        <div class="content">
+            <ol class="is-upper-roman">
+                <li>
+                    Bulma CSS framework v.0.9.0 via CDN.
+                </li>
+                <li>
+                    Bulma divider 0.2.0 via CDN.
+                </li>
+                <li>
+                    Vanilla JavaScript with AJAX.
+                </li>
+                <li>
+                    WebPack module bundler.
+                </li>
+            </ol>
+        </div>
+
+        <p>
+            Back-end:
+        </p>
+        <div class="content">
+            <ol class="is-upper-roman">
+                <li>
+                    NET Core 3.1 / Razor Pages / C#.
+                </li>
+                <li>
+                    SQL Database / Entity Framework Core.
+                </li>
+            </ol>
+        </div>
+
+    </div>
+
+</section>

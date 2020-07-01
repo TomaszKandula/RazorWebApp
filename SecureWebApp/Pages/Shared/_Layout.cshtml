@@ -2,17 +2,15 @@
 <html lang="en">
 <head>
 
-    <!-- Basic -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@ViewData["Title"] - SecureWebApp</title>
+    <title>Secure Web App</title>
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@0.2.0/dist/css/bulma-divider.min.css" />
 
-    <!-- Scripts -->
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="~/dist/bundle.56b0b58310f712dad3e6.js"></script>
+    <script src="~/dist/bundle.324107e08bcdb86bc5d9.js"></script>
     <script src="~/dist/runtime.acfdeda3904d25c72cbb.js"></script>
     <script src="~/dist/vendors.dfc4e5cd770c3858d168.js"></script>
 
@@ -21,9 +19,45 @@
 
     <header>
 
+        <nav class="navbar">
+            <div class="container">
+
+                <div class="navbar-brand">
+
+                    <a class="navbar-item" href="../">
+                        <img src="~/images/app-logo.png" alt="Logo" width="112" height="80">
+                    </a>
+
+                    <span class="navbar-burger burger" data-target="navbarMenu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+
+                </div>
+
+                <div id="navbarMenu" class="navbar-menu">
+
+                    <div class="navbar-end">
+
+                        <div class="navbar-item">
+                            <div class="buttons">
+                                <a class="button is-info" asp-area="" asp-page="/Register"><strong>Sign up</strong></a>
+                                <a class="button is-light" asp-area="" asp-page="/Login">Log in</a>
+                                <a class="button is-light" style="display: none">Log out</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </nav>
+
     </header>
 
-    <div class="">
+    <div class="container">
 
         <main role="main" class="">
             @RenderBody()
@@ -31,10 +65,10 @@
 
     </div>
 
-    <footer class="">
+    <footer class="footer">
 
-        <div class="">
-            &copy; 2020 - SecureWebApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        <div class="content has-text-centered">
+            Example of web application in NET Core 3.1, the source code is available at <a href="https://github.com/TomaszKandula/SecureWebAapp">GitHub</a>.
         </div>
 
     </footer>

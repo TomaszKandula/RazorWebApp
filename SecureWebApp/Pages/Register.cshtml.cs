@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using SecureWebApp.Extensions.AppLogger;
+using SecureWebApp.Models.Views;
 using SecureWebApp.Models.Database;
 
 namespace SecureWebApp.Pages
@@ -19,7 +19,7 @@ namespace SecureWebApp.Pages
         private readonly MainDbContext FMainDbContext;
 
         [BindProperty]
-        public List<string> CountryList { get; set; }
+        public List<CountryList> CountryList { get; set; }
 
         public RegisterModel(
             IAppLogger    AAppLogger,
@@ -34,9 +34,18 @@ namespace SecureWebApp.Pages
         {
 
             try
-            { 
-                CountryList = await FMainDbContext.Countries.Select(R => R.CountryName).ToListAsync();
+            {
+                
+                CountryList = await FMainDbContext.Countries.Select(R => new CountryList() 
+                { 
+                    Id   = R.Id, 
+                    Name = R.CountryName 
+                })
+                .AsNoTracking()
+                .ToListAsync();
+                
                 return Page();
+            
             }
             catch (Exception E) 
             {
