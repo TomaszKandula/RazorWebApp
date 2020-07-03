@@ -1,4 +1,5 @@
-﻿"use strict";
+﻿
+"use strict";
 
 
 function IsEmpty(value)
@@ -15,8 +16,8 @@ function IsNumeric(n)
 
 function ValidateEmail(email)
 {
-    var re = /\S+@\S+\.\S+/;
-    return re.test(email);
+    var LRegex = /\S+@\S+\.\S+/;
+    return LRegex.test(email);
 };
 
 
@@ -97,6 +98,18 @@ function CleanBaseUrl()
 }
 
 
+function ClearSelectElement(SelectElement)
+{
+    var Index, Length = SelectElement.options.length - 1;
+
+    for (Index = Length; Index >= 0; Index--)
+    {
+        SelectElement.remove(Index);
+    }
+
+}
+
+
 export
 {
     FormatPhoneNumber,
@@ -106,5 +119,6 @@ export
     IsNumeric,
     IsEmpty,
     ValidateEmail,
-    CleanBaseUrl
+    CleanBaseUrl,
+    ClearSelectElement
 };

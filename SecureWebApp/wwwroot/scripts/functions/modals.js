@@ -1,4 +1,5 @@
-﻿"use strict";
+﻿
+"use strict";
 
 
 export default function CallModalWindow(ContentUrl, ModalText, ModalWindow)
@@ -16,8 +17,8 @@ export default function CallModalWindow(ContentUrl, ModalText, ModalWindow)
 
             var Response = this.response;
 
-            var GetModalWindow = document.querySelector("#" + ModalWindow);
-            var GetModalText   = document.querySelector("#" + ModalText);
+            var GetModalWindow = document.getElementById(ModalWindow);
+            var GetModalText   = document.getElementById(ModalText);
 
             GetModalText.innerHTML(Response);
             GetModalWindow.style.display = '';
@@ -25,7 +26,7 @@ export default function CallModalWindow(ContentUrl, ModalText, ModalWindow)
         }
         else
         {
-            console.log("Status: " + status + ". Ajax response:" + request.responseText);
+            console.log("Status: " + status + ". Server response:" + request.responseText);
         }
 
     };

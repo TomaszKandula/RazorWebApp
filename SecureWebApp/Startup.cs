@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using SecureWebApp.Models.Database;
+using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.ConnectionService;
+using System;
 
 namespace SecureWebApp
 {
@@ -24,28 +27,29 @@ namespace SecureWebApp
         public void ConfigureServices(IServiceCollection AServices)
         {
 
-            // Add MVC
-            AServices.AddMvc(Option => Option.EnableEndpointRouting = false)
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-            
-            // Add runtime compilation
-            AServices.AddRazorPages()
-                .AddRazorRuntimeCompilation();
+            AServices.AddMvc(Option => Option.CacheProfiles
+                .Add("RequestCache", new CacheProfile()
+                {
+                    Duration = 10,
+                    Location = ResponseCacheLocation.Any,
+                    NoStore = false
+                }));
 
-            // Add API controllers
+            AServices.AddMvc(Option => Option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            AServices.AddRazorPages().AddRazorRuntimeCompilation();
             AServices.AddControllers();
-
-            // XSRF
+            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(5));
             AServices.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
-            // Add logger service
+            AServices.AddSingleton<IDnsLookup, DnsLookup>();
             AServices.AddSingleton<IAppLogger, AppLogger>();
-
-            // Register (a'priori) connection service holding connection string(s) to database(s)
             AServices.AddScoped<IConnectionService, ConnectionService>();
-
-            // Operational database
             AServices.AddDbContext<MainDbContext>();
+
+            AServices.AddResponseCompression(Options =>
+            {
+                Options.Providers.Add<GzipCompressionProvider>();
+            });
 
         }
 
@@ -65,6 +69,7 @@ namespace SecureWebApp
             AApplication.UseRouting();
             AApplication.UseAuthorization();
             AApplication.UseBrowserLink();
+            AApplication.UseSession();
             AApplication.UseEndpoints(Endpoints =>
             {
                 Endpoints.MapRazorPages();

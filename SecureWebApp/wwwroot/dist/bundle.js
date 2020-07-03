@@ -1,0 +1,96 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["bundle"],{
+
+/***/ "./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./styles/site.scss":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./styles/site.scss ***!
+  \*******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ \"./node_modules/css-loader/dist/runtime/api.js\")(false);\n// Module\nexports.push([module.i, \"ol {\\n  list-style-type: none;\\n  counter-reset: item;\\n  margin: 0;\\n  padding: 0; }\\n\\nol > li {\\n  display: table;\\n  counter-increment: item;\\n  margin-bottom: 0.6em; }\\n\\nol > li:before {\\n  content: counters(item, \\\".\\\") \\\". \\\";\\n  display: table-cell;\\n  padding-right: 0.6em; }\\n\\nli ol > li {\\n  margin: 0; }\\n\\nli ol > li:before {\\n  content: counters(item, \\\".\\\") \\\" \\\"; }\\n\\nnav.navbar {\\n  height: 6rem !important;\\n  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important; }\\n\", \"\"]);\n\n\n\n//# sourceURL=webpack:///./styles/site.scss?./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js");
+
+/***/ }),
+
+/***/ "./scripts/functions/ajax.js":
+/*!***********************************!*\
+  !*** ./scripts/functions/ajax.js ***!
+  \***********************************/
+/*! exports provided: ValidateEmailAddress, GetCityList */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ValidateEmailAddress\", function() { return ValidateEmailAddress; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"GetCityList\", function() { return GetCityList; });\n/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ \"./scripts/functions/helpers.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nfunction ValidateEmailAddress(EmailAddress, Handle, OkIcon, ErrIcon)\r\n{\r\n\r\n    var Handler   = document.getElementById(Handle);\r\n    var Verified  = document.getElementById(OkIcon);\r\n    var Malformed = document.getElementById(ErrIcon);\r\n\r\n    Verified.style.display  = \"visibility\";\r\n    Malformed.style.display = \"visibility\";\r\n    Handler.classList.add(\"is-loading\");\r\n\r\n    if (!_helpers__WEBPACK_IMPORTED_MODULE_0__[\"IsEmpty\"](EmailAddress) && _helpers__WEBPACK_IMPORTED_MODULE_0__[\"ValidateEmail\"](EmailAddress))\r\n    {\r\n\r\n        var Url = window.location.origin + \"/api/v1/ajax/validation/\" + EmailAddress + \"/\";\r\n        var Request = new XMLHttpRequest();\r\n\r\n        Request.open('GET', Url, true);\r\n        Request.onload = function ()\r\n        {\r\n\r\n            Handler.classList.remove(\"is-loading\");\r\n\r\n            if (this.status == 200)\r\n            {\r\n\r\n                var Parsed = JSON.parse(this.response);\r\n\r\n                if (Parsed.IsEmailValid)\r\n                {\r\n                    Verified.style.visibility  = \"visible\";\r\n                    Malformed.style.visibility = \"hidden\";\r\n                }\r\n                else\r\n                {\r\n                    Verified.style.visibility  = \"hidden\";\r\n                    Malformed.style.visibility = \"visible\";\r\n                }\r\n\r\n            }\r\n            else\r\n            {\r\n                Verified.style.visibility  = \"hidden\";\r\n                Malformed.style.visibility = \"hidden\";\r\n                alert(\"Status: \" + status + \". Server response:\" + request.responseText);\r\n            }\r\n\r\n        };\r\n\r\n        Request.onerror = function ()\r\n        {\r\n            Handler.classList.remove(\"is-loading\");\r\n            Verified.style.visibility  = \"hidden\";\r\n            Malformed.style.visibility = \"visible\";\r\n            alert(\"An error has occurred during the processing.\");\r\n        };\r\n\r\n        Request.send();\r\n\r\n    }\r\n    else\r\n    {\r\n        Handler.classList.remove(\"is-loading\");\r\n        Verified.style.visibility  = \"hidden\";\r\n        Malformed.style.visibility = \"hidden\";\r\n    }\r\n\r\n}\r\n\r\n\r\nfunction GetCityList(SelectedCountryId, TargetHandle, TargetSelect)\r\n{\r\n\r\n    var Handler  = document.getElementById(TargetHandle);\r\n    var Selector = document.getElementById(TargetSelect);\r\n\r\n    var Url = window.location.origin + \"/api/v1/ajax/cities/\" + SelectedCountryId + \"/\";\r\n    var Request = new XMLHttpRequest();\r\n\r\n    Handler.classList.add(\"is-loading\");\r\n\r\n    Request.open('GET', Url, true);\r\n    Request.onload = function ()\r\n    {\r\n\r\n        Handler.classList.remove(\"is-loading\");\r\n\r\n        if (this.status == 200)\r\n        {\r\n\r\n            _helpers__WEBPACK_IMPORTED_MODULE_0__[\"ClearSelectElement\"](Selector);\r\n            var Parsed = JSON.parse(this.response);\r\n\r\n            for (var Index = 0; Index < Parsed.Cities.length; Index++)\r\n            {\r\n\r\n                var City = Parsed.Cities[Index];\r\n                var Option = document.createElement(\"option\");\r\n\r\n                Option.value = City.id;\r\n                Option.innerHTML = City.name;\r\n                Selector.appendChild(Option);\r\n\r\n            }\r\n\r\n            Selector.removeAttribute(\"disabled\");\r\n            Selector.selectedIndex = 0;\r\n\r\n        }\r\n        else\r\n        {\r\n            alert(\"Status: \" + status + \". Server response:\" + request.responseText);\r\n        }\r\n\r\n    }\r\n\r\n    Request.onerror = function ()\r\n    {\r\n        Handler.classList.remove(\"is-loading\");\r\n        alert(\"An error has occurred during the processing.\");\r\n    }\r\n\r\n    Request.send();\r\n\r\n}\r\n\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./scripts/functions/ajax.js?");
+
+/***/ }),
+
+/***/ "./scripts/functions/helpers.js":
+/*!**************************************!*\
+  !*** ./scripts/functions/helpers.js ***!
+  \**************************************/
+/*! exports provided: FormatPhoneNumber, HasSpecialChar, HasLowerCase, HasUpperCase, IsNumeric, IsEmpty, ValidateEmail, CleanBaseUrl, ClearSelectElement */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"FormatPhoneNumber\", function() { return FormatPhoneNumber; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"HasSpecialChar\", function() { return HasSpecialChar; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"HasLowerCase\", function() { return HasLowerCase; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"HasUpperCase\", function() { return HasUpperCase; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"IsNumeric\", function() { return IsNumeric; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"IsEmpty\", function() { return IsEmpty; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ValidateEmail\", function() { return ValidateEmail; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"CleanBaseUrl\", function() { return CleanBaseUrl; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ClearSelectElement\", function() { return ClearSelectElement; });\n﻿\r\n\r\n\r\n\r\nfunction IsEmpty(value)\r\n{\r\n    return typeof value === 'string' && !value.trim() || typeof value === undefined || value === null;\r\n};\r\n\r\n\r\nfunction IsNumeric(n)\r\n{\r\n    return !isNaN(parseFloat(n)) && isFinite(n);\r\n};\r\n\r\n\r\nfunction ValidateEmail(email)\r\n{\r\n    var LRegex = /\\S+@\\S+\\.\\S+/;\r\n    return LRegex.test(email);\r\n};\r\n\r\n\r\nfunction FormatPhoneNumber(Number)\r\n{\r\n    Number = Number.replace(/[^\\d]+/g, '').replace(/(\\d{2})(\\d{3})(\\d{3})(\\d{3})/, '($1) $2 $3 $4');\r\n\r\n    if (isEmpty(Number))\r\n    {\r\n        return false;\r\n    }\r\n    else\r\n    {\r\n        return Number;\r\n    };\r\n\r\n};\r\n\r\n\r\nfunction HasLowerCase(str)\r\n{\r\n    if (str.toUpperCase() != str)\r\n    {\r\n        return true;\r\n    }\r\n\r\n    return false;\r\n}\r\n\r\n\r\nfunction HasUpperCase(str)\r\n{\r\n    if (str.toLowerCase() != str)\r\n    {\r\n        return true;\r\n    }\r\n\r\n    return false;\r\n}\r\n\r\n\r\nfunction HasSpecialChar(str)\r\n{\r\n    var format = /[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]/;\r\n\r\n    if (format.test(str))\r\n    {\r\n        return true;\r\n    }\r\n    else\r\n    {\r\n        return false;\r\n    }\r\n\r\n}\r\n\r\nfunction CleanBaseUrl()\r\n{\r\n    var CurrentUrl = window.location.href;\r\n    var Check = 0;\r\n    var BaseUrl = \"\";\r\n\r\n    for (var iCNT = 0; iCNT <= CurrentUrl.length; iCNT++)\r\n    {\r\n        BaseUrl = CurrentUrl.charAt(iCNT);\r\n        if (BaseUrl.charAt(iCNT) === \"/\")\r\n        {\r\n            Check++;\r\n            if (Check === 2)\r\n            {\r\n                break;\r\n            };\r\n        };\r\n    }\r\n\r\n    return BaseUrl;\r\n\r\n}\r\n\r\n\r\nfunction ClearSelectElement(SelectElement)\r\n{\r\n    var Index, Length = SelectElement.options.length - 1;\r\n\r\n    for (Index = Length; Index >= 0; Index--)\r\n    {\r\n        SelectElement.remove(Index);\r\n    }\r\n\r\n}\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./scripts/functions/helpers.js?");
+
+/***/ }),
+
+/***/ "./scripts/functions/modals.js":
+/*!*************************************!*\
+  !*** ./scripts/functions/modals.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return CallModalWindow; });\n﻿\r\n\r\n\r\n\r\nfunction CallModalWindow(ContentUrl, ModalText, ModalWindow)\r\n{\r\n\r\n    var Url = window.location.origin + ContentUrl;\r\n    var Request = new XMLHttpRequest();\r\n\r\n    Request.open('GET', Url, true);\r\n    Request.onload = function ()\r\n    {\r\n\r\n        if (this.status >= 200 && this.status < 400)\r\n        {\r\n\r\n            var Response = this.response;\r\n\r\n            var GetModalWindow = document.getElementById(ModalWindow);\r\n            var GetModalText   = document.getElementById(ModalText);\r\n\r\n            GetModalText.innerHTML(Response);\r\n            GetModalWindow.style.display = '';\r\n\r\n        }\r\n        else\r\n        {\r\n            console.log(\"Status: \" + status + \". Server response:\" + request.responseText);\r\n        }\r\n\r\n    };\r\n\r\n    Request.onerror = function ()\r\n    {\r\n        console.log(\"An error has occurred during the processing.\");\r\n    };\r\n\r\n    Request.send();\r\n\r\n}\r\n\n\n//# sourceURL=webpack:///./scripts/functions/modals.js?");
+
+/***/ }),
+
+/***/ "./scripts/functions/validation.js":
+/*!*****************************************!*\
+  !*** ./scripts/functions/validation.js ***!
+  \*****************************************/
+/*! exports provided: ValidateEditTextField, ValidatePasswordField */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ValidateEditTextField\", function() { return ValidateEditTextField; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"ValidatePasswordField\", function() { return ValidatePasswordField; });\n/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ \"./scripts/functions/helpers.js\");\n﻿\r\n\r\n\r\n\r\n\r\n\r\n\r\nfunction ValidateEditTextField(Value, OkIcon, ErrIcon)\r\n{\r\n\r\n    var Verified  = document.getElementById(OkIcon);\r\n    var Malformed = document.getElementById(ErrIcon);\r\n\r\n    if (_helpers__WEBPACK_IMPORTED_MODULE_0__[\"IsEmpty\"](Value))\r\n    {\r\n        Verified.style.visibility  = \"hidden\";\r\n        Malformed.style.visibility = \"visible\";\r\n    }\r\n    else\r\n    {\r\n        Verified.style.visibility  = \"visible\";\r\n        Malformed.style.visibility = \"hidden\";\r\n    }\r\n\r\n}\r\n\r\n\r\nfunction ValidatePasswordField(Value, OkIcon, ErrIcon)\r\n{\r\n\r\n\r\n\r\n\r\n};\r\n\r\n\r\n\r\n\n\n//# sourceURL=webpack:///./scripts/functions/validation.js?");
+
+/***/ }),
+
+/***/ "./scripts/site.js":
+/*!*************************!*\
+  !*** ./scripts/site.js ***!
+  \*************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _functions_validation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions/validation */ \"./scripts/functions/validation.js\");\n/* harmony import */ var _functions_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./functions/modals */ \"./scripts/functions/modals.js\");\n/* harmony import */ var _functions_ajax__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./functions/ajax */ \"./scripts/functions/ajax.js\");\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\ndocument.addEventListener('DOMContentLoaded', () => Initialize());\r\n\r\n\r\nfunction Initialize()\r\n{\r\n\r\n    const IsLoginPage    = document.getElementById(\"LoginForm\");\r\n    const IsRegisterPage = document.getElementById(\"RegisterForm\");\r\n\r\n    if (IsLoginPage)\r\n    {\r\n\r\n    }\r\n\r\n    if (IsRegisterPage)\r\n    {\r\n\r\n        const FirstNameInput = document.getElementById(\"Input_FirstName\");\r\n        FirstNameInput.addEventListener(\"change\", (event) =>\r\n        {\r\n            const Icon_Ok  = \"OK_FirstName\";\r\n            const Icon_Err = \"ERR_FirstName\";\r\n            _functions_validation__WEBPACK_IMPORTED_MODULE_0__[\"ValidateEditTextField\"](event.target.value, Icon_Ok, Icon_Err);\r\n        });\r\n\r\n        const LastNameInput = document.getElementById(\"Input_LastName\");\r\n        LastNameInput.addEventListener(\"change\", (event) =>\r\n        {\r\n            const Icon_Ok  = \"OK_LastName\";\r\n            const Icon_Err = \"ERR_LastName\";\r\n            _functions_validation__WEBPACK_IMPORTED_MODULE_0__[\"ValidateEditTextField\"](event.target.value, Icon_Ok, Icon_Err);\r\n        });\r\n\r\n        const NicknameInput = document.getElementById(\"Input_Nickname\");\r\n        NicknameInput.addEventListener(\"change\", (event) =>\r\n        {\r\n            const Icon_Ok  = \"OK_Nickname\";\r\n            const Icon_Err = \"ERR_Nickname\";\r\n            _functions_validation__WEBPACK_IMPORTED_MODULE_0__[\"ValidateEditTextField\"](event.target.value, Icon_Ok, Icon_Err);\r\n        });\r\n\r\n        const EmailAddressInput = document.getElementById(\"Input_EmailAddress\");\r\n        EmailAddressInput.onkeyup = function()\r\n        {\r\n            const TargetHandler = \"Handle_EmailAddress\";\r\n            const Icon_Ok       = \"OK_EmailAddress\";\r\n            const Icon_NonOk    = \"ERR_EmailAddress\";\r\n            _functions_ajax__WEBPACK_IMPORTED_MODULE_2__[\"ValidateEmailAddress\"](EmailAddressInput.value, TargetHandler, Icon_Ok, Icon_NonOk);\r\n        };\r\n\r\n        const PasswordInput = document.getElementById(\"Input_Password\");\r\n        PasswordInput.addEventListener(\"change\", (event) =>\r\n        {\r\n            const Icon_Ok  = \"OK_Password\";\r\n            const Icon_Err = \"ERR_Password\";\r\n            _functions_validation__WEBPACK_IMPORTED_MODULE_0__[\"ValidatePasswordField\"](event.target.value, Icon_Ok, Icon_Err);\r\n        });\r\n\r\n        const CountryListSelect = document.getElementById(\"Select_CountryList\");\r\n        CountryListSelect.addEventListener(\"change\", (event) => \r\n        {\r\n            const TargetSelector = \"Select_CityList\";\r\n            const TargetHandler  = \"Handle_CityList\";\r\n            _functions_ajax__WEBPACK_IMPORTED_MODULE_2__[\"GetCityList\"](event.target.value, TargetHandler, TargetSelector);\r\n        });\r\n\r\n        const CountryList = document.getElementById(\"Select_CityList\");\r\n        CountryList.selectedIndex = 0;\r\n        CountryList.disabled = true;\r\n\r\n        const TermsCheckbox = document.getElementById(\"Handle_TermsCheckbox\");\r\n        TermsCheckbox.addEventListener(\"click\", function()\r\n        {\r\n\r\n            if (this.checked)\r\n            {\r\n                document.getElementById(\"Button_CreateAccount\").disabled = false;\r\n            }\r\n            else\r\n            {\r\n                document.getElementById(\"Button_CreateAccount\").disabled = true;\r\n            }\r\n\r\n        });\r\n\r\n        const CreateAccountButton = document.getElementById(\"Button_CreateAccount\");\r\n        CreateAccountButton.addEventListener(\"click\", function ()\r\n        {\r\n            // ...ajax call\r\n        });\r\n\r\n    }\r\n\r\n}\r\n\n\n//# sourceURL=webpack:///./scripts/site.js?");
+
+/***/ }),
+
+/***/ "./styles/site.scss":
+/*!**************************!*\
+  !*** ./styles/site.scss ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("\nvar content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js!../node_modules/sass-loader/dist/cjs.js!./site.scss */ \"./node_modules/css-loader/dist/cjs.js!./node_modules/sass-loader/dist/cjs.js!./styles/site.scss\");\n\nif(typeof content === 'string') content = [[module.i, content, '']];\n\nvar transform;\nvar insertInto;\n\n\n\nvar options = {\"hmr\":true}\n\noptions.transform = transform\noptions.insertInto = undefined;\n\nvar update = __webpack_require__(/*! ../node_modules/style-loader/lib/addStyles.js */ \"./node_modules/style-loader/lib/addStyles.js\")(content, options);\n\nif(content.locals) module.exports = content.locals;\n\nif(false) {}\n\n//# sourceURL=webpack:///./styles/site.scss?");
+
+/***/ }),
+
+/***/ 0:
+/*!**************************************************!*\
+  !*** multi ./styles/site.scss ./scripts/site.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! ./styles/site.scss */\"./styles/site.scss\");\nmodule.exports = __webpack_require__(/*! ./scripts/site.js */\"./scripts/site.js\");\n\n\n//# sourceURL=webpack:///multi_./styles/site.scss_./scripts/site.js?");
+
+/***/ })
+
+},[[0,"runtime","vendors"]]]);

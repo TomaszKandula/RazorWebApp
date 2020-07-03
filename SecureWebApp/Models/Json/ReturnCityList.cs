@@ -1,18 +1,20 @@
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using SecureWebApp.Models.Views;
 
 namespace SecureWebApp.Models.Json
 {
-    
-    public class EmailValidation
+
+    public class ReturnCityList
     {
 
-        [JsonPropertyName("IsEmailValid")]
-        public bool IsEmailValid { get; set; }
+        [JsonPropertyName("Cities")]
+        public List<CityList> Cities { get; set; }
 
         [JsonPropertyName("Error")]
         public ErrorHandler Error { get; set; }
 
-        public EmailValidation()
+        public ReturnCityList()
         {
             Error = new ErrorHandler();
         }

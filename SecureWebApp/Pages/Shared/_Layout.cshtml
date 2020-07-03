@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-divider@0.2.0/dist/css/bulma-divider.min.css" />
 
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
-    <script src="~/dist/bundle.324107e08bcdb86bc5d9.js"></script>
-    <script src="~/dist/runtime.acfdeda3904d25c72cbb.js"></script>
-    <script src="~/dist/vendors.dfc4e5cd770c3858d168.js"></script>
+    <script src="~/dist/bundle.js"></script>
+    <script src="~/dist/runtime.js"></script>
+    <script src="~/dist/vendors.js"></script>
 
 </head>
 <body>
@@ -74,6 +74,19 @@
     </footer>
 
     @RenderSection("Scripts", required: false)
+
+    @*<script>
+
+        if (document.getElementById("EmailAddress"))
+        {
+            console.log("exists");
+        }
+        else
+        {
+            console.log("null");
+        }
+
+    </script>*@
 
 </body>
 </html>
