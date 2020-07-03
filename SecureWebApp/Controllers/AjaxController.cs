@@ -10,6 +10,7 @@ using SecureWebApp.Models.Views;
 using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.DnsLookup;
+using System.Collections.Generic;
 
 namespace SecureWebApp.Controllers
 {
@@ -35,7 +36,8 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// Parse given email address.
+        /// Parse given email address using MailAddress class provided in NET Core.
+        /// This is alternative approach to classic RegEx.
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
@@ -53,7 +55,26 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// Validate supplied email address. It checks format and email domain, and if it is already registered in database.
+        /// Check if given email address aready exists.
+        /// </summary>
+        /// <param name="AEmailAddress"></param>
+        /// <returns></returns>
+        public async Task<bool> IsEmailAddressExist(string AEmailAddress) 
+        {
+
+            var LEmailList = await FMainDbContext.Users
+                .AsNoTracking()
+                .Where(R => R.EmailAddr == AEmailAddress)
+                .Select(R => R.EmailAddr)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return LEmailList.Any();
+
+        }
+
+        /// <summary>
+        /// Endpoint validating supplied email address. It checks format and email domain, and if it is already registered in database.
         /// </summary>
         /// <param name="EmailAddress"></param>
         /// <returns></returns>
@@ -73,14 +94,8 @@ namespace SecureWebApp.Controllers
                     FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, EResponse.Error.ErrorDesc));
                     return StatusCode(200, EResponse);
                 }
-
-                var EmailList = await FMainDbContext.Users
-                    .AsNoTracking()
-                    .Where(R => R.EmailAddr == EmailAddress)
-                    .Select(R => R.EmailAddr)
-                    .ToListAsync();
-                
-                if (EmailList.Any()) 
+               
+                if (await IsEmailAddressExist(EmailAddress)) 
                 {
                     EResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     EResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
@@ -113,6 +128,29 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Return list of cities for given Country Id.
         /// </summary>
+        /// <param name="AId"></param>
+        /// <returns></returns>
+        public async Task<List<CityList>> ReturnCityList(int AId) 
+        {
+
+            var LCities = await FMainDbContext.Cities
+                .AsNoTracking()
+                .Where(R => R.CountryId == AId)
+                .Select(R => new CityList()
+                {
+                    Id = R.Id,
+                    Name = R.CityName
+                })
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            return LCities;
+
+        }
+
+        /// <summary>
+        /// Endpoint returning list of cities for given Country Id in JSON format.
+        /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
         // GET api/v1/ajax/cities/{id}/
@@ -123,20 +161,8 @@ namespace SecureWebApp.Controllers
             var EResponse = new ReturnCityList();
             try 
             {
-
-                var Cities = await FMainDbContext.Cities
-                    .AsNoTracking()
-                    .Where(R => R.CountryId == Id)
-                    .Select(R => new CityList() 
-                    { 
-                        Id   = R.Id, 
-                        Name = R.CityName 
-                    })
-                    .ToListAsync();
-
-                EResponse.Cities = Cities;
+                EResponse.Cities = await ReturnCityList(Id);
                 return StatusCode(200, EResponse);
-
             } 
             catch (Exception E)
             {

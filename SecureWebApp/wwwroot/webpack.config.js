@@ -8,8 +8,8 @@ const config =
 	{
         bundle: 
 		[
-            './styles/site.scss',
-            './scripts/site.js'
+            './styles/main.scss',
+            './scripts/startup.js'
         ]
     },
   
