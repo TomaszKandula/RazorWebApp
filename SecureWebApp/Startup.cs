@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.ConnectionService;
-using System;
 
 namespace SecureWebApp
 {
