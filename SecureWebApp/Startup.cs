@@ -28,9 +28,9 @@ namespace SecureWebApp
         {
 
             AServices.AddMvc(Option => Option.CacheProfiles
-                .Add("RequestCache", new CacheProfile()
+                .Add("ResponseCache", new CacheProfile()
                 {
-                    Duration = 10,
+                    Duration = 5,
                     Location = ResponseCacheLocation.Any,
                     NoStore = false
                 }));

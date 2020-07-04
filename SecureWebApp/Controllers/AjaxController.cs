@@ -17,6 +17,7 @@ namespace SecureWebApp.Controllers
 
     [Route("api/v1/[controller]")]
     [ApiController]
+    [ResponseCache(CacheProfileName = "ResponseCache")]
     public class AjaxController : Controller
     {
 
