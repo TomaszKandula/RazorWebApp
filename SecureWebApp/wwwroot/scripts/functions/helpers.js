@@ -60,11 +60,11 @@ function HasUpperCase(AText)
 }
 
 
-function HasSpecialChar(str)
+function HasSpecialChar(AText)
 {
     let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-    if (LFormat.test(str))
+    if (LFormat.test(AText))
     {
         return true;
     }

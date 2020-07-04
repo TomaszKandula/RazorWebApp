@@ -1,4 +1,4 @@
-// Startup module
+// Startup module to cache DOM and bind events
 
 "use strict"
 

@@ -85,6 +85,11 @@ namespace SecureWebApp.Models.Database
                     .IsUnicode(false)
                     .IsFixedLength();
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .IsUnicode(false)
+                    .HasMaxLength(255);
+
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Users)
                     .HasForeignKey(d => d.CityId)

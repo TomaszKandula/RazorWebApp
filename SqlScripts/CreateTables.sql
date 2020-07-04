@@ -28,6 +28,7 @@ create table Users
     NickName    nvarchar(255) not null,
     EmailAddr   varchar(255) not null,
     PhoneNum    char(15) not null,
+    Password    varchar(255) not null,
     CONSTRAINT PK__Id__Users PRIMARY KEY (Id),
     CONSTRAINT UQ__EmailAddr__Users UNIQUE (EmailAddr),
     CONSTRAINT FK__CountryId__Users FOREIGN KEY (CountryId) REFERENCES Countries (Id),

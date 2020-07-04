@@ -211,13 +211,15 @@ function GetCountryList_Callback(ParsedResponse, StatusCode)
 function Handle_TermsCheckbox(IsChecked)
 {
 
+    let CreateAccountButton = document.getElementById("Button_CreateAccount");
+
     if (IsChecked)
     {
-        document.getElementById("Button_CreateAccount").disabled = false;
+        CreateAccountButton.disabled = false;
     }
     else
     {
-        document.getElementById("Button_CreateAccount").disabled = true;
+        CreateAccountButton.disabled = true;
     }
 
 }
@@ -226,18 +228,20 @@ function Handle_TermsCheckbox(IsChecked)
 function Button_CreateAccount()
 {
 
-    //var UserInputData =
-    //{
-    //    FirstName:    FirstNameInput.value,
-    //    LastName:     LastNameInput.value,
-    //    NickName:     NicknameInput.value,
-    //    EmailAddress: EmailAddressInput.value,
-    //    Password:     PasswordInput.value,
-    //    Country:      CountryListSelect.value,
-    //    City:         CountryList.value
-    //};
+    let UserInputData =
+    {
+        FirstName:    FirstNameInput.value,
+        LastName:     LastNameInput.value,
+        NickName:     NicknameInput.value,
+        EmailAddress: EmailAddressInput.value,
+        Password:     PasswordInput.value,
+        CountryId:    CountryListSelect.value,
+        CityId:       CountryList.value
+    };
 
     //...
+
+    return true;
 
 }
 

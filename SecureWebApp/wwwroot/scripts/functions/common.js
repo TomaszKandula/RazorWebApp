@@ -6,18 +6,18 @@
 import * as _helpers from "./helpers";
 
 
-function ValidatePasswordField(Value)
+function ValidatePasswordField(AValue)
 {
 
-    let Check = 0;
+    let LCheck = 0;
 
-    if (Value.length < 8)                { Check++; };
-    if (_helpers.IsEmpty(Value))         { Check++; };
-    if (!_helpers.HasLowerCase(Value))   { Check++; };
-    if (!_helpers.HasUpperCase(Value))   { Check++; };
-    if (!_helpers.HasSpecialChar(Value)) { Check++; };
+    if (AValue.length < 8)                { LCheck++; };
+    if (_helpers.IsEmpty(AValue))         { LCheck++; };
+    if (!_helpers.HasLowerCase(AValue))   { LCheck++; };
+    if (!_helpers.HasUpperCase(AValue))   { LCheck++; };
+    if (!_helpers.HasSpecialChar(AValue)) { LCheck++; };
 
-    if (Check != 0)
+    if (LCheck != 0)
     {
         return false;
     }
@@ -29,43 +29,43 @@ function ValidatePasswordField(Value)
 };
 
 
-function PerformAjaxCall(Method, Url, PayLoad, Callback)
+function PerformAjaxCall(AMethod, AUrl, APayLoad, ACallback)
 {
 
-    const ContentType = "application/json; charset=UTF-8";
-    let Request = new XMLHttpRequest();
+    const LContentType = "application/json; charset=UTF-8";
+    let LRequest = new XMLHttpRequest();
 
-    Request.open(Method, Url, true);
-    Request.setRequestHeader("Content-Type", ContentType);
+    LRequest.open(AMethod, AUrl, true);
+    LRequest.setRequestHeader("Content-Type", LContentType);
 
-    Request.onload = function ()
+    LRequest.onload = function ()
     {
 
         if (this.status >= 200 && this.status < 400)
         {
             let ParsedResponse = JSON.parse(this.response);
-            Callback(ParsedResponse, this.status);
+            ACallback(ParsedResponse, this.status);
         }
         else
         {
-            Callback(null, this.status);
+            ACallback(null, this.status);
         }
 
     };
 
-    Request.onerror = function ()
+    LRequest.onerror = function ()
     {
-        Callback(null, this.status);
+        ACallback(null, this.status);
     };
 
-    if (Method === "GET" || Method === "DELETE")
+    if (AMethod === "GET" || AMethod === "DELETE")
     {
-        Request.send();
+        LRequest.send();
     }
 
-    if (Method === "PUT" || Method === "POST" || Method === "PATCH")
+    if (AMethod === "PUT" || AMethod === "POST" || AMethod === "PATCH")
     {
-        Request.send(PayLoad);
+        LRequest.send(APayLoad);
     }
 
 }

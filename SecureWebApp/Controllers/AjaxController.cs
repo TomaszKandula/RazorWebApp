@@ -173,6 +173,51 @@ namespace SecureWebApp.Controllers
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PayLoad"></param>
+        /// <returns></returns>
+        // POST api/v1/ajax/users/
+        [HttpPost("users")]
+        public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate PayLoad) 
+        {
+
+            var LResponse = new UserCreated();
+            try
+            {
+
+                if (!ModelState.IsValid) 
+                {
+                    LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
+                    FAppLogger.LogError(string.Format("POST api/v1/ajax/users/. {0}.", LResponse.Error.ErrorDesc));
+                    return StatusCode(200, LResponse);
+                }
+
+                var NewUser = new Users()
+                { 
+                    FirstName = PayLoad.FirstName,
+                    LastName = PayLoad.LastName,
+                    NickName = PayLoad.NickName,
+                    
+                };
+
+
+
+                return StatusCode(200, LResponse);
+
+            }
+            catch (Exception E)
+            {
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = E.Message;
+                FAppLogger.LogFatality(string.Format("POST api/v1/users/ | Error has been raised while processing request. Message: {0}.", E.Message));
+                return StatusCode(500, LResponse);
+            }
+
+        }
+
     }
 
 }
