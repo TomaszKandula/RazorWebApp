@@ -1,4 +1,5 @@
-﻿
+﻿// This module cannot manipulate DOM
+
 "use strict"
 
 
@@ -40,7 +41,7 @@ function PerformAjaxCall(Method, Url, PayLoad, Callback)
     Request.onload = function ()
     {
 
-        if (this.status === 200)
+        if (this.status >= 200 && this.status < 400)
         {
             let ParsedResponse = JSON.parse(this.response);
             Callback(ParsedResponse, this.status);

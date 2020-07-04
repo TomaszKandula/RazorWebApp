@@ -1,4 +1,5 @@
-﻿
+﻿// This module cannot manipulate DOM
+
 "use strict";
 
 
