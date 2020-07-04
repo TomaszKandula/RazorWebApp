@@ -66,8 +66,7 @@ namespace SecureWebApp.Controllers
                 .AsNoTracking()
                 .Where(R => R.EmailAddr == AEmailAddress)
                 .Select(R => R.EmailAddr)
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToListAsync();
 
             return LEmailList.Any();
 
@@ -83,44 +82,44 @@ namespace SecureWebApp.Controllers
         public async Task<IActionResult> CheckEmailAsync(string EmailAddress)
         {
 
-            var EResponse = new EmailValidation();
+            var LResponse = new EmailValidation();
             try 
             {
 
                 if (!IsEmailAddressCorrect(EmailAddress)) 
                 {
-                    EResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
-                    EResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, EResponse.Error.ErrorDesc));
-                    return StatusCode(200, EResponse);
+                    LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
+                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    return StatusCode(200, LResponse);
                 }
                
                 if (await IsEmailAddressExist(EmailAddress)) 
                 {
-                    EResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
-                    EResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, EResponse.Error.ErrorDesc));
-                    return StatusCode(200, EResponse);
+                    LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
+                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    return StatusCode(200, LResponse);
                 }
 
                 if (!await FDnsLookup.IsDomainExist(EmailAddress)) 
                 {
-                    EResponse.Error.ErrorCode = Constants.Errors.EmailDomainNotExist.ErrorCode;
-                    EResponse.Error.ErrorDesc = Constants.Errors.EmailDomainNotExist.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, EResponse.Error.ErrorDesc));
-                    return StatusCode(200, EResponse);
+                    LResponse.Error.ErrorCode = Constants.Errors.EmailDomainNotExist.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.EmailDomainNotExist.ErrorDesc;
+                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    return StatusCode(200, LResponse);
                 }
 
-                EResponse.IsEmailValid = true;
-                return StatusCode(200, EResponse);
+                LResponse.IsEmailValid = true;
+                return StatusCode(200, LResponse);
 
             } 
             catch (Exception E)
             {
-                EResponse.Error.ErrorCode = E.HResult.ToString();
-                EResponse.Error.ErrorDesc = E.Message;
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = E.Message;
                 FAppLogger.LogFatality(string.Format("GET api/v1/ajax/validation/{0} | Error has been raised while processing request. Message: {1}.", EmailAddress, E.Message));
-                return StatusCode(500, EResponse);
+                return StatusCode(500, LResponse);
             }
 
         }
@@ -141,8 +140,7 @@ namespace SecureWebApp.Controllers
                     Id = R.Id,
                     Name = R.CityName
                 })
-                .ToListAsync()
-                .ConfigureAwait(false);
+                .ToListAsync();
 
             return LCities;
 
@@ -158,18 +156,18 @@ namespace SecureWebApp.Controllers
         public async Task<IActionResult> ReturnCityAsync(int Id) 
         {
 
-            var EResponse = new ReturnCityList();
+            var LResponse = new ReturnCityList();
             try 
             {
-                EResponse.Cities = await ReturnCityList(Id);
-                return StatusCode(200, EResponse);
+                LResponse.Cities = await ReturnCityList(Id);
+                return StatusCode(200, LResponse);
             } 
             catch (Exception E)
             {
-                EResponse.Error.ErrorCode = E.HResult.ToString();
-                EResponse.Error.ErrorDesc = E.Message;
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = E.Message;
                 FAppLogger.LogFatality(string.Format("GET api/v1/cities/{0} | Error has been raised while processing request. Message: {1}.", Id, E.Message));
-                return StatusCode(500, EResponse);
+                return StatusCode(500, LResponse);
             }
 
         }

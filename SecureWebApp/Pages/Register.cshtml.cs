@@ -49,7 +49,7 @@ namespace SecureWebApp.Pages
             }
             catch (Exception E) 
             {
-                FAppLogger.LogFatality("[RegisterModel.OnGet]: an error has been thrown: " + E.Message + " (" + E.StackTrace + ").");
+                FAppLogger.LogFatality(string.Format("[RegisterModel.OnGet]: an error has been thrown: {0} ({1}).", E.Message, E.StackTrace));
                 throw;
             }
 

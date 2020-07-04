@@ -3,7 +3,7 @@
 namespace SecureWebApp.Extensions.AppLogger
 {
 
-    public sealed class AppLogger : IAppLogger
+    public class AppLogger : IAppLogger
     {
 
         public void LogDebug(string AMessage)
