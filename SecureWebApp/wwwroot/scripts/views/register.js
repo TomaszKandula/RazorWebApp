@@ -9,8 +9,8 @@ import * as _common  from "../functions/common";
 function Input_FirstName(Event)
 {
 
-    var Verified  = document.getElementById("OK_FirstName");
-    var Malformed = document.getElementById("ERR_FirstName");
+    let Verified  = document.getElementById("OK_FirstName");
+    let Malformed = document.getElementById("ERR_FirstName");
 
     if (_helpers.IsEmpty(Event.target.value))
     {
@@ -29,8 +29,8 @@ function Input_FirstName(Event)
 function Input_LastName(Event)
 {
 
-    var Verified  = document.getElementById("OK_LastName");
-    var Malformed = document.getElementById("ERR_LastName");
+    let Verified  = document.getElementById("OK_LastName");
+    let Malformed = document.getElementById("ERR_LastName");
 
     if (_helpers.IsEmpty(Event.target.value))
     {
@@ -49,8 +49,8 @@ function Input_LastName(Event)
 function Input_Nickname(Event)
 {
 
-    var Verified  = document.getElementById("OK_Nickname");
-    var Malformed = document.getElementById("ERR_Nickname");
+    let Verified  = document.getElementById("OK_Nickname");
+    let Malformed = document.getElementById("ERR_Nickname");
 
     if (_helpers.IsEmpty(Event.target.value))
     {
@@ -69,9 +69,9 @@ function Input_Nickname(Event)
 function Input_EmailAddress(EmailAddress)
 {
 
-    var Handler   = document.getElementById("Handle_EmailAddress");
-    var Verified  = document.getElementById("OK_EmailAddress");
-    var Malformed = document.getElementById("ERR_EmailAddress");
+    let Handler   = document.getElementById("Handle_EmailAddress");
+    let Verified  = document.getElementById("OK_EmailAddress");
+    let Malformed = document.getElementById("ERR_EmailAddress");
 
     Verified.style.display  = "visibility";
     Malformed.style.display = "visibility";
@@ -101,9 +101,9 @@ function Input_EmailAddress(EmailAddress)
 function CheckEmailAddress_Callback(ParsedResponse, StatusCode)
 {
 
-    var Handler   = document.getElementById("Handle_EmailAddress");
-    var Verified  = document.getElementById("OK_EmailAddress");
-    var Malformed = document.getElementById("ERR_EmailAddress");
+    let Handler   = document.getElementById("Handle_EmailAddress");
+    let Verified  = document.getElementById("OK_EmailAddress");
+    let Malformed = document.getElementById("ERR_EmailAddress");
 
     Handler.classList.remove("is-loading");
 
@@ -135,8 +135,8 @@ function CheckEmailAddress_Callback(ParsedResponse, StatusCode)
 function Input_Password(Event)
 {
 
-    var Verified  = document.getElementById("OK_Password");
-    var Malformed = document.getElementById("ERR_Password");
+    let Verified  = document.getElementById("OK_Password");
+    let Malformed = document.getElementById("ERR_Password");
 
     if (!_common.ValidatePasswordField(Event.target.value))
     {
@@ -155,8 +155,8 @@ function Input_Password(Event)
 function Select_CountryList(Event)
 {
 
-    var Handler    = document.getElementById("Handle_CityList");
-    var SelectedId = Event.target.value;
+    let Handler    = document.getElementById("Handle_CityList");
+    let SelectedId = Event.target.value;
 
     Handler.classList.add("is-loading");
 
@@ -173,8 +173,8 @@ function Select_CountryList(Event)
 function GetCountryList_Callback(ParsedResponse, StatusCode)
 {
 
-    var Handler  = document.getElementById("Handle_CityList");
-    var Selector = document.getElementById("Select_CityList");
+    let Handler  = document.getElementById("Handle_CityList");
+    let Selector = document.getElementById("Select_CityList");
 
     Handler.classList.remove("is-loading");
 
@@ -183,11 +183,11 @@ function GetCountryList_Callback(ParsedResponse, StatusCode)
 
         _helpers.ClearSelectElement(Selector);
 
-        for (var Index = 0; Index < ParsedResponse.Cities.length; Index++)
+        for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
         {
 
-            var City = ParsedResponse.Cities[Index];
-            var Option = document.createElement("option");
+            let City = ParsedResponse.Cities[Index];
+            let Option = document.createElement("option");
 
             Option.value = City.id;
             Option.innerHTML = City.name;

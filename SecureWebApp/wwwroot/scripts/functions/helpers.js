@@ -2,44 +2,44 @@
 "use strict";
 
 
-function IsEmpty(value)
+function IsEmpty(AValue)
 {
-    return typeof value === 'string' && !value.trim() || typeof value === undefined || value === null;
+    return typeof AValue === 'string' && !AValue.trim() || typeof AValue === undefined || AValue === null;
 };
 
 
-function IsNumeric(n)
+function IsNumeric(AValue)
 {
-    return !isNaN(parseFloat(n)) && isFinite(n);
+    return !isNaN(parseFloat(AValue)) && isFinite(AValue);
 };
 
 
-function ValidateEmail(email)
+function ValidateEmail(AEmail)
 {
-    var LRegex = /\S+@\S+\.\S+/;
-    return LRegex.test(email);
+    let LRegex = /\S+@\S+\.\S+/;
+    return LRegex.test(AEmail);
 };
 
 
-function FormatPhoneNumber(Number)
+function FormatPhoneNumber(ANumber)
 {
-    Number = Number.replace(/[^\d]+/g, '').replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '($1) $2 $3 $4');
+    ANumber = ANumber.replace(/[^\d]+/g, '').replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '($1) $2 $3 $4');
 
-    if (isEmpty(Number))
+    if (isEmpty(ANumber))
     {
         return false;
     }
     else
     {
-        return Number;
+        return ANumber;
     };
 
 };
 
 
-function HasLowerCase(str)
+function HasLowerCase(AText)
 {
-    if (str.toUpperCase() != str)
+    if (AText.toUpperCase() != AText)
     {
         return true;
     }
@@ -48,9 +48,9 @@ function HasLowerCase(str)
 }
 
 
-function HasUpperCase(str)
+function HasUpperCase(AText)
 {
-    if (str.toLowerCase() != str)
+    if (AText.toLowerCase() != AText)
     {
         return true;
     }
@@ -61,9 +61,9 @@ function HasUpperCase(str)
 
 function HasSpecialChar(str)
 {
-    var format = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-    if (format.test(str))
+    if (LFormat.test(str))
     {
         return true;
     }
@@ -76,35 +76,36 @@ function HasSpecialChar(str)
 
 function CleanBaseUrl()
 {
-    var CurrentUrl = window.location.href;
-    var Check = 0;
-    var BaseUrl = "";
 
-    for (var iCNT = 0; iCNT <= CurrentUrl.length; iCNT++)
+    let LCurrentUrl = window.location.href;
+    let LCheck = 0;
+    let LBaseUrl = "";
+
+    for (let Index = 0; Index <= LCurrentUrl.length; Index++)
     {
-        BaseUrl = CurrentUrl.charAt(iCNT);
-        if (BaseUrl.charAt(iCNT) === "/")
+        LBaseUrl = LCurrentUrl.charAt(Index);
+        if (LBaseUrl.charAt(Index) === "/")
         {
-            Check++;
-            if (Check === 2)
+            LCheck++;
+            if (LCheck === 2)
             {
                 break;
             };
         };
     }
 
-    return BaseUrl;
+    return LBaseUrl;
 
 }
 
 
-function ClearSelectElement(SelectElement)
+function ClearSelectElement(ASelectElement)
 {
-    var Index, Length = SelectElement.options.length - 1;
+    let Index, Length = ASelectElement.options.length - 1;
 
     for (Index = Length; Index >= 0; Index--)
     {
-        SelectElement.remove(Index);
+        ASelectElement.remove(Index);
     }
 
 }

@@ -8,7 +8,7 @@ import * as _helpers from "./helpers";
 function ValidatePasswordField(Value)
 {
 
-    var Check = 0;
+    let Check = 0;
 
     if (Value.length < 8)                { Check++; };
     if (_helpers.IsEmpty(Value))         { Check++; };
@@ -32,7 +32,7 @@ function PerformAjaxCall(Method, Url, PayLoad, Callback)
 {
 
     const ContentType = "application/json; charset=UTF-8";
-    var Request = new XMLHttpRequest();
+    let Request = new XMLHttpRequest();
 
     Request.open(Method, Url, true);
     Request.setRequestHeader("Content-Type", ContentType);
@@ -42,7 +42,7 @@ function PerformAjaxCall(Method, Url, PayLoad, Callback)
 
         if (this.status === 200)
         {
-            var ParsedResponse = JSON.parse(this.response);
+            let ParsedResponse = JSON.parse(this.response);
             Callback(ParsedResponse, this.status);
         }
         else
