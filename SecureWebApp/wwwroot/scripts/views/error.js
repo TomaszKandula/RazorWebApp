@@ -3,7 +3,7 @@
 "use strict"
 
 
-// Code to operat on view Error.cshtml
+// Code to operate on view Error.cshtml
 
 
 export

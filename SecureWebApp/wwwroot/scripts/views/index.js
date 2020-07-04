@@ -3,7 +3,7 @@
 "use strict"
 
 
-// Code to operat on view Index.cshtml
+// Code to operate on view Index.cshtml
 
 
 export

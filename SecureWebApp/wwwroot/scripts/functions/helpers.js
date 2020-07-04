@@ -1,4 +1,4 @@
-﻿// This module cannot manipulate DOM
+﻿// This module should not manipulate DOM
 
 "use strict";
 
