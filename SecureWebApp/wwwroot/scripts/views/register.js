@@ -426,7 +426,8 @@ export class RegisterClass
 
         if (!this.IsDataValid())
         {
-            console.log("no-go");
+            // show modal window with message
+            alert("Cannot create the account. Please check all the fields.");
             return false;
         }
 
@@ -441,9 +442,12 @@ export class RegisterClass
             CityId:       Number(this.CityListSelect.value)
         });
 
+        let Url = encodeURI(window.location.origin + "/api/v1/ajax/users/");
+
         _common.PerformAjaxCall(
             "POST",
-            window.location.origin + "/api/v1/ajax/users/",
+            Url,
+            "application/json; charset=UTF-8",
             SerializedPayLoad,
             this.CreateAccount_Callback.bind(this)
         );
