@@ -201,7 +201,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("POST api/v1/ajax/users/.", LResponse.Error.ErrorDesc));
+                    FAppLogger.LogWarn(string.Format("POST api/v1/ajax/users/. {0}", LResponse.Error.ErrorDesc));
                     return StatusCode(200, LResponse);
                 }
 
@@ -223,7 +223,7 @@ namespace SecureWebApp.Controllers
                 LResponse.UserId = NewUser.Id;
                 LResponse.IsUserCreated = true;
                 
-                FAppLogger.LogInfo(string.Format("POST api/v1/users/ | New user '{0}' has been successfully registered.", PayLoad.EmailAddress));
+                FAppLogger.LogInfo(string.Format("POST api/v1/ajax/users/ | New user '{0}' has been successfully registered.", PayLoad.EmailAddress));
                 return StatusCode(200, LResponse);
 
             }
@@ -231,7 +231,7 @@ namespace SecureWebApp.Controllers
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
                 LResponse.Error.ErrorDesc = E.Message + " " + E.InnerException.Message;
-                FAppLogger.LogFatality(string.Format("POST api/v1/users/ | Error has been raised while processing request. Message: {0}", LResponse.Error.ErrorDesc));
+                FAppLogger.LogFatality(string.Format("POST api/v1/ajax/users/ | Error has been raised while processing request. Message: {0}", LResponse.Error.ErrorDesc));
                 return StatusCode(500, LResponse);
             }
 

@@ -7,253 +7,373 @@ import * as _helpers from "../functions/helpers";
 import * as _common  from "../functions/common";
 
 
-function Input_FirstName(Event)
+export class RegisterClass
 {
 
-    let Verified  = document.getElementById("OK_FirstName");
-    let Malformed = document.getElementById("ERR_FirstName");
-
-    if (_helpers.IsEmpty(Event.target.value))
+    constructor(Container)
     {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "visible";
-    }
-    else
-    {
-        Verified.style.visibility  = "visible";
-        Malformed.style.visibility = "hidden";
-    }
 
-}
+        this.Container = Container;
 
+        this.BindDom();
+        this.AddEvents();
+        this.InitErrorCheck();
 
-function Input_LastName(Event)
-{
+        this.CountryListSelect.selectedIndex = 0;
+        this.CityListSelect.disabled = true;
 
-    let Verified  = document.getElementById("OK_LastName");
-    let Malformed = document.getElementById("ERR_LastName");
-
-    if (_helpers.IsEmpty(Event.target.value))
-    {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "visible";
-    }
-    else
-    {
-        Verified.style.visibility  = "visible";
-        Malformed.style.visibility = "hidden";
     }
 
-}
-
-
-function Input_Nickname(Event)
-{
-
-    let Verified  = document.getElementById("OK_Nickname");
-    let Malformed = document.getElementById("ERR_Nickname");
-
-    if (_helpers.IsEmpty(Event.target.value))
+    BindDom()
     {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "visible";
-    }
-    else
-    {
-        Verified.style.visibility  = "visible";
-        Malformed.style.visibility = "hidden";
+        this.FirstNameInput      = this.Container.querySelector("#Input_FirstName");
+        this.LastNameInput       = this.Container.querySelector("#Input_LastName");
+        this.NicknameInput       = this.Container.querySelector("#Input_Nickname");
+        this.EmailAddressInput   = this.Container.querySelector("#Input_EmailAddress");
+        this.PasswordInput       = this.Container.querySelector("#Input_Password");
+        this.CountryListSelect   = this.Container.querySelector("#Select_CountryList");
+        this.CityListSelect      = this.Container.querySelector("#Select_CityList");
+        this.TermsCheckbox       = this.Container.querySelector("#Handle_TermsCheckbox");
+        this.CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
     }
 
-}
-
-
-function Input_EmailAddress(EmailAddress)
-{
-
-    let Handler   = document.getElementById("Handle_EmailAddress");
-    let Verified  = document.getElementById("OK_EmailAddress");
-    let Malformed = document.getElementById("ERR_EmailAddress");
-
-    Verified.style.display  = "visibility";
-    Malformed.style.display = "visibility";
-    Handler.classList.add("is-loading");
-
-    if (!_helpers.IsEmpty(EmailAddress) && _helpers.ValidateEmail(EmailAddress))
+    AddEvents()
     {
-
-        _common.PerformAjaxCall(
-            "GET",
-            window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/",
-            null,
-            CheckEmailAddress_Callback
-        );
-
-    }
-    else
-    {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "hidden";
-        Handler.classList.remove("is-loading");
+        this.FirstNameInput.addEventListener("change", (Event) => { this.Input_FirstName(Event); });
+        this.LastNameInput.addEventListener("change", (Event) => { this.Input_LastName(Event); });
+        this.NicknameInput.addEventListener("change", (Event) => { this.Input_Nickname(Event); });
+        this.PasswordInput.addEventListener("change", (Event) => { this.Input_Password(Event) });
+        this.CountryListSelect.addEventListener("change", (Event) => { this.Select_CountryList(Event); });
+        this.TermsCheckbox.addEventListener("click", (Event) => { this.Handle_TermsCheckbox(Event); });
+        this.CreateAccountButton.addEventListener("click", (Event) => { this.Button_CreateAccount(Event); });
+        this.EmailAddressInput.onkeyup = () => { this.Input_EmailAddress(); };
     }
 
-}
+    InitErrorCheck()
+    {
+        this.IsValidFirstName    = false;
+        this.IsValidLastName     = false;
+        this.IsValidNickname     = false;
+        this.IsValidEmailAddress = false;
+        this.IsValidPassword     = false;
+        this.IsValidCountryList  = false;
+        this.IsValidCityList     = false;
+    }
 
-
-function CheckEmailAddress_Callback(ParsedResponse, StatusCode)
-{
-
-    let Handler   = document.getElementById("Handle_EmailAddress");
-    let Verified  = document.getElementById("OK_EmailAddress");
-    let Malformed = document.getElementById("ERR_EmailAddress");
-
-    Handler.classList.remove("is-loading");
-
-    if (StatusCode === 200)
+    AreFieldsValidated()
     {
 
-        if (ParsedResponse.IsEmailValid)
+        if (!this.IsValidFirstName || !this.IsValidLastName
+            || !this.IsValidNickname || !this.IsValidEmailAddress
+            || !this.IsValidPassword || !this.IsValidCountryList
+            || !this.IsValidCityList)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
+    Input_FirstName(Event)
+    {
+
+        let Verified  = this.Container.querySelector("#OK_FirstName");
+        let Malformed = this.Container.querySelector("#ERR_FirstName");
+        let Info      = this.Container.querySelector("#Info_FirstName");
+
+        if (_helpers.IsEmpty(Event.target.value))
+        {
+            Verified.style.visibility  = "hidden";
+            Malformed.style.visibility = "visible";
+            Info.style.display         = "inline-block";
+            this.IsValidFirstName      = false;
+        }
+        else
         {
             Verified.style.visibility  = "visible";
             Malformed.style.visibility = "hidden";
+            Info.style.display         = "none";
+            this.IsValidFirstName      = true;
+        }
+
+    }
+
+
+    Input_LastName(Event)
+    {
+
+        let Verified  = this.Container.querySelector("#OK_LastName");
+        let Malformed = this.Container.querySelector("#ERR_LastName");
+        let Info      = this.Container.querySelector("#Info_LastName");
+
+        if (_helpers.IsEmpty(Event.target.value))
+        {
+            Verified.style.visibility  = "hidden";
+            Malformed.style.visibility = "visible";
+            Info.style.display         = "inline-block";
+            this.IsValidLastName       = false;
+        }
+        else
+        {
+            Verified.style.visibility  = "visible";
+            Malformed.style.visibility = "hidden";
+            Info.style.display         = "none";
+            this.IsValidLastName       = true;
+        }
+
+    }
+
+
+    Input_Nickname(Event)
+    {
+
+        let Verified  = this.Container.querySelector("#OK_Nickname");
+        let Malformed = this.Container.querySelector("#ERR_Nickname");
+        let Info      = this.Container.querySelector("#Info_Nickname");
+
+        if (_helpers.IsEmpty(Event.target.value))
+        {
+            Verified.style.visibility  = "hidden";
+            Malformed.style.visibility = "visible";
+            Info.style.display         = "inline-block";
+            this.IsValidNickname       = false;
+        }
+        else
+        {
+            Verified.style.visibility  = "visible";
+            Malformed.style.visibility = "hidden";
+            Info.style.display         = "none";
+            this.IsValidNickname       = true;
+        }
+
+    }
+
+
+    Input_EmailAddress()
+    {
+
+        let Handler      = this.Container.querySelector("#Handle_EmailAddress");
+        let Verified     = this.Container.querySelector("#OK_EmailAddress");
+        let Malformed    = this.Container.querySelector("#ERR_EmailAddress");
+        let Info         = this.Container.querySelector("#Info_EmailAddress");
+        let EmailAddress = this.EmailAddressInput.value;
+
+        Verified.style.display  = "visibility";
+        Malformed.style.display = "visibility";
+        Info.style.display      = "visibility";
+
+        Handler.classList.add("is-loading");
+
+        if (!_helpers.IsEmpty(EmailAddress) && _helpers.ValidateEmail(EmailAddress))
+        {
+
+            _common.PerformAjaxCall(
+                "GET",
+                window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/",
+                null,
+                this.CheckEmailAddress_Callback.bind(this)
+            );
+
         }
         else
         {
             Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "visible";
+            Malformed.style.visibility = "hidden";
+            Info.style.display = "inline-block";
+            Info.innerHTML     = "Valid email address is mandatory.";
+            Handler.classList.remove("is-loading");
+            this.IsValidEmailAddress = false;
         }
 
     }
-    else
-    {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "hidden";
-        alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
-    }
-
-} 
 
 
-function Input_Password(Event)
-{
-
-    let Verified  = document.getElementById("OK_Password");
-    let Malformed = document.getElementById("ERR_Password");
-
-    if (!_common.ValidatePasswordField(Event.target.value))
-    {
-        Verified.style.visibility  = "hidden";
-        Malformed.style.visibility = "visible";
-    }
-    else
-    {
-        Verified.style.visibility  = "visible";
-        Malformed.style.visibility = "hidden";
-    }
-
-}
-
-
-function Select_CountryList(Event)
-{
-
-    let Handler    = document.getElementById("Handle_CityList");
-    let SelectedId = Event.target.value;
-
-    Handler.classList.add("is-loading");
-
-    _common.PerformAjaxCall(
-        "GET",
-        window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/",
-        null,
-        GetCountryList_Callback
-    );
-
-}
-
-
-function GetCountryList_Callback(ParsedResponse, StatusCode)
-{
-
-    let Handler  = document.getElementById("Handle_CityList");
-    let Selector = document.getElementById("Select_CityList");
-
-    Handler.classList.remove("is-loading");
-
-    if (StatusCode == 200)
+    CheckEmailAddress_Callback(ParsedResponse, StatusCode)
     {
 
-        _helpers.ClearSelectElement(Selector);
+        let Handler   = this.Container.querySelector("#Handle_EmailAddress");
+        let Verified  = this.Container.querySelector("#OK_EmailAddress");
+        let Malformed = this.Container.querySelector("#ERR_EmailAddress");
+        let Info      = this.Container.querySelector("#Info_EmailAddress");
 
-        for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
+        Handler.classList.remove("is-loading");
+
+        if (StatusCode === 200)
         {
 
-            let City = ParsedResponse.Cities[Index];
-            let Option = document.createElement("option");
-
-            Option.value = City.id;
-            Option.innerHTML = City.name;
-            Selector.appendChild(Option);
+            if (ParsedResponse.IsEmailValid)
+            {
+                Verified.style.visibility  = "visible";
+                Malformed.style.visibility = "hidden";
+                Info.style.display         = "none";
+                Info.innerHTML             = "";
+                this.IsValidEmailAddress   = true;
+            }
+            else
+            {
+                Verified.style.visibility  = "hidden";
+                Malformed.style.visibility = "visible";
+                Info.style.display         = "inline-block";
+                Info.innerHTML             = ParsedResponse.Error.ErrorDesc;
+                this.IsValidEmailAddress   = false;
+            }
 
         }
-
-        Selector.removeAttribute("disabled");
-        Selector.selectedIndex = 0;
+        else
+        {
+            Verified.style.visibility  = "hidden";
+            Malformed.style.visibility = "hidden";
+            Info.style.display = "inline-block";
+            Info.innerHTML     = "An error has occured during the processing";
+            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+            this.IsValidEmailAddress = false;
+        }
 
     }
-    else
+
+
+    Input_Password(Event)
     {
-        alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+
+        let Verified  = this.Container.querySelector("#OK_Password");
+        let Malformed = this.Container.querySelector("#ERR_Password");
+        let Info      = this.Container.querySelector("#Info_Password");
+
+        if (!_common.ValidatePasswordField(Event.target.value))
+        {
+            Verified.style.visibility  = "hidden";
+            Malformed.style.visibility = "visible";
+            Info.style.display         = "inline-block";
+            this.IsValidPassword       = false;
+        }
+        else
+        {
+            Verified.style.visibility  = "visible";
+            Malformed.style.visibility = "hidden";
+            Info.style.display         = "none";
+            this.IsValidPassword       = true;
+        }
+
+    }
+
+
+    Select_CountryList(Event)
+    {
+
+        let Handler    = this.Container.querySelector("#Handle_CityList");
+        let SelectedId = Event.target.value;
+
+        Handler.classList.add("is-loading");
+
+        _common.PerformAjaxCall(
+            "GET",
+            window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/",
+            null,
+            this.GetCountryList_Callback.bind(this)
+        );
+
+    }
+
+
+    GetCountryList_Callback(ParsedResponse, StatusCode)
+    {
+
+        let Handler  = this.Container.querySelector("#Handle_CityList");
+        let Selector = this.Container.querySelector("#Select_CityList");
+
+        Handler.classList.remove("is-loading");
+
+        if (StatusCode == 200)
+        {
+
+            _helpers.ClearSelectElement(Selector);
+
+            for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
+            {
+
+                let City   = ParsedResponse.Cities[Index];
+                let Option = document.createElement("option");
+
+                Option.value = City.id;
+                Option.innerHTML = City.name;
+                Selector.appendChild(Option);
+
+            }
+
+            Selector.removeAttribute("disabled");
+            Selector.selectedIndex = 0;
+            this.IsValidCountryList = true;
+
+        }
+        else
+        {
+            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+            this.IsValidCountryList = false;
+        }
+
+    }
+
+
+    Handle_TermsCheckbox(Event)
+    {
+
+        let CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
+
+        if (Event.target.checked)
+        {
+            CreateAccountButton.disabled = false;
+        }
+        else
+        {
+            CreateAccountButton.disabled = true;
+        }
+
+    }
+
+
+    Button_CreateAccount(Event)
+    {
+
+        if (!this.AreFieldsValidated)
+        {
+            alert("All fields are mandatory.");
+            return false;
+        }
+
+        let SerializedPayLoad = JSON.stringify(
+            {
+                FirstName:    this.FirstNameInput.value,
+                LastName:     this.LastNameInput.value,
+                NickName:     this.NicknameInput.value,
+                EmailAddress: this.EmailAddressInput.value,
+                Password:     this.PasswordInput.value,
+                CountryId:    Number(this.CountryListSelect.value),
+                CityId:       Number(this.CityListSelect.value)
+            });
+
+        _common.PerformAjaxCall(
+            "POST",
+            window.location.origin + "/api/v1/ajax/users/",
+            SerializedPayLoad,
+            this.CreateAccount_Callback.bind(this)
+        );
+
+        return true;
+
+    }
+
+
+    CreateAccount_Callback(ParsedResponse, StatusCode)
+    {
+
+        alert(StatusCode + ": " + ParsedResponse);
+
+        // clear fields
+        // show modal window with message
+
     }
 
 }
-
-
-function Handle_TermsCheckbox(IsChecked)
-{
-
-    let CreateAccountButton = document.getElementById("Button_CreateAccount");
-
-    if (IsChecked)
-    {
-        CreateAccountButton.disabled = false;
-    }
-    else
-    {
-        CreateAccountButton.disabled = true;
-    }
-
-}
-
-
-function Button_CreateAccount()
-{
-
-    let UserInputData =
-    {
-        FirstName:    FirstNameInput.value,
-        LastName:     LastNameInput.value,
-        NickName:     NicknameInput.value,
-        EmailAddress: EmailAddressInput.value,
-        Password:     PasswordInput.value,
-        CountryId:    CountryListSelect.value,
-        CityId:       CountryList.value
-    };
-
-    //...
-
-    return true;
-
-}
-
-
-export
-{
-    Input_FirstName,
-    Input_LastName,
-    Input_Nickname,
-    Input_EmailAddress,
-    Input_Password,
-    Select_CountryList,
-    Handle_TermsCheckbox,
-    Button_CreateAccount
-};

@@ -3,10 +3,14 @@
 "use strict"
 
 
-
-
-
-export
+export class LoginClass
 {
 
-};
+    constructor(Container)
+    {
+
+        this.Container = Container;
+
+    } 
+
+}
