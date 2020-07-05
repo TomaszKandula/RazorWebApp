@@ -29,6 +29,12 @@
                 public const string ErrorDesc = "The email domain is not exist.";
             }
 
+            internal class InvalidPayLoad 
+            {
+                public const string ErrorCode = "invalid_payload";
+                public const string ErrorDesc = "The received content cannot be validated.";
+            }
+
         }
 
     }

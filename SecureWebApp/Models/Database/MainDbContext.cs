@@ -80,7 +80,6 @@ namespace SecureWebApp.Models.Database
                     .HasMaxLength(255);
 
                 entity.Property(e => e.PhoneNum)
-                    .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .IsFixedLength();

@@ -27,7 +27,7 @@ create table Users
     LastName    nvarchar(255) not null,
     NickName    nvarchar(255) not null,
     EmailAddr   varchar(255) not null,
-    PhoneNum    char(15) not null,
+    PhoneNum    char(15) null,
     Password    varchar(255) not null,
     CONSTRAINT PK__Id__Users PRIMARY KEY (Id),
     CONSTRAINT UQ__EmailAddr__Users UNIQUE (EmailAddr),

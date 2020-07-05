@@ -11,6 +11,7 @@ using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.DnsLookup;
 using System.Collections.Generic;
+using SecureWebApp.Extensions.BCrypt;
 
 namespace SecureWebApp.Controllers
 {
@@ -174,7 +175,7 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Endpoint adding new user to the database.
         /// </summary>
         /// <param name="PayLoad"></param>
         /// <returns></returns>
@@ -189,30 +190,48 @@ namespace SecureWebApp.Controllers
 
                 if (!ModelState.IsValid) 
                 {
-                    LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
-                    LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
+                    LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.InvalidPayLoad.ErrorDesc;
                     FAppLogger.LogError(string.Format("POST api/v1/ajax/users/. {0}.", LResponse.Error.ErrorDesc));
+                    LResponse.IsUserCreated = false;
+                    return StatusCode(200, LResponse);
+                }
+
+                if (await IsEmailAddressExist(PayLoad.EmailAddress))
+                {
+                    LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
+                    FAppLogger.LogWarn(string.Format("POST api/v1/ajax/users/.", LResponse.Error.ErrorDesc));
                     return StatusCode(200, LResponse);
                 }
 
                 var NewUser = new Users()
                 { 
                     FirstName = PayLoad.FirstName,
-                    LastName = PayLoad.LastName,
-                    NickName = PayLoad.NickName,
-                    
+                    LastName  = PayLoad.LastName,
+                    NickName  = PayLoad.NickName,
+                    EmailAddr = PayLoad.EmailAddress,
+                    Password  = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(12)),
+                    PhoneNum  = null,
+                    CountryId = PayLoad.CountryId,
+                    CityId    = PayLoad.CityId
                 };
 
+                FMainDbContext.Users.Add(NewUser);
+                await FMainDbContext.SaveChangesAsync();
 
-
+                LResponse.UserId = NewUser.Id;
+                LResponse.IsUserCreated = true;
+                
+                FAppLogger.LogInfo(string.Format("POST api/v1/users/ | New user '{0}' has been successfully registered.", PayLoad.EmailAddress));
                 return StatusCode(200, LResponse);
 
             }
             catch (Exception E)
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = E.Message;
-                FAppLogger.LogFatality(string.Format("POST api/v1/users/ | Error has been raised while processing request. Message: {0}.", E.Message));
+                LResponse.Error.ErrorDesc = E.Message + " " + E.InnerException.Message;
+                FAppLogger.LogFatality(string.Format("POST api/v1/users/ | Error has been raised while processing request. Message: {0}", LResponse.Error.ErrorDesc));
                 return StatusCode(500, LResponse);
             }
 
