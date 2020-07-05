@@ -33,8 +33,10 @@ export class RegisterClass
         this.PasswordInput       = this.Container.querySelector("#Input_Password");
         this.CountryListSelect   = this.Container.querySelector("#Select_CountryList");
         this.CityListSelect      = this.Container.querySelector("#Select_CityList");
-        this.TermsCheckbox       = this.Container.querySelector("#Handle_TermsCheckbox");
         this.CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
+        this.ModalWindowHandle   = this.Container.querySelector("#Handle_RegisterModal");
+        this.TermsLink           = this.Container.querySelector("#Link_Terms");
+        this.PrivacyLink         = this.Container.querySelector("#Link_Privacy");
     }
 
     AddEvents()
@@ -44,9 +46,11 @@ export class RegisterClass
         this.NicknameInput.addEventListener("change", (Event) => { this.Input_Nickname(Event); });
         this.PasswordInput.addEventListener("change", (Event) => { this.Input_Password(Event) });
         this.CountryListSelect.addEventListener("change", (Event) => { this.Select_CountryList(Event); });
-        this.TermsCheckbox.addEventListener("click", (Event) => { this.Handle_TermsCheckbox(Event); });
+        this.CityListSelect.addEventListener("change", (Event) => { this.Select_CityList(Event); });
         this.CreateAccountButton.addEventListener("click", (Event) => { this.Button_CreateAccount(Event); });
         this.EmailAddressInput.onkeyup = () => { this.Input_EmailAddress(); };
+        this.TermsLink.addEventListener("click", (Event) => { this.Link_Terms(Event) });
+        this.PrivacyLink.addEventListener("click", (Event) => { this.Link_Privacy(Event) });
     }
 
     InitErrorCheck()
@@ -60,7 +64,7 @@ export class RegisterClass
         this.IsValidCityList     = false;
     }
 
-    AreFieldsValidated()
+    IsDataValid()
     {
 
         if (!this.IsValidFirstName || !this.IsValidLastName
@@ -160,6 +164,7 @@ export class RegisterClass
         let Malformed    = this.Container.querySelector("#ERR_EmailAddress");
         let Info         = this.Container.querySelector("#Info_EmailAddress");
         let EmailAddress = this.EmailAddressInput.value;
+        let Url          = encodeURI(window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/");
 
         Verified.style.display  = "visibility";
         Malformed.style.display = "visibility";
@@ -172,7 +177,8 @@ export class RegisterClass
 
             _common.PerformAjaxCall(
                 "GET",
-                window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/",
+                Url,
+                "application/json; charset=UTF-8",
                 null,
                 this.CheckEmailAddress_Callback.bind(this)
             );
@@ -191,7 +197,7 @@ export class RegisterClass
     }
 
 
-    CheckEmailAddress_Callback(ParsedResponse, StatusCode)
+    CheckEmailAddress_Callback(Response, StatusCode)
     {
 
         let Handler   = this.Container.querySelector("#Handle_EmailAddress");
@@ -204,6 +210,7 @@ export class RegisterClass
         if (StatusCode === 200)
         {
 
+            let ParsedResponse = JSON.parse(Response); 
             if (ParsedResponse.IsEmailValid)
             {
                 Verified.style.visibility  = "visible";
@@ -265,12 +272,14 @@ export class RegisterClass
 
         let Handler    = this.Container.querySelector("#Handle_CityList");
         let SelectedId = Event.target.value;
+        let Url        = encodeURI(window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/");
 
         Handler.classList.add("is-loading");
 
         _common.PerformAjaxCall(
             "GET",
-            window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/",
+            Url,
+            "application/json; charset=UTF-8",
             null,
             this.GetCountryList_Callback.bind(this)
         );
@@ -278,18 +287,18 @@ export class RegisterClass
     }
 
 
-    GetCountryList_Callback(ParsedResponse, StatusCode)
+    GetCountryList_Callback(Response, StatusCode)
     {
 
         let Handler  = this.Container.querySelector("#Handle_CityList");
-        let Selector = this.Container.querySelector("#Select_CityList");
 
         Handler.classList.remove("is-loading");
 
         if (StatusCode == 200)
         {
 
-            _helpers.ClearSelectElement(Selector);
+            let ParsedResponse = JSON.parse(Response); 
+            _helpers.ClearSelectElement(this.CityListSelect);
 
             for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
             {
@@ -299,12 +308,12 @@ export class RegisterClass
 
                 Option.value = City.id;
                 Option.innerHTML = City.name;
-                Selector.appendChild(Option);
+                this.CityListSelect.appendChild(Option);
 
             }
 
-            Selector.removeAttribute("disabled");
-            Selector.selectedIndex = 0;
+            this.CityListSelect.removeAttribute("disabled");
+            this.CityListSelect.selectedIndex = 0;
             this.IsValidCountryList = true;
 
         }
@@ -317,18 +326,96 @@ export class RegisterClass
     }
 
 
-    Handle_TermsCheckbox(Event)
+    Select_CityList(Event)
     {
 
-        let CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
-
-        if (Event.target.checked)
+        if (Event.target.value === "")
         {
-            CreateAccountButton.disabled = false;
+            this.IsValidCityList = false;
         }
         else
         {
-            CreateAccountButton.disabled = true;
+            this.IsValidCityList = true;
+        }
+
+    }
+
+
+    Link_Terms(Event)
+    {
+
+        let Url = encodeURI(window.location.origin + "/modals/terms.html");
+
+        _common.PerformAjaxCall(
+            "GET",
+            Url,
+            "text/html; charset=UTF-8",
+            null,
+            this.Link_Terms_Callback.bind(this)
+        );
+
+    }
+
+
+    Link_Terms_Callback(Response, StatusCode)
+    {
+
+        if (StatusCode === 200)
+        {
+            this.ModalWindowHandle.innerHTML = Response;
+
+            let Button_CloseTerms = this.Container.querySelector("#Close_TermsModal");
+            Button_CloseTerms.addEventListener("click", () =>
+            {
+                this.ModalWindowHandle.classList.remove("is-active");
+            });
+
+            this.ModalWindowHandle.classList.add("is-active");
+        }
+        else
+        {
+            Console.Error("Cannot get Terms.html, status code: " + StatusCode);
+        }
+
+    }
+
+
+    Link_Privacy(Event)
+    {
+
+        let Url = encodeURI(window.location.origin + "/modals/privacy.html");
+
+        _common.PerformAjaxCall(
+            "GET",
+            Url,
+            "text/html; charset=UTF-8",
+            null,
+            this.Link_Privacy_Callback.bind(this)
+        );
+
+    }
+
+
+    Link_Privacy_Callback(Response, StatusCode)
+    {
+
+        if (StatusCode === 200)
+        {
+
+            this.ModalWindowHandle.innerHTML = Response;
+
+            let Button_ClosePrivacy = this.Container.querySelector("#Close_PrivacyModal");
+            Button_ClosePrivacy.addEventListener("click", () =>
+            {
+                this.ModalWindowHandle.classList.remove("is-active");
+            });
+
+            this.ModalWindowHandle.classList.add("is-active");
+
+        }
+        else
+        {
+            Console.Error("Cannot get Terms.html, status code: " + StatusCode);
         }
 
     }
@@ -337,22 +424,22 @@ export class RegisterClass
     Button_CreateAccount(Event)
     {
 
-        if (!this.AreFieldsValidated)
+        if (!this.IsDataValid())
         {
-            alert("All fields are mandatory.");
+            console.log("no-go");
             return false;
         }
 
         let SerializedPayLoad = JSON.stringify(
-            {
-                FirstName:    this.FirstNameInput.value,
-                LastName:     this.LastNameInput.value,
-                NickName:     this.NicknameInput.value,
-                EmailAddress: this.EmailAddressInput.value,
-                Password:     this.PasswordInput.value,
-                CountryId:    Number(this.CountryListSelect.value),
-                CityId:       Number(this.CityListSelect.value)
-            });
+        {
+            FirstName:    this.FirstNameInput.value,
+            LastName:     this.LastNameInput.value,
+            NickName:     this.NicknameInput.value,
+            EmailAddress: this.EmailAddressInput.value,
+            Password:     this.PasswordInput.value,
+            CountryId:    Number(this.CountryListSelect.value),
+            CityId:       Number(this.CityListSelect.value)
+        });
 
         _common.PerformAjaxCall(
             "POST",

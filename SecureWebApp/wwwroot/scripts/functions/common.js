@@ -29,22 +29,20 @@ function ValidatePasswordField(AValue)
 };
 
 
-function PerformAjaxCall(AMethod, AUrl, APayLoad, ACallback)
+function PerformAjaxCall(AMethod, AUrl, AContentType, APayLoad, ACallback)
 {
 
-    const LContentType = "application/json; charset=UTF-8";
     let LRequest = new XMLHttpRequest();
 
     LRequest.open(AMethod, AUrl, true);
-    LRequest.setRequestHeader("Content-Type", LContentType);
+    LRequest.setRequestHeader("Content-Type", AContentType);
 
     LRequest.onload = function ()
     {
 
         if (this.status >= 200 && this.status < 400)
         {
-            let ParsedResponse = JSON.parse(this.response);
-            ACallback(ParsedResponse, this.status);
+            ACallback(this.response, this.status);
         }
         else
         {

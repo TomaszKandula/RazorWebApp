@@ -12,6 +12,8 @@
 
 <section id="RegisterForm">
 
+    <div id="Handle_RegisterModal" class="modal"></div>
+
     <div class="container mt-6 mb-6">
 
         <div class="columns is-mobile mt-6 mb-6">
@@ -143,7 +145,7 @@
                         <div class="control">
                             <div id="Handle_CityList" class="select">
                                 <select id="Select_CityList" disabled>
-                                    <option value="">Select country</option>
+                                    <option value="">Select city</option>
                                 </select>
                             </div>
                         </div>
@@ -153,17 +155,14 @@
 
                     <div class="container mt-6 is-grouped">
                         <div id="Handle_CreateAccount" class="control">
-                            <button id="Button_CreateAccount" class="button is-info is-fullwidth" disabled>Create account</button>
+                            <button id="Button_CreateAccount" class="button is-info is-fullwidth">Create account</button>
                         </div>
                     </div>
 
                     <!-- Terms of use -->
 
                     <div class="field mt-6 mb-6 is-size-7">
-                        <label class="checkbox">
-                            <input id="Handle_TermsCheckbox" type="checkbox">
-                            I accept the <a href="#" target="_blank">Terms of Service</a> and have read the <a a href="#" target="_blank">Services Privacy Policy</a>.
-                        </label>
+                        By creating the account I accept the <span id="Link_Terms" class="has-text-link" style="cursor: pointer">Terms of Service</span> and have read the <span id="Link_Privacy" class="has-text-link" style="cursor: pointer">Services Privacy Policy</span>.
                     </div>
 
                 </div>
