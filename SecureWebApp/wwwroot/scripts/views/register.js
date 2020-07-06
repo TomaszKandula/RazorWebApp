@@ -341,28 +341,18 @@ export class RegisterClass
     }
 
 
-    Link_Terms(Event)
+    async Link_Terms(Event)
     {
 
         let Url = encodeURI(window.location.origin + "/modals/terms.html");
+        let Response = await fetch(Url);
+        let Content = await Response.text();
 
-        _common.PerformAjaxCall(
-            "GET",
-            Url,
-            "text/html; charset=UTF-8",
-            null,
-            this.Link_Terms_Callback.bind(this)
-        );
-
-    }
-
-
-    Link_Terms_Callback(Response, StatusCode)
-    {
-
-        if (StatusCode === 200)
+        if (Response.ok)
         {
-            this.ModalWindowHandle.innerHTML = Response;
+
+            this.ModalWindowHandle.innerHTML = Content;
+            this.ModalWindowHandle.classList.add("is-active");
 
             let Button_CloseTerms = this.Container.querySelector("#Close_TermsModal");
             Button_CloseTerms.addEventListener("click", () =>
@@ -370,39 +360,29 @@ export class RegisterClass
                 this.ModalWindowHandle.classList.remove("is-active");
             });
 
-            this.ModalWindowHandle.classList.add("is-active");
         }
         else
         {
-            Console.Error("Cannot get Terms.html, status code: " + StatusCode);
+            alert("An error has occured during the processing. Response: " + Response.status);
         }
 
     }
 
 
-    Link_Privacy(Event)
+    async Link_Privacy(Event)
     {
 
         let Url = encodeURI(window.location.origin + "/modals/privacy.html");
+        let Response = await fetch(Url);
+        let Content = await Response.text();
 
-        _common.PerformAjaxCall(
-            "GET",
-            Url,
-            "text/html; charset=UTF-8",
-            null,
-            this.Link_Privacy_Callback.bind(this)
-        );
-
-    }
-
-
-    Link_Privacy_Callback(Response, StatusCode)
-    {
-
-        if (StatusCode === 200)
+        if (Response.ok)
         {
 
-            this.ModalWindowHandle.innerHTML = Response;
+            console.log(Response.text)
+
+            this.ModalWindowHandle.innerHTML = Content;
+            this.ModalWindowHandle.classList.add("is-active");
 
             let Button_ClosePrivacy = this.Container.querySelector("#Close_PrivacyModal");
             Button_ClosePrivacy.addEventListener("click", () =>
@@ -410,12 +390,10 @@ export class RegisterClass
                 this.ModalWindowHandle.classList.remove("is-active");
             });
 
-            this.ModalWindowHandle.classList.add("is-active");
-
         }
         else
         {
-            Console.Error("Cannot get Terms.html, status code: " + StatusCode);
+            alert("An error has occured during the processing. Response: " + Response.status);
         }
 
     }
