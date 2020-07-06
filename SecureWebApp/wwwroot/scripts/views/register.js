@@ -341,7 +341,7 @@ export class RegisterClass
     }
 
 
-    async Link_Terms(Event)
+    async Link_Terms(Event) //refactor!
     {
 
         let Url = encodeURI(window.location.origin + "/modals/terms.html");
@@ -369,7 +369,7 @@ export class RegisterClass
     }
 
 
-    async Link_Privacy(Event)
+    async Link_Privacy(Event) //refactor!
     {
 
         let Url = encodeURI(window.location.origin + "/modals/privacy.html");
@@ -378,8 +378,6 @@ export class RegisterClass
 
         if (Response.ok)
         {
-
-            console.log(Response.text)
 
             this.ModalWindowHandle.innerHTML = Content;
             this.ModalWindowHandle.classList.add("is-active");
@@ -399,14 +397,36 @@ export class RegisterClass
     }
 
 
-    Button_CreateAccount(Event)
+    async Button_CreateAccount(Event) //refactor!
     {
 
         if (!this.IsDataValid())
         {
-            // show modal window with message
-            alert("Cannot create the account. Please check all the fields.");
+
+            let Url = encodeURI(window.location.origin + "/modals/ErrorCreateAccount.html");
+            let Response = await fetch(Url);
+            let Content = await Response.text();
+
+            if (Response.ok)
+            {
+
+                this.ModalWindowHandle.innerHTML = Content;
+                this.ModalWindowHandle.classList.add("is-active");
+
+                let Button_CloseError = this.Container.querySelector("#Close_ErrorCreateAccount");
+                Button_CloseError.addEventListener("click", () =>
+                {
+                    this.ModalWindowHandle.classList.remove("is-active");
+                });
+
+            }
+            else
+            {
+                alert("An error has occured during the processing. Response: " + Response.status);
+            }
+
             return false;
+
         }
 
         let SerializedPayLoad = JSON.stringify(
@@ -435,13 +455,50 @@ export class RegisterClass
     }
 
 
-    CreateAccount_Callback(ParsedResponse, StatusCode)
+    async CreateAccount_Callback(Response, StatusCode) //refactor!
     {
 
-        alert(StatusCode + ": " + ParsedResponse);
+        if (StatusCode === 200)
+        {
 
-        // clear fields
-        // show modal window with message
+            let ParsedResponse = JSON.parse(Response);
+
+            if (ParsedResponse.IsUserCreated)
+            {
+
+                let Url = encodeURI(window.location.origin + "/modals/SuccessCreateAccount.html");
+                let Response = await fetch(Url);
+                let Content = await Response.text();
+
+                if (Response.ok)
+                {
+
+                    this.ModalWindowHandle.innerHTML = Content;
+                    this.ModalWindowHandle.classList.add("is-active");
+
+                    let Button_CloseError = this.Container.querySelector("#Close_SuccessCreateAccount");
+                    Button_CloseError.addEventListener("click", () =>
+                    {
+                        this.ModalWindowHandle.classList.remove("is-active");
+                    });
+
+                }
+                else
+                {
+                    alert("An error has occured during the processing. Response: " + Response.status);
+                }
+
+            }
+            else
+            {
+                alert("An error has occured during the processing. Error: " + ParsedResponse.Error.ErrorDesc);
+            }
+
+        }
+        else
+        {
+            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+        }
 
     }
 
