@@ -6,37 +6,37 @@ SET NOCOUNT ON
 
 BEGIN TRY
 
-	BEGIN TRANSACTION
+    BEGIN TRANSACTION
 
-		BULK INSERT 
-			Countries
-		FROM 
-			'C:\Tmp\Countries.csv'
-		WITH
-		(
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',  
-			ROWTERMINATOR = '\n',   
-			TABLOCK
-		)
+        BULK INSERT 
+            Countries
+        FROM 
+            'C:\Tmp\Countries.csv'
+        WITH
+        (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ';',  
+            ROWTERMINATOR = '\n',   
+            TABLOCK
+        )
 
-		BULK INSERT 
-			Cities
-		FROM 
-			'C:\Tmp\Cities.csv'
-		WITH
-		(
-			FIRSTROW = 2,
-			FIELDTERMINATOR = ';',  
-			ROWTERMINATOR = '\n',   
-			TABLOCK
-		)
+        BULK INSERT 
+            Cities
+        FROM 
+            'C:\Tmp\Cities.csv'
+        WITH
+        (
+            FIRSTROW = 2,
+            FIELDTERMINATOR = ';',  
+            ROWTERMINATOR = '\n',   
+            TABLOCK
+        )
 
-	COMMIT TRANSACTION
+    COMMIT TRANSACTION
 
 END TRY
 BEGIN CATCH
-	IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION
-	;THROW
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION
+    ;THROW
 END CATCH
 
