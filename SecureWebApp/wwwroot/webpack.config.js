@@ -1,74 +1,92 @@
 const webpack = require('webpack');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const config = 
 {
-  mode: 'development',
-  entry: 
-	{
-        bundle: 
-		[
-            './styles/main.scss',
-            './scripts/startup.js'
-        ]
+    mode: 'development',
+        entry: 
+	    {
+            bundle: 
+		    [
+                './styles/main.scss',
+                './scripts/startup.js'
+            ]
+        },
+  
+    output: 
+    {
+        path: path.resolve(__dirname, 'dist'),
+	    //filename: '[name].[contenthash].js' 
+	    filename: '[name].js' 
     },
   
-  output: 
-  {
-    path: path.resolve(__dirname, 'dist'),
-	//filename: '[name].[contenthash].js' 
-	filename: '[name].js' 
-  },
-  
-  module: 
-  {
-    rules: 
-	[
-      {
-        test: /\.scss$/,
-        use: 
-		[
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
-      },
-      {
-        test: /\.png$/,
-        use: 
-		[
-          {
-            loader: 'url-loader',
-            options: 
-			{
-              mimetype: 'image/png'
+    module: 
+    {
+        rules: 
+	    [
+            {
+                test: /\.scss$/,
+                use: 
+		        [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
+            },
+            {
+                test: /\.png$/,
+                use: 
+		        [
+                    {
+                        loader: 'url-loader',
+                        options: 
+			            {
+                            mimetype: 'image/png'
+                        }
+                    }
+                ]
+            },
+            {
+                test: /\.svg$/,
+                use: 'file-loader'
             }
-          }
         ]
-      },
-      {
-        test: /\.svg$/,
-        use: 'file-loader'
-      }
-    ]
-  }, 
+    }, 
   
-  optimization: 
-  {
-    runtimeChunk: 'single',
-    splitChunks: 
-	{
-      cacheGroups: 
-	  {
-        vendor: 
+    optimization: 
+    {
+        minimizer: [new UglifyJsPlugin(
 		{
-          test: /[\\\/]node_modules[\\\/]/,
-          name: 'vendors',
-          chunks: 'all'
+			uglifyOptions: 
+			{
+				mangle: true,
+				output: 
+				{
+					comments: false,
+					beautify: false
+				},
+				compress: true,
+				warnings: false			
+			},
+			sourceMap: true,
+            exclude: [/\.min\.js$/gi]
+		})],
+        runtimeChunk: 'single',
+        splitChunks: 
+	    {
+            cacheGroups: 
+	        {
+                vendor: 
+		        {
+                    test: /[\\\/]node_modules[\\\/]/,
+                    name: 'vendors',
+                    chunks: 'all'
+                }
+            }
         }
-      }
     }
-  }
+
 }
 
 module.exports = config;

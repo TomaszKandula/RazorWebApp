@@ -1,60 +1,53 @@
 ﻿@page
 @model LoginModel
 
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
-    }
-}
+    <section id="LoginForm">
 
-<section id="LoginForm">
+        <div class="container mt-6 mb-6">
 
-    <div class="container mt-6 mb-6">
+            <div class="columns is-mobile mt-6 mb-6">
 
-        <div class="columns is-mobile mt-6 mb-6">
+                <div class="column is-6 is-offset-3 box">
 
-            <div class="column is-6 is-offset-3 box">
+                    <div class="column is-8 is-offset-2">
 
-                <div class="column is-8 is-offset-2">
-
-                    <div class="container mt-4">
-                        <h1 class="title">Sing in!</h1>
-                        <h2 class="subtitle">The Ultimate Place</h2>
-                    </div>
-
-                    <!-- Email address -->
-
-                    <div class="field mt-6">
-                        <label class="label">Email address</label>
-                        <div class="control has-icons-left has-icons-right">
-                            <input class="input" type="email" placeholder="" pattern="/\S+@@\S+\.\S+/" minlength="5" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-envelope"></i>
-                            </span>
+                        <div class="container mt-4">
+                            <h1 class="title">Sing in!</h1>
+                            <h2 class="subtitle">The Ultimate Place</h2>
                         </div>
-                    </div>
 
-                    <!-- User password -->
+                        <!-- Email address -->
 
-                    <div class="field mt-4">
-                        <label class="label">Password</label>
-                        <div class="control has-icons-left has-icons-right">
-                            <input class="input" type="password" placeholder="" minlength="8" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
+                        <div class="field mt-6">
+                            <label class="label">Email address</label>
+                            <div class="control has-icons-left has-icons-right">
+                                <input class="input" type="email" placeholder="" pattern="/\S+@@\S+\.\S+/" minlength="5" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Login -->
+                        <!-- User password -->
 
-                    <div class="container mt-6 mb-6 is-grouped">
-                        <div class="control">
-                            <button class="button is-info is-block is-fullwidth" id="BtnSubmit">Login <i class="fas fa-sign-in-alt" aria-hidden="true"></i></button>
+                        <div class="field mt-4">
+                            <label class="label">Password</label>
+                            <div class="control has-icons-left has-icons-right">
+                                <input class="input" type="password" placeholder="" minlength="8" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                            </div>
                         </div>
+
+                        <!-- Login -->
+
+                        <div class="container mt-6 mb-6 is-grouped">
+                            <div class="control">
+                                <button class="button is-info is-block is-fullwidth" id="BtnSubmit">Login <i class="fas fa-sign-in-alt" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -63,6 +56,4 @@
 
         </div>
 
-    </div>
-
-</section>
+    </section>

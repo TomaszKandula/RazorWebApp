@@ -15,7 +15,7 @@ namespace SecureWebApp.Pages
     public class RegisterModel : PageModel
     {
 
-        private readonly IAppLogger    FAppLogger;
+        private readonly IAppLogger FAppLogger;
         private readonly MainDbContext FMainDbContext;
 
         [BindProperty]
@@ -43,7 +43,7 @@ namespace SecureWebApp.Pages
                 })
                 .AsNoTracking()
                 .ToListAsync();
-                
+
                 return Page();
             
             }

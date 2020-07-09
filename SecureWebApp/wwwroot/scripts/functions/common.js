@@ -29,13 +29,14 @@ function ValidatePasswordField(AValue)
 };
 
 
-function PerformAjaxCall(AMethod, AUrl, AContentType, APayLoad, ACallback)
+function PerformAjaxCall(AMethod, AUrl, ACustomToken, AContentType, APayLoad, ACallback)
 {
 
     let LRequest = new XMLHttpRequest();
 
     LRequest.open(AMethod, AUrl, true);
     LRequest.setRequestHeader("Content-Type", AContentType);
+    LRequest.setRequestHeader("X-ApiKey", ACustomToken);
 
     LRequest.onload = function ()
     {
@@ -56,12 +57,14 @@ function PerformAjaxCall(AMethod, AUrl, AContentType, APayLoad, ACallback)
         ACallback(null, this.status);
     };
 
-    if (AMethod === "GET" || AMethod === "DELETE")
+    let LMethod = AMethod.toUpperCase();
+
+    if (LMethod === "GET" || LMethod === "DELETE")
     {
         LRequest.send();
     }
 
-    if (AMethod === "PUT" || AMethod === "POST" || AMethod === "PATCH")
+    if (LMethod === "PUT" || LMethod === "POST" || LMethod === "PATCH")
     {
         LRequest.send(APayLoad);
     }

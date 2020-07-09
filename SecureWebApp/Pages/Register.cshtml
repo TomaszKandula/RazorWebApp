@@ -1,168 +1,161 @@
 ﻿@page
 @model RegisterModel
 
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
-    }
-}
+    <section id="RegisterForm">
 
-<section id="RegisterForm">
+        <div id="Handle_RegisterModal" class="modal"></div>
 
-    <div id="Handle_RegisterModal" class="modal"></div>
+        <div class="container mt-6 mb-6">
 
-    <div class="container mt-6 mb-6">
+            <div class="columns is-mobile mt-6 mb-6">
 
-        <div class="columns is-mobile mt-6 mb-6">
+                <div class="column is-6 is-offset-3 box">
 
-            <div class="column is-6 is-offset-3 box">
+                    <div class="column is-8 is-offset-2">
 
-                <div class="column is-8 is-offset-2">
-
-                    <div class="container mt-4">
-                        <h1 class="title">Signup Today!</h1>
-                        <h2 class="subtitle">The Ultimate Place</h2>
-                    </div>
-
-                    <!-- First name -->
-
-                    <div class="field mt-6">
-                        <label class="label">First name</label>
-                        <div id="Handle_FirstName" class="control has-icons-left has-icons-right">
-                            <input id="Input_FirstName" class="input" type="text" placeholder="" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <span id="OK_FirstName" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span id="ERR_FirstName" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </span>
+                        <div class="container mt-4">
+                            <h1 class="title">Signup Today!</h1>
+                            <h2 class="subtitle">The Ultimate Place</h2>
                         </div>
-                        <p id="Info_FirstName" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
-                    </div>
 
-                    <!-- Last name -->
+                        <!-- First name -->
 
-                    <div class="field mt-4">
-                        <label class="label">Last name</label>
-                        <div id="Handle_LastName" class="control has-icons-left has-icons-right">
-                            <input id="Input_LastName" class="input" type="text" placeholder="" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <span id="OK_LastName" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span id="ERR_LastName" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </span>
+                        <div class="field mt-6">
+                            <label class="label">First name</label>
+                            <div id="Handle_FirstName" class="control has-icons-left has-icons-right">
+                                <input id="Input_FirstName" class="input" type="text" placeholder="" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <span id="OK_FirstName" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_FirstName" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <p id="Info_FirstName" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
                         </div>
-                        <p id="Info_LastName" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
-                    </div>
 
-                    <!-- Nickname -->
+                        <!-- Last name -->
 
-                    <div class="field mt-4">
-                        <label class="label">Nickname</label>
-                        <div id="Handle_Nickname" class="control has-icons-left has-icons-right">
-                            <input id="Input_Nickname" class="input" type="text" placeholder="" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-user"></i>
-                            </span>
-                            <span id="OK_Nickname" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span id="ERR_Nickname" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </span>
+                        <div class="field mt-4">
+                            <label class="label">Last name</label>
+                            <div id="Handle_LastName" class="control has-icons-left has-icons-right">
+                                <input id="Input_LastName" class="input" type="text" placeholder="" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <span id="OK_LastName" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_LastName" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <p id="Info_LastName" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
                         </div>
-                        <p id="Info_Nickname" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
-                    </div>
 
-                    <!-- Email address -->
+                        <!-- Nickname -->
 
-                    <div class="field mt-4">
-                        <label class="label">Email address</label>
-                        <div id="Handle_EmailAddress" class="control has-icons-left has-icons-right">
-                            <input id="Input_EmailAddress" class="input" type="email" placeholder="" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <span id="OK_EmailAddress" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span id="ERR_EmailAddress" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </span>
+                        <div class="field mt-4">
+                            <label class="label">Nickname</label>
+                            <div id="Handle_Nickname" class="control has-icons-left has-icons-right">
+                                <input id="Input_Nickname" class="input" type="text" placeholder="" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <span id="OK_Nickname" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_Nickname" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <p id="Info_Nickname" class="help is-danger" style="display: none">This field is mandatory and cannot be empty.</p>
                         </div>
-                        <p id="Info_EmailAddress" class="help is-danger" style="display: none"></p>
-                    </div>
 
-                    <!-- User password -->
+                        <!-- Email address -->
 
-                    <div class="field mt-4">
-                        <label class="label">Password</label>
-                        <div id="Handle_Password" class="control has-icons-left has-icons-right">
-                            <input id="Input_Password" class="input" type="password" placeholder="" maxlength="255" required>
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-key"></i>
-                            </span>
-                            <span id="OK_Password" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-check"></i>
-                            </span>
-                            <span id="ERR_Password" class="icon is-right" style="visibility: hidden">
-                                <i class="fas fa-exclamation-triangle"></i>
-                            </span>
+                        <div class="field mt-4">
+                            <label class="label">Email address</label>
+                            <div id="Handle_EmailAddress" class="control has-icons-left has-icons-right">
+                                <input id="Input_EmailAddress" class="input" type="email" placeholder="" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <span id="OK_EmailAddress" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_EmailAddress" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <p id="Info_EmailAddress" class="help is-danger" style="display: none"></p>
                         </div>
-                        <p id="Info_Password" class="help is-danger" style="display: none">The password cannot be shorter than 8 characters, and must contain special char and capital letter.</p>
-                    </div>
 
-                    <!-- Country -->
+                        <!-- User password -->
 
-                    <div class="field mt-4">
-                        <label class="label">Country</label>
-                        <div class="control">
-                            <div id="Handle_CountryList" class="select">
-                                <select id="Select_CountryList">
-                                    @foreach (var Country in Model.CountryList)
-                                    {
-                                        <option value="@Country.Id">@Country.Name</option>
-                                    }
-                                </select>
+                        <div class="field mt-4">
+                            <label class="label">Password</label>
+                            <div id="Handle_Password" class="control has-icons-left has-icons-right">
+                                <input id="Input_Password" class="input" type="password" placeholder="" maxlength="255" required>
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-key"></i>
+                                </span>
+                                <span id="OK_Password" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_Password" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </span>
+                            </div>
+                            <p id="Info_Password" class="help is-danger" style="display: none">The password cannot be shorter than 8 characters, and must contain special char and capital letter.</p>
+                        </div>
+
+                        <!-- Country -->
+
+                        <div class="field mt-4">
+                            <label class="label">Country</label>
+                            <div class="control">
+                                <div id="Handle_CountryList" class="select">
+                                    <select id="Select_CountryList">
+                                        @foreach (var Country in Model.CountryList)
+                                        {
+                                            <option value="@Country.Id">@Country.Name</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- City -->
+                        <!-- City -->
 
-                    <div class="field mt-4">
-                        <label class="label">City</label>
-                        <div class="control">
-                            <div id="Handle_CityList" class="select">
-                                <select id="Select_CityList" disabled>
-                                    <option value="">Select city</option>
-                                </select>
+                        <div class="field mt-4">
+                            <label class="label">City</label>
+                            <div class="control">
+                                <div id="Handle_CityList" class="select">
+                                    <select id="Select_CityList" disabled>
+                                        <option value="">Select city</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Submit -->
+                        <!-- Submit -->
 
-                    <div class="container mt-6 is-grouped">
-                        <div id="Handle_CreateAccount" class="control">
-                            <button id="Button_CreateAccount" class="button is-info is-fullwidth">Create account</button>
+                        <div class="container mt-6 is-grouped">
+                            <div id="Handle_CreateAccount" class="control">
+                                <button id="Button_CreateAccount" class="button is-info is-fullwidth">Create account</button>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Terms of use -->
+                        <!-- Terms of use -->
 
-                    <div class="field mt-6 mb-6 is-size-7">
-                        By creating the account I accept the <span id="Link_Terms" class="has-text-link" style="cursor: pointer">Terms of Service</span> and have read the <span id="Link_Privacy" class="has-text-link" style="cursor: pointer">Services Privacy Policy</span>.
+                        <div class="field mt-6 mb-6 is-size-7">
+                            By creating the account I accept the <span id="Link_Terms" class="has-text-link" style="cursor: pointer">Terms of Service</span> and have read the <span id="Link_Privacy" class="has-text-link" style="cursor: pointer">Services Privacy Policy</span>.
+                        </div>
+
                     </div>
 
                 </div>
@@ -171,6 +164,4 @@
 
         </div>
 
-    </div>
-
-</section>
+    </section>
