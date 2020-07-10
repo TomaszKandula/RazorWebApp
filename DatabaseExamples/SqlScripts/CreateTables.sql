@@ -1,13 +1,4 @@
 
-CREATE TABLE AuthDomains
-(
-    Id       INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-    Domain   VARCHAR(255) NOT NULL,
-    ApiKey   VARCHAR(255) NOT NULL,
-    Maturity DATETIME NULL
-)
-
-
 CREATE TABLE Countries
 (
     Id          INT IDENTITY(1,1) NOT NULL,
