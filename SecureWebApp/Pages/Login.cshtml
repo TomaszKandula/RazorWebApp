@@ -1,7 +1,16 @@
 ﻿@page
 @model LoginModel
 
-    <section id="LoginForm">
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+    }
+}
+
+    <section id="LoginForm" data-xsrf=@GetAntiXsrfRequestToken()>
 
         <div class="container mt-6 mb-6">
 

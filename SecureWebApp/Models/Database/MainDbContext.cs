@@ -26,28 +26,12 @@ namespace SecureWebApp.Models.Database
 
         }
 
-        public virtual DbSet<AuthDomains> AuthDomains { get; set; }
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            modelBuilder.Entity<AuthDomains>(entity =>
-            {
-
-                entity.Property(e => e.Domain)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.ApiKey)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.Maturity).HasColumnType("datetime");
-
-            });
 
             modelBuilder.Entity<Cities>(entity =>
             {

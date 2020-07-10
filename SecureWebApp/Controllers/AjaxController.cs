@@ -80,6 +80,7 @@ namespace SecureWebApp.Controllers
         /// <param name="EmailAddress"></param>
         /// <returns></returns>
         // GET api/v1/ajax/validation/{emailaddress}/
+        [ValidateAntiForgeryToken]
         [HttpGet("validation/{emailaddress}")]
         public async Task<IActionResult> CheckEmailAsync(string EmailAddress)
         {
@@ -154,6 +155,7 @@ namespace SecureWebApp.Controllers
         /// <param name="Id"></param>
         /// <returns></returns>
         // GET api/v1/ajax/cities/{id}/
+        [ValidateAntiForgeryToken]
         [HttpGet("cities/{id}")]
         public async Task<IActionResult> ReturnCityAsync(int Id) 
         {
@@ -180,6 +182,7 @@ namespace SecureWebApp.Controllers
         /// <param name="PayLoad"></param>
         /// <returns></returns>
         // POST api/v1/ajax/users/
+        [ValidateAntiForgeryToken]
         [HttpPost("users")]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate PayLoad) 
         {

@@ -36,7 +36,7 @@ function PerformAjaxCall(AMethod, AUrl, ACustomToken, AContentType, APayLoad, AC
 
     LRequest.open(AMethod, AUrl, true);
     LRequest.setRequestHeader("Content-Type", AContentType);
-    LRequest.setRequestHeader("X-ApiKey", ACustomToken);
+    LRequest.setRequestHeader("X-CSRF-TOKEN", ACustomToken);
 
     LRequest.onload = function ()
     {

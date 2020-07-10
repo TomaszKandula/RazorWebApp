@@ -1,7 +1,16 @@
 ﻿@page
 @model RegisterModel
 
-    <section id="RegisterForm">
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+    }
+}
+
+    <section id="RegisterForm" data-xsrf=@GetAntiXsrfRequestToken()>
 
         <div id="Handle_RegisterModal" class="modal"></div>
 

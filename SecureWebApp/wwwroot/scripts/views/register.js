@@ -22,8 +22,6 @@ export class RegisterClass
         this.CountryListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
 
-        this.PublicAPIKey = "99eab46506ad4159aac9bb053258c851";
-
     }
 
     BindDom()
@@ -180,7 +178,7 @@ export class RegisterClass
             _common.PerformAjaxCall(
                 "GET",
                 Url,
-                this.PublicAPIKey,
+                this.Container.dataset.xsrf,
                 "application/json; charset=UTF-8",
                 null,
                 this.CheckEmailAddress_Callback.bind(this)
@@ -282,7 +280,7 @@ export class RegisterClass
         _common.PerformAjaxCall(
             "GET",
             Url,
-            this.PublicAPIKey,
+            this.Container.dataset.xsrf,
             "application/json; charset=UTF-8",
             null,
             this.GetCountryList_Callback.bind(this)
@@ -449,7 +447,7 @@ export class RegisterClass
         _common.PerformAjaxCall(
             "POST",
             Url,
-            this.PublicAPIKey,
+            this.Container.dataset.xsrf,
             "application/json; charset=UTF-8",
             SerializedPayLoad,
             this.CreateAccount_Callback.bind(this)
