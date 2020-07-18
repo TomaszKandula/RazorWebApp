@@ -3,25 +3,30 @@
 "use strict";
 
 
-import { IndexPage }    from "./pages/index";
-import { LoginPage }    from "./pages/login";
-import { RegisterPage } from "./pages/register";
-import { ErrorPage }    from "./pages/error";
+import IndexPage    from "./pages/Index";
+import LoginPage    from "./pages/Login";
+import RegisterPage from "./pages/Register";
+import ErrorPage    from "./pages/Error";
 
 
 document.addEventListener('DOMContentLoaded', () =>
 {
 
     // Pages
-    const IndexForm    = document.querySelector("#IndexForm");
-    const LoginForm    = document.querySelector("#LoginForm");
-    const RegisterForm = document.querySelector("#RegisterForm");
-    const ErrorForm    = document.querySelector("#ErrorForm");
+    const SectionIndex    = document.querySelector("#IndexPage");
+    const SectionLogin    = document.querySelector("#LoginPage");
+    const SectionRegister = document.querySelector("#RegisterPage");
+    const SectionError    = document.querySelector("#ErrorPage");
 
-    if (IndexForm)    { const indexPage    = new IndexPage(IndexForm); }
-    if (LoginForm)    { const loginPage    = new LoginPage(LoginForm); }
-    if (RegisterForm) { const registerPage = new RegisterPage(RegisterForm); }
-    if (ErrorForm)    { const errorPage    = new ErrorPage(ErrorForm); }
+    const IndexInstance    = new IndexPage(SectionIndex);
+    const LoginInstance    = new LoginPage(SectionLogin);
+    const RegisterInstance = new RegisterPage(SectionRegister);
+    const ErrorInstance    = new ErrorPage(SectionError);
+
+    IndexInstance.Initialize();
+    LoginInstance.Initialize();
+    RegisterInstance.Initialize();
+    ErrorInstance.Initialize();
 
     // Modals
 

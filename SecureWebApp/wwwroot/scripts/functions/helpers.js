@@ -3,14 +3,13 @@
 "use strict";
 
 
-export class Helpers
+export default class Helpers
 {
 
     constructor()
     {
 
     }
-
 
     ClearSelectElement(ASelectElement)
     {
@@ -23,7 +22,6 @@ export class Helpers
         }
 
     }
-
 
     FormatPhoneNumber(ANumber)
     {
@@ -40,7 +38,6 @@ export class Helpers
 
     }
 
-
     HasSpecialChar(AText)
     {
         let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
@@ -56,7 +53,6 @@ export class Helpers
 
     }
 
-
     HasLowerCase(AText)
     {
         if (AText.toUpperCase() != AText)
@@ -66,7 +62,6 @@ export class Helpers
 
         return false;
     }
-
 
     HasUpperCase(AText)
     {
@@ -78,25 +73,21 @@ export class Helpers
         return false;
     }
 
-
     IsEmpty(AValue)
     {
         return typeof AValue === 'string' && !AValue.trim() || typeof AValue === undefined || AValue === null;
     }
-
 
     IsNumeric(AValue)
     {
         return !isNaN(parseFloat(AValue)) && isFinite(AValue);
     }
 
-
     ValidateEmail(AEmail)
     {
         let LRegex = /\S+@\S+\.\S+/
         return LRegex.test(AEmail);
     }
-
 
     ValidatePasswordField(AValue)
     {

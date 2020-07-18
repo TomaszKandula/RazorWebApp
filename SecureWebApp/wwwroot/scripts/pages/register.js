@@ -3,17 +3,25 @@
 "use strict";
 
 
-import { Helpers } from "../functions/helpers";
-import { Rest }    from "../functions/rest";
+import Helpers    from "../functions/Helpers";
+import RestClient from "../functions/RestClient";
 
 
-export class RegisterPage
+export default class RegisterPage
 {
 
     constructor(Container)
     {
-
         this.Container = Container;
+    }
+
+    Initialize()
+    {
+
+        if (this.Container === null)
+        {
+            return null;
+        }
 
         this.BindDom();
         this.AddEvents();
@@ -22,7 +30,7 @@ export class RegisterPage
         this.CountryListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
 
-        this.Ajax = new Rest(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Helpers = new Helpers();
 
     }

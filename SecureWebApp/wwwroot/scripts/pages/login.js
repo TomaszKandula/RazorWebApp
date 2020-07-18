@@ -3,14 +3,22 @@
 "use strict";
 
 
-export class LoginPage
+export default class LoginPage
 {
 
     constructor(Container)
     {
-
         this.Container = Container;
-
     } 
+
+    Initialize()
+    {
+
+        if (this.Container === null)
+        {
+            return null;
+        }
+
+    }
 
 }

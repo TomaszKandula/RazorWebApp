@@ -3,7 +3,7 @@
 "use strict";
 
 
-export class Rest
+export default class RestClient
 {
 
     constructor(ACustomToken, AContentType)
