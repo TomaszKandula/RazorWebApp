@@ -116,7 +116,6 @@ export default class RegisterPage
 
     }
 
-
     Input_LastName(Event)
     {
 
@@ -141,7 +140,6 @@ export default class RegisterPage
 
     }
 
-
     Input_Nickname(Event)
     {
 
@@ -165,7 +163,6 @@ export default class RegisterPage
         }
 
     }
-
 
     Input_EmailAddress()
     {
@@ -199,7 +196,6 @@ export default class RegisterPage
         }
 
     }
-
 
     CheckEmailAddress_Callback(Response, StatusCode)
     {
@@ -245,7 +241,6 @@ export default class RegisterPage
 
     }
 
-
     Input_Password(Event)
     {
 
@@ -270,7 +265,6 @@ export default class RegisterPage
 
     }
 
-
     Select_CountryList(Event)
     {
 
@@ -282,7 +276,6 @@ export default class RegisterPage
         this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
 
     }
-
 
     GetCountryList_Callback(Response, StatusCode)
     {
@@ -322,7 +315,6 @@ export default class RegisterPage
 
     }
 
-
     Select_CityList(Event)
     {
 
@@ -336,7 +328,6 @@ export default class RegisterPage
         }
 
     }
-
 
     async Link_Terms(Event) //refactor!
     {
@@ -365,7 +356,6 @@ export default class RegisterPage
 
     }
 
-
     async Link_Privacy(Event) //refactor!
     {
 
@@ -392,7 +382,6 @@ export default class RegisterPage
         }
 
     }
-
 
     async Button_CreateAccount(Event) //refactor!
     {
@@ -443,7 +432,6 @@ export default class RegisterPage
         return true;
 
     }
-
 
     async CreateAccount_Callback(Response, StatusCode) //refactor!
     {

@@ -16,40 +16,49 @@ export default class RestClient
     {
 
         let LRequest = new XMLHttpRequest();
-
-        LRequest.open(AMethod, AUrl, true);
-        LRequest.setRequestHeader("Content-Type", this.LContentType);
-        LRequest.setRequestHeader("X-CSRF-TOKEN", this.LCustomToken);
-
-        LRequest.onload = function ()
+        try
         {
 
-            if (this.status >= 200 && this.status < 400)
+            LRequest.open(AMethod, AUrl, true);
+            LRequest.setRequestHeader("Content-Type", this.LContentType);
+            LRequest.setRequestHeader("X-CSRF-TOKEN", this.LCustomToken);
+
+            LRequest.onload = function ()
             {
-                ACallback(this.response, this.status);
-            }
-            else
+
+                if (this.status >= 200 && this.status < 400)
+                {
+                    ACallback(this.response, this.status);
+                }
+                else
+                {
+                    ACallback(null, this.status);
+                }
+
+            };
+
+            LRequest.onerror = function ()
             {
                 ACallback(null, this.status);
+            };
+
+            let LMethod = AMethod.toUpperCase();
+
+            if (LMethod === "GET" || LMethod === "DELETE")
+            {
+                LRequest.send();
             }
 
-        };
+            if (LMethod === "PUT" || LMethod === "POST" || LMethod === "PATCH")
+            {
+                LRequest.send(APayLoad);
+            }
 
-        LRequest.onerror = function ()
-        {
-            ACallback(null, this.status);
-        };
-
-        let LMethod = AMethod.toUpperCase();
-
-        if (LMethod === "GET" || LMethod === "DELETE")
-        {
-            LRequest.send();
         }
-
-        if (LMethod === "PUT" || LMethod === "POST" || LMethod === "PATCH")
+        catch (Error)
         {
-            LRequest.send(APayLoad);
+            alert("An error occured during execution: " + Error.message);
+            console.error("[RestClient].[Execute]: An error has been thrown: " + Error.message);
         }
 
     }
