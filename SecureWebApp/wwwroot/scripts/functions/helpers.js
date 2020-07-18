@@ -84,7 +84,7 @@ export default class Helpers
         return LRegex.test(AEmail);
     }
 
-    ValidatePasswordField(AValue)
+    ValidatePassword(AValue)
     {
 
         let LCheck = 0;

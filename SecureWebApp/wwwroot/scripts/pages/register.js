@@ -248,7 +248,7 @@ export default class RegisterPage
         let Malformed = this.Container.querySelector("#ERR_Password");
         let Info      = this.Container.querySelector("#Info_Password");
 
-        if (!this.Helpers.ValidatePasswordField(Event.target.value))
+        if (!this.Helpers.ValidatePassword(Event.target.value))
         {
             Verified.style.visibility  = "hidden";
             Malformed.style.visibility = "visible";
