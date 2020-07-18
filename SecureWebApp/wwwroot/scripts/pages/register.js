@@ -1,13 +1,13 @@
-﻿// View module to manipulate DOM
+﻿// View module to manipulate Virtual DOM
 
-"use strict"
-
-
-import * as _helpers from "../functions/helpers";
-import * as _common  from "../functions/common";
+"use strict";
 
 
-export class RegisterClass
+import { Helpers } from "../functions/helpers";
+import { Rest }    from "../functions/rest";
+
+
+export class RegisterPage
 {
 
     constructor(Container)
@@ -21,6 +21,9 @@ export class RegisterClass
 
         this.CountryListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
+
+        this.Ajax = new Rest(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Helpers = new Helpers();
 
     }
 
@@ -88,7 +91,7 @@ export class RegisterClass
         let Malformed = this.Container.querySelector("#ERR_FirstName");
         let Info      = this.Container.querySelector("#Info_FirstName");
 
-        if (_helpers.IsEmpty(Event.target.value))
+        if (this.Helpers.IsEmpty(Event.target.value))
         {
             Verified.style.visibility  = "hidden";
             Malformed.style.visibility = "visible";
@@ -113,7 +116,7 @@ export class RegisterClass
         let Malformed = this.Container.querySelector("#ERR_LastName");
         let Info      = this.Container.querySelector("#Info_LastName");
 
-        if (_helpers.IsEmpty(Event.target.value))
+        if (this.Helpers.IsEmpty(Event.target.value))
         {
             Verified.style.visibility  = "hidden";
             Malformed.style.visibility = "visible";
@@ -138,7 +141,7 @@ export class RegisterClass
         let Malformed = this.Container.querySelector("#ERR_Nickname");
         let Info      = this.Container.querySelector("#Info_Nickname");
 
-        if (_helpers.IsEmpty(Event.target.value))
+        if (this.Helpers.IsEmpty(Event.target.value))
         {
             Verified.style.visibility  = "hidden";
             Malformed.style.visibility = "visible";
@@ -163,6 +166,7 @@ export class RegisterClass
         let Verified     = this.Container.querySelector("#OK_EmailAddress");
         let Malformed    = this.Container.querySelector("#ERR_EmailAddress");
         let Info         = this.Container.querySelector("#Info_EmailAddress");
+
         let EmailAddress = this.EmailAddressInput.value;
         let Url          = encodeURI(window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/");
 
@@ -172,18 +176,9 @@ export class RegisterClass
 
         Handler.classList.add("is-loading");
 
-        if (!_helpers.IsEmpty(EmailAddress) && _helpers.ValidateEmail(EmailAddress))
+        if (!this.Helpers.IsEmpty(EmailAddress) && this.Helpers.ValidateEmail(EmailAddress))
         {
-
-            _common.PerformAjaxCall(
-                "GET",
-                Url,
-                this.Container.dataset.xsrf,
-                "application/json; charset=UTF-8",
-                null,
-                this.CheckEmailAddress_Callback.bind(this)
-            );
-
+            this.Ajax.Execute("GET", Url, null, this.CheckEmailAddress_Callback.bind(this));
         }
         else
         {
@@ -250,7 +245,7 @@ export class RegisterClass
         let Malformed = this.Container.querySelector("#ERR_Password");
         let Info      = this.Container.querySelector("#Info_Password");
 
-        if (!_common.ValidatePasswordField(Event.target.value))
+        if (!this.Helpers.ValidatePasswordField(Event.target.value))
         {
             Verified.style.visibility  = "hidden";
             Malformed.style.visibility = "visible";
@@ -276,15 +271,7 @@ export class RegisterClass
         let Url        = encodeURI(window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/");
 
         Handler.classList.add("is-loading");
-
-        _common.PerformAjaxCall(
-            "GET",
-            Url,
-            this.Container.dataset.xsrf,
-            "application/json; charset=UTF-8",
-            null,
-            this.GetCountryList_Callback.bind(this)
-        );
+        this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
 
     }
 
@@ -300,7 +287,7 @@ export class RegisterClass
         {
 
             let ParsedResponse = JSON.parse(Response); 
-            _helpers.ClearSelectElement(this.CityListSelect);
+            this.Helpers.ClearSelectElement(this.CityListSelect);
 
             for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
             {
@@ -443,15 +430,7 @@ export class RegisterClass
         });
 
         let Url = encodeURI(window.location.origin + "/api/v1/ajax/users/");
-
-        _common.PerformAjaxCall(
-            "POST",
-            Url,
-            this.Container.dataset.xsrf,
-            "application/json; charset=UTF-8",
-            SerializedPayLoad,
-            this.CreateAccount_Callback.bind(this)
-        );
+        this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccount_Callback.bind(this));
 
         return true;
 

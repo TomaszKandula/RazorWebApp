@@ -3,7 +3,7 @@ const path = require('path');
 
 const config = 
 {
-    mode: 'development',
+    mode: 'production',
         entry: 
 	    {
             bundle: 

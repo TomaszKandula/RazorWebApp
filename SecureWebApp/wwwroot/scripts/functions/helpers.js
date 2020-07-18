@@ -1,126 +1,123 @@
-﻿// This module should not manipulate DOM
+﻿// This module should not manipulate DOM/Virtual DOM
 
 "use strict";
 
 
-function IsEmpty(AValue)
+export class Helpers
 {
-    return typeof AValue === 'string' && !AValue.trim() || typeof AValue === undefined || AValue === null;
-};
 
-
-function IsNumeric(AValue)
-{
-    return !isNaN(parseFloat(AValue)) && isFinite(AValue);
-};
-
-
-function ValidateEmail(AEmail)
-{
-    let LRegex = /\S+@\S+\.\S+/;
-    return LRegex.test(AEmail);
-};
-
-
-function FormatPhoneNumber(ANumber)
-{
-    ANumber = ANumber.replace(/[^\d]+/g, '').replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '($1) $2 $3 $4');
-
-    if (isEmpty(ANumber))
+    constructor()
     {
-        return false;
-    }
-    else
-    {
-        return ANumber;
-    };
 
-};
-
-
-function HasLowerCase(AText)
-{
-    if (AText.toUpperCase() != AText)
-    {
-        return true;
     }
 
-    return false;
-}
 
-
-function HasUpperCase(AText)
-{
-    if (AText.toLowerCase() != AText)
+    ClearSelectElement(ASelectElement)
     {
-        return true;
-    }
 
-    return false;
-}
+        let Index, Length = ASelectElement.options.length - 1;
 
-
-function HasSpecialChar(AText)
-{
-    let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-
-    if (LFormat.test(AText))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
-}
-
-function CleanBaseUrl()
-{
-
-    let LCurrentUrl = window.location.href;
-    let LCheck = 0;
-    let LBaseUrl = "";
-
-    for (let Index = 0; Index <= LCurrentUrl.length; Index++)
-    {
-        LBaseUrl = LCurrentUrl.charAt(Index);
-        if (LBaseUrl.charAt(Index) === "/")
+        for (Index = Length; Index >= 0; Index--)
         {
-            LCheck++;
-            if (LCheck === 2)
-            {
-                break;
-            };
-        };
+            ASelectElement.remove(Index);
+        }
+
     }
 
-    return LBaseUrl;
 
-}
-
-
-function ClearSelectElement(ASelectElement)
-{
-    let Index, Length = ASelectElement.options.length - 1;
-
-    for (Index = Length; Index >= 0; Index--)
+    FormatPhoneNumber(ANumber)
     {
-        ASelectElement.remove(Index);
+        ANumber = ANumber.replace(/[^\d]+/g, '').replace(/(\d{2})(\d{3})(\d{3})(\d{3})/, '($1) $2 $3 $4');
+
+        if (isEmpty(ANumber))
+        {
+            return false;
+        }
+        else
+        {
+            return ANumber;
+        };
+
+    }
+
+
+    HasSpecialChar(AText)
+    {
+        let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+
+        if (LFormat.test(AText))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+
+    HasLowerCase(AText)
+    {
+        if (AText.toUpperCase() != AText)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    HasUpperCase(AText)
+    {
+        if (AText.toLowerCase() != AText)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    IsEmpty(AValue)
+    {
+        return typeof AValue === 'string' && !AValue.trim() || typeof AValue === undefined || AValue === null;
+    }
+
+
+    IsNumeric(AValue)
+    {
+        return !isNaN(parseFloat(AValue)) && isFinite(AValue);
+    }
+
+
+    ValidateEmail(AEmail)
+    {
+        let LRegex = /\S+@\S+\.\S+/
+        return LRegex.test(AEmail);
+    }
+
+
+    ValidatePasswordField(AValue)
+    {
+
+        let LCheck = 0;
+
+        if (AValue.length < 8) { LCheck++; };
+        if (this.IsEmpty(AValue)) { LCheck++; };
+        if (!this.HasLowerCase(AValue)) { LCheck++; };
+        if (!this.HasUpperCase(AValue)) { LCheck++; };
+        if (!this.HasSpecialChar(AValue)) { LCheck++; };
+
+        if (LCheck != 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
     }
 
 }
-
-
-export
-{
-    FormatPhoneNumber,
-    HasSpecialChar,
-    HasLowerCase,
-    HasUpperCase,
-    IsNumeric,
-    IsEmpty,
-    ValidateEmail,
-    CleanBaseUrl,
-    ClearSelectElement
-};

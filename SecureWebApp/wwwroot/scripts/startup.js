@@ -1,19 +1,29 @@
 // Startup module to cache DOM and bind events
 
-"use strict"
+"use strict";
 
 
-import * as _login    from "./views/login";
-import * as _register from "./views/register";
+import { IndexPage }    from "./pages/index";
+import { LoginPage }    from "./pages/login";
+import { RegisterPage } from "./pages/register";
+import { ErrorPage }    from "./pages/error";
 
 
 document.addEventListener('DOMContentLoaded', () =>
 {
 
-    const LoginPage    = document.getElementById("LoginForm");
-    const RegisterPage = document.getElementById("RegisterForm");
+    // Pages
+    const IndexForm    = document.querySelector("#IndexForm");
+    const LoginForm    = document.querySelector("#LoginForm");
+    const RegisterForm = document.querySelector("#RegisterForm");
+    const ErrorForm    = document.querySelector("#ErrorForm");
 
-    if (LoginPage)    { const LoginView    = new _login.LoginClass(LoginPage); }
-    if (RegisterPage) { const RegisterView = new _register.RegisterClass(RegisterPage); }
+    if (IndexForm)    { const indexPage    = new IndexPage(IndexForm); }
+    if (LoginForm)    { const loginPage    = new LoginPage(LoginForm); }
+    if (RegisterForm) { const registerPage = new RegisterPage(RegisterForm); }
+    if (ErrorForm)    { const errorPage    = new ErrorPage(ErrorForm); }
+
+    // Modals
+
 
 });

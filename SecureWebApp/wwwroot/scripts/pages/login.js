@@ -1,9 +1,9 @@
-﻿// View module to manipulate DOM
+﻿// View module to manipulate Virtual DOM
 
-"use strict"
+"use strict";
 
 
-export class LoginClass
+export class LoginPage
 {
 
     constructor(Container)
