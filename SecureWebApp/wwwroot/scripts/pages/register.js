@@ -210,22 +210,33 @@ export default class RegisterPage
         if (StatusCode === 200)
         {
 
-            let ParsedResponse = JSON.parse(Response); 
-            if (ParsedResponse.IsEmailValid)
+            try
             {
-                Verified.style.visibility  = "visible";
-                Malformed.style.visibility = "hidden";
-                Info.style.display         = "none";
-                Info.innerHTML             = "";
-                this.IsValidEmailAddress   = true;
+
+                let ParsedResponse = JSON.parse(Response);
+
+                if (ParsedResponse.IsEmailValid)
+                {
+                    Verified.style.visibility  = "visible";
+                    Malformed.style.visibility = "hidden";
+                    Info.style.display = "none";
+                    Info.innerHTML     = "";
+                    this.IsValidEmailAddress = true;
+                }
+                else
+                {
+                    Verified.style.visibility  = "hidden";
+                    Malformed.style.visibility = "visible";
+                    Info.style.display = "inline-block";
+                    Info.innerHTML     = ParsedResponse.Error.ErrorDesc;
+                    this.IsValidEmailAddress = false;
+                }
+
             }
-            else
+            catch (Error)
             {
-                Verified.style.visibility  = "hidden";
-                Malformed.style.visibility = "visible";
-                Info.style.display         = "inline-block";
-                Info.innerHTML             = ParsedResponse.Error.ErrorDesc;
-                this.IsValidEmailAddress   = false;
+                alert("An error occured during parsing JSON, error: " + Error.message);
+                console.error("[RegisterPage].[CheckEmailAddress_Callback]: An error has been thrown: " + Error.message);
             }
 
         }
@@ -287,24 +298,34 @@ export default class RegisterPage
         if (StatusCode == 200)
         {
 
-            let ParsedResponse = JSON.parse(Response); 
-            this.Helpers.ClearSelectElement(this.CityListSelect);
-
-            for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
+            try
             {
 
-                let City   = ParsedResponse.Cities[Index];
-                let Option = document.createElement("option");
+                let ParsedResponse = JSON.parse(Response);
+                this.Helpers.ClearSelectElement(this.CityListSelect);
 
-                Option.value = City.id;
-                Option.innerHTML = City.name;
-                this.CityListSelect.appendChild(Option);
+                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
+                {
+
+                    let City   = ParsedResponse.Cities[Index];
+                    let Option = document.createElement("option");
+
+                    Option.value     = City.id;
+                    Option.innerHTML = City.name;
+                    this.CityListSelect.appendChild(Option);
+
+                }
+
+                this.CityListSelect.removeAttribute("disabled");
+                this.CityListSelect.selectedIndex = 0;
+                this.IsValidCountryList = true;
 
             }
-
-            this.CityListSelect.removeAttribute("disabled");
-            this.CityListSelect.selectedIndex = 0;
-            this.IsValidCountryList = true;
+            catch (Error)
+            {
+                alert("An error occured during parsing JSON, error: " + Error.message);
+                console.error("[RegisterPage].[GetCountryList_Callback]: An error has been thrown: " + Error.message);
+            }
 
         }
         else
