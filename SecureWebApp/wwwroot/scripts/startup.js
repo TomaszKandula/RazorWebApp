@@ -28,7 +28,4 @@ document.addEventListener('DOMContentLoaded', () =>
     RegisterInstance.Initialize();
     ErrorInstance.Initialize();
 
-    // Modals
-
-
 });

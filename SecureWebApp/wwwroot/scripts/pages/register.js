@@ -5,6 +5,7 @@
 
 import Helpers    from "../functions/Helpers";
 import RestClient from "../functions/RestClient";
+import MessageBox from "../components/MessageBox";
 
 
 export default class RegisterPage
@@ -350,7 +351,7 @@ export default class RegisterPage
 
     }
 
-    async Link_Terms(Event) //refactor!
+    async Link_Terms(Event)  
     {
 
         let Url = encodeURI(window.location.origin + "/modals/terms.html");
@@ -359,16 +360,10 @@ export default class RegisterPage
 
         if (Response.ok)
         {
-
-            this.ModalWindowHandle.innerHTML = Content;
-            this.ModalWindowHandle.classList.add("is-active");
-
-            let Button_CloseTerms = this.Container.querySelector("#Close_TermsModal");
-            Button_CloseTerms.addEventListener("click", () =>
-            {
-                this.ModalWindowHandle.classList.remove("is-active");
-            });
-
+            let Dialog = new MessageBox(this.ModalWindowHandle, "Dialog");
+            Dialog.SetTitle("Privacy Terms");
+            Dialog.SetContent(Content);
+            Dialog.Show();
         }
         else
         {
@@ -377,7 +372,7 @@ export default class RegisterPage
 
     }
 
-    async Link_Privacy(Event) //refactor!
+    async Link_Privacy(Event)
     {
 
         let Url = encodeURI(window.location.origin + "/modals/privacy.html");
@@ -386,16 +381,10 @@ export default class RegisterPage
 
         if (Response.ok)
         {
-
-            this.ModalWindowHandle.innerHTML = Content;
-            this.ModalWindowHandle.classList.add("is-active");
-
-            let Button_ClosePrivacy = this.Container.querySelector("#Close_PrivacyModal");
-            Button_ClosePrivacy.addEventListener("click", () =>
-            {
-                this.ModalWindowHandle.classList.remove("is-active");
-            });
-
+            let Dialog = new MessageBox(this.ModalWindowHandle, "Dialog");
+            Dialog.SetTitle("Privacy Policy");
+            Dialog.SetContent(Content);
+            Dialog.Show();
         }
         else
         {
@@ -404,33 +393,16 @@ export default class RegisterPage
 
     }
 
-    async Button_CreateAccount(Event) //refactor!
+    async Button_CreateAccount(Event)
     {
 
         if (!this.IsDataValid())
         {
 
-            let Url = encodeURI(window.location.origin + "/modals/ErrorCreateAccount.html");
-            let Response = await fetch(Url);
-            let Content = await Response.text();
-
-            if (Response.ok)
-            {
-
-                this.ModalWindowHandle.innerHTML = Content;
-                this.ModalWindowHandle.classList.add("is-active");
-
-                let Button_CloseError = this.Container.querySelector("#Close_ErrorCreateAccount");
-                Button_CloseError.addEventListener("click", () =>
-                {
-                    this.ModalWindowHandle.classList.remove("is-active");
-                });
-
-            }
-            else
-            {
-                alert("An error has occured during the processing. Response: " + Response.status);
-            }
+            let Dialog = new MessageBox(this.ModalWindowHandle, "AlertError");
+            Dialog.SetTitle("Cannot create an account");
+            Dialog.SetContent("The account cannot be created. Please make sure all the fields are filled and valid email address is provided.");
+            Dialog.Show();
 
             return false;
 
@@ -454,43 +426,33 @@ export default class RegisterPage
 
     }
 
-    async CreateAccount_Callback(Response, StatusCode) //refactor!
+    async CreateAccount_Callback(Response, StatusCode)
     {
 
         if (StatusCode === 200)
         {
 
-            let ParsedResponse = JSON.parse(Response);
-
-            if (ParsedResponse.IsUserCreated)
+            try
             {
 
-                let Url = encodeURI(window.location.origin + "/modals/SuccessCreateAccount.html");
-                let Response = await fetch(Url);
-                let Content = await Response.text();
-
-                if (Response.ok)
+                let ParsedResponse = JSON.parse(Response);
+                if (ParsedResponse.IsUserCreated)
                 {
-
-                    this.ModalWindowHandle.innerHTML = Content;
-                    this.ModalWindowHandle.classList.add("is-active");
-
-                    let Button_CloseError = this.Container.querySelector("#Close_SuccessCreateAccount");
-                    Button_CloseError.addEventListener("click", () =>
-                    {
-                        this.ModalWindowHandle.classList.remove("is-active");
-                    });
-
+                    let Dialog = new MessageBox(this.ModalWindowHandle, "AlertSuccess");
+                    Dialog.SetTitle("An account has been created");
+                    Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");
+                    Dialog.Show();
                 }
                 else
                 {
-                    alert("An error has occured during the processing. Response: " + Response.status);
+                    alert("An error has occured during the processing. Error: " + ParsedResponse.Error.ErrorDesc);
                 }
 
             }
-            else
+            catch (Error)
             {
-                alert("An error has occured during the processing. Error: " + ParsedResponse.Error.ErrorDesc);
+                alert("An error occured during parsing JSON, error: " + Error.message);
+                console.error("[RegisterPage].[CreateAccount_Callback]: An error has been thrown: " + Error.message);
             }
 
         }
