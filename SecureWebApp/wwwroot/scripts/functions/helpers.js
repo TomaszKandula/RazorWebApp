@@ -6,11 +6,6 @@
 export default class Helpers
 {
 
-    constructor()
-    {
-
-    }
-
     ClearSelectElement(ASelectElement)
     {
 
