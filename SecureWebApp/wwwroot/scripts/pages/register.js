@@ -270,9 +270,9 @@ export default class RegisterPage
             {
                 this.Dialog.SetMessageType("AlertError");
                 this.Dialog.SetTitle("Email Address Check");
-                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
                 this.Dialog.Show();
-                console.error("[RegisterPage].[CheckEmailAddress_Callback]: An error has been thrown: " + Error.message);
+                console.error(`[RegisterPage].[CheckEmailAddress_Callback]: An error has been thrown: ${Error.message}`);
             }
 
         }
@@ -282,7 +282,7 @@ export default class RegisterPage
             Malformed.style.visibility = "hidden";
             Info.style.display = "inline-block";
             Info.innerHTML     = "An error has occured during the processing";
-            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+            alert(`An error has occured during the processing. Returned status code: ${StatusCode}`);
             this.IsValidEmailAddress = false;
         }
 
@@ -333,19 +333,17 @@ export default class RegisterPage
         if (StatusCode == 200)
         {
 
-            try
-            {
+            try {
 
                 let ParsedResponse = JSON.parse(Response);
                 this.Helpers.ClearSelectElement(this.CityListSelect);
 
-                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
-                {
+                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++) {
 
-                    let City   = ParsedResponse.Cities[Index];
+                    let City = ParsedResponse.Cities[Index];
                     let Option = document.createElement("option");
 
-                    Option.value     = City.id;
+                    Option.value = City.id;
                     Option.innerHTML = City.name;
                     this.CityListSelect.appendChild(Option);
 
@@ -360,9 +358,9 @@ export default class RegisterPage
             {
                 this.Dialog.SetMessageType("AlertError");
                 this.Dialog.SetTitle("Get Country List");
-                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
                 this.Dialog.Show();
-                console.error("[RegisterPage].[GetCountryList_Callback]: An error has been thrown: " + Error.message);
+                console.error(`[RegisterPage].[GetCountryList_Callback]: An error has been thrown: ${Error.message}`);
             }
 
         }
@@ -370,7 +368,7 @@ export default class RegisterPage
         {
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Email Address Check");
-            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
             this.Dialog.Show();
             this.IsValidCountryList = false;
         }
@@ -409,7 +407,7 @@ export default class RegisterPage
         {
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Privacy Terms");
-            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
             this.Dialog.Show();
         }
 
@@ -433,7 +431,7 @@ export default class RegisterPage
         {
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Privacy Policy");
-            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
             this.Dialog.Show();
         }
 
@@ -507,7 +505,7 @@ export default class RegisterPage
                 {
                     this.Dialog.SetMessageType("AlertError");
                     this.Dialog.SetTitle("An account cannot be created");
-                    this.Dialog.SetContent("The account could not be created. Please contact IT support if problem persists. Description: " + ParsedResponse.Error.ErrorDesc);
+                    this.Dialog.SetContent(`The account could not be created. Please contact IT support if problem persists. Description: ${ParsedResponse.Error.ErrorDesc}`);
                     this.Dialog.Show();
                 }
 
@@ -516,9 +514,9 @@ export default class RegisterPage
             {
                 this.Dialog.SetMessageType("AlertError");
                 this.Dialog.SetTitle("Create Account");
-                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
                 this.Dialog.Show();
-                console.error("[RegisterPage].[CreateAccount_Callback]: An error has been thrown: " + Error.message);
+                console.error(`[RegisterPage].[CreateAccount_Callback]: An error has been thrown: ${Error.message}`);
             }
 
         }
@@ -526,7 +524,7 @@ export default class RegisterPage
         {
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Create Account");
-            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
             this.Dialog.Show();
         }
 
