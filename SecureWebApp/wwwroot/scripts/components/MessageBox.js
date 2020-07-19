@@ -11,25 +11,40 @@ export default class MessageBox
 
         this.LModalHandle = AModalHandle;
 
-        this.LMessageType = "AlertInfo";
-        this.LCaption     = "Title";
-        this.LContent     = "<p>No content</p>";
+        let LMessageType = "AlertInfo";
+        let LCaption     = "Title";
+        let LContent     = "<p>No content</p>";
 
-    }
+        this.SetMessageType = function (AMessageType)
+        {
+            LMessageType = AMessageType;
+        }
 
-    SetMessageType(AMessageType)
-    {
-        this.LMessageType = AMessageType;
-    }
+        this.GetMessageType = function ()
+        {
+            return LMessageType;
+        }
 
-    SetTitle(ATitle)
-    {
-        this.LCaption = ATitle;
-    }
+        this.SetTitle = function (ATitle)
+        {
+            LCaption = ATitle;
+        }
 
-    SetContent(AContent)
-    {
-        this.LContent = AContent;
+        this.GetTitle = function ()
+        {
+            return LCaption;
+        }
+
+        this.SetContent = function (AContent)
+        {
+            LContent = AContent;
+        }
+
+        this.GetContent = function ()
+        {
+            return LContent;
+        }
+
     }
 
     Show()
@@ -57,11 +72,11 @@ export default class MessageBox
              <div class="modal-card">
                 <article class="message ` + AFlag + `">
                     <div class="message-header">
-                        <p>` + this.LCaption + `</p>
+                        <p>` + this.GetTitle() + `</p>
                         <button id="ModalClose" class="delete" aria-label="delete"></button>
                     </div>
                     <div class="message-body">
-                        ` + this.LContent + `
+                        ` + this.GetContent() + `
                     </div>
                 </article>
             </div>`;
@@ -73,11 +88,11 @@ export default class MessageBox
             `<div class="modal-background"></div>
                 <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">` + this.LCaption + `</p>
+                    <p class="modal-card-title">` + this.GetTitle() + `</p>
                     <button id="ModalClose" class="delete" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    ` + this.LContent + `
+                    ` + this.GetContent() + `
                 </section>
             </div>`;
     }
@@ -85,7 +100,7 @@ export default class MessageBox
     Render()
     {
 
-        switch (this.LMessageType)
+        switch (this.GetMessageType())
         {
 
             case "AlertInfo":

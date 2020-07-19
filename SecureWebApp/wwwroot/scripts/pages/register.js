@@ -116,6 +116,9 @@ export default class RegisterPage
         this.PasswordInput.value     = "";
 
         this.CountryListSelect.selectedIndex = 0;
+        this.Helpers.ClearSelectElement(this.CityListSelect);
+
+        this.CityListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
 
         this.InitErrorCheck();
