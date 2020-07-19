@@ -31,6 +31,7 @@ export default class RegisterPage
         this.CountryListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
 
+        this.Dialog  = new MessageBox(this.ModalWindowHandle);
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Helpers = new Helpers();
 
@@ -45,6 +46,7 @@ export default class RegisterPage
         this.PasswordInput       = this.Container.querySelector("#Input_Password");
         this.CountryListSelect   = this.Container.querySelector("#Select_CountryList");
         this.CityListSelect      = this.Container.querySelector("#Select_CityList");
+        this.CreateAccountHandle = this.Container.querySelector("#Handle_CreateAccount");
         this.CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
         this.ModalWindowHandle   = this.Container.querySelector("#Handle_RegisterModal");
         this.TermsLink           = this.Container.querySelector("#Link_Terms");
@@ -90,6 +92,33 @@ export default class RegisterPage
         {
             return true;
         }
+
+    }
+
+    DisableFields(AState)
+    {
+        this.FirstNameInput.disabled    = AState;
+        this.LastNameInput.disabled     = AState;
+        this.NicknameInput.disabled     = AState;
+        this.EmailAddressInput.disabled = AState;
+        this.PasswordInput.disabled     = AState;
+        this.CountryListSelect.disabled = AState;
+        this.CityListSelect.disabled    = AState;
+    }
+
+    ClearFields()
+    {
+
+        this.FirstNameInput.value    = "";
+        this.LastNameInput.value     = "";
+        this.NicknameInput.value     = "";
+        this.EmailAddressInput.value = "";
+        this.PasswordInput.value     = "";
+
+        this.CountryListSelect.selectedIndex = 0;
+        this.CityListSelect.disabled = true;
+
+        this.InitErrorCheck();
 
     }
 
@@ -236,7 +265,10 @@ export default class RegisterPage
             }
             catch (Error)
             {
-                alert("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetMessageType("AlertError");
+                this.Dialog.SetTitle("Email Address Check");
+                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.Show();
                 console.error("[RegisterPage].[CheckEmailAddress_Callback]: An error has been thrown: " + Error.message);
             }
 
@@ -292,8 +324,7 @@ export default class RegisterPage
     GetCountryList_Callback(Response, StatusCode)
     {
 
-        let Handler  = this.Container.querySelector("#Handle_CityList");
-
+        let Handler = this.Container.querySelector("#Handle_CityList");
         Handler.classList.remove("is-loading");
 
         if (StatusCode == 200)
@@ -324,14 +355,20 @@ export default class RegisterPage
             }
             catch (Error)
             {
-                alert("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetMessageType("AlertError");
+                this.Dialog.SetTitle("Get Country List");
+                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.Show();
                 console.error("[RegisterPage].[GetCountryList_Callback]: An error has been thrown: " + Error.message);
             }
 
         }
         else
         {
-            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Email Address Check");
+            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.Show();
             this.IsValidCountryList = false;
         }
 
@@ -360,14 +397,17 @@ export default class RegisterPage
 
         if (Response.ok)
         {
-            let Dialog = new MessageBox(this.ModalWindowHandle, "Dialog");
-            Dialog.SetTitle("Privacy Terms");
-            Dialog.SetContent(Content);
-            Dialog.Show();
+            this.Dialog.SetMessageType("Dialog");
+            this.Dialog.SetTitle("Privacy Terms");
+            this.Dialog.SetContent(Content);
+            this.Dialog.Show();
         }
         else
         {
-            alert("An error has occured during the processing. Response: " + Response.status);
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Privacy Terms");
+            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.Show();
         }
 
     }
@@ -381,14 +421,17 @@ export default class RegisterPage
 
         if (Response.ok)
         {
-            let Dialog = new MessageBox(this.ModalWindowHandle, "Dialog");
-            Dialog.SetTitle("Privacy Policy");
-            Dialog.SetContent(Content);
-            Dialog.Show();
+            this.Dialog.SetMessageType("Dialog");
+            this.Dialog.SetTitle("Privacy Policy");
+            this.Dialog.SetContent(Content);
+            this.Dialog.Show();
         }
         else
         {
-            alert("An error has occured during the processing. Response: " + Response.status);
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Privacy Policy");
+            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.Show();
         }
 
     }
@@ -399,10 +442,10 @@ export default class RegisterPage
         if (!this.IsDataValid())
         {
 
-            let Dialog = new MessageBox(this.ModalWindowHandle, "AlertError");
-            Dialog.SetTitle("Cannot create an account");
-            Dialog.SetContent("The account cannot be created. Please make sure all the fields are filled and valid email address is provided.");
-            Dialog.Show();
+            this.Dialog.SetMessageType("AlertWarning");
+            this.Dialog.SetTitle("Cannot create an account");
+            this.Dialog.SetContent("The account cannot be created. Please make sure that all the fields are filled and valid email address is provided.");
+            this.Dialog.Show();
 
             return false;
 
@@ -419,6 +462,11 @@ export default class RegisterPage
             CityId:       Number(this.CityListSelect.value)
         });
 
+        this.ClearFields();
+        this.DisableFields(true);
+        this.CreateAccountHandle.classList.add("is-loading");
+        this.CreateAccountButton.disabled = true;
+
         let Url = encodeURI(window.location.origin + "/api/v1/ajax/users/");
         this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccount_Callback.bind(this));
 
@@ -429,6 +477,10 @@ export default class RegisterPage
     async CreateAccount_Callback(Response, StatusCode)
     {
 
+        this.DisableFields(false);
+        this.CreateAccountButton.disabled = false;
+        this.CreateAccountHandle.classList.remove("is-loading");
+
         if (StatusCode === 200)
         {
 
@@ -438,27 +490,41 @@ export default class RegisterPage
                 let ParsedResponse = JSON.parse(Response);
                 if (ParsedResponse.IsUserCreated)
                 {
-                    let Dialog = new MessageBox(this.ModalWindowHandle, "AlertSuccess");
-                    Dialog.SetTitle("An account has been created");
-                    Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");
-                    Dialog.Show();
+
+                    /* This is demo application and we only display message to the user.
+                     * However, in production, one may want to redirect user to another page. */
+
+                    this.Dialog.SetMessageType("AlertSuccess");
+                    this.Dialog.SetTitle("An account has been created");
+                    this.Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");
+                    this.Dialog.Show();
+
                 }
                 else
                 {
-                    alert("An error has occured during the processing. Error: " + ParsedResponse.Error.ErrorDesc);
+                    this.Dialog.SetMessageType("AlertError");
+                    this.Dialog.SetTitle("An account cannot be created");
+                    this.Dialog.SetContent("The account could not be created. Please contact IT support if problem persists. Description: " + ParsedResponse.Error.ErrorDesc);
+                    this.Dialog.Show();
                 }
 
             }
             catch (Error)
             {
-                alert("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.SetMessageType("AlertError");
+                this.Dialog.SetTitle("Create Account");
+                this.Dialog.SetContent("An error occured during parsing JSON, error: " + Error.message);
+                this.Dialog.Show();
                 console.error("[RegisterPage].[CreateAccount_Callback]: An error has been thrown: " + Error.message);
             }
 
         }
         else
         {
-            alert("An error has occured during the processing. Returned status code: " + StatusCode + ".");
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Create Account");
+            this.Dialog.SetContent("An error has occured during the processing. Returned status code: " + StatusCode);
+            this.Dialog.Show();
         }
 
     }

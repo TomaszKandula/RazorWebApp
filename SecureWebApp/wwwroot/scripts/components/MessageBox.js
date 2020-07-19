@@ -6,15 +6,20 @@
 export default class MessageBox
 {
 
-    constructor(AModalHandle, AMessageType)
+    constructor(AModalHandle)
     {
 
         this.LModalHandle = AModalHandle;
+
+        this.LMessageType = "AlertInfo";
+        this.LCaption     = "Title";
+        this.LContent     = "<p>No content</p>";
+
+    }
+
+    SetMessageType(AMessageType)
+    {
         this.LMessageType = AMessageType;
-
-        this.LCaption = "Title";
-        this.LContent = "<p>No content</p>";
-
     }
 
     SetTitle(ATitle)
@@ -83,8 +88,16 @@ export default class MessageBox
         switch (this.LMessageType)
         {
 
+            case "AlertInfo":
+                this.RenderAlert("is-info");
+                break;
+
             case "AlertSuccess":
                 this.RenderAlert("is-success");
+                break;
+
+            case "AlertWarning":
+                this.RenderAlert("is-warning");
                 break;
 
             case "AlertError":

@@ -12,20 +12,19 @@ import ErrorPage    from "./pages/Error";
 document.addEventListener('DOMContentLoaded', () =>
 {
 
-    // Pages
     const SectionIndex    = document.querySelector("#IndexPage");
     const SectionLogin    = document.querySelector("#LoginPage");
     const SectionRegister = document.querySelector("#RegisterPage");
     const SectionError    = document.querySelector("#ErrorPage");
 
     const IndexInstance    = new IndexPage(SectionIndex);
+    const ErrorInstance    = new ErrorPage(SectionError);
     const LoginInstance    = new LoginPage(SectionLogin);
     const RegisterInstance = new RegisterPage(SectionRegister);
-    const ErrorInstance    = new ErrorPage(SectionError);
 
     IndexInstance.Initialize();
+    ErrorInstance.Initialize();
     LoginInstance.Initialize();
     RegisterInstance.Initialize();
-    ErrorInstance.Initialize();
 
 });
