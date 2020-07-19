@@ -57,8 +57,8 @@ export default class RestClient
         }
         catch (Error)
         {
-            alert("An error occured during execution: " + Error.message);
-            console.error("[RestClient].[Execute]: An error has been thrown: " + Error.message);
+            alert(`An error occured during execution: ${Error.message}`);
+            console.error(`[RestClient].[Execute]: An error has been thrown: ${Error.message}`);
         }
 
     }
