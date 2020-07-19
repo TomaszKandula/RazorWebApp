@@ -206,7 +206,7 @@ export default class RegisterPage
         let Info         = this.Container.querySelector("#Info_EmailAddress");
 
         let EmailAddress = this.EmailAddressInput.value;
-        let Url          = encodeURI(window.location.origin + "/api/v1/ajax/validation/" + EmailAddress + "/");
+        let Url          = encodeURI(`${window.location.origin}/api/v1/ajax/validation/${EmailAddress}/`);
 
         Verified.style.display  = "visibility";
         Malformed.style.display = "visibility";
@@ -247,7 +247,6 @@ export default class RegisterPage
             {
 
                 let ParsedResponse = JSON.parse(Response);
-
                 if (ParsedResponse.IsEmailValid)
                 {
                     Verified.style.visibility  = "visible";
@@ -317,7 +316,7 @@ export default class RegisterPage
 
         let Handler    = this.Container.querySelector("#Handle_CityList");
         let SelectedId = Event.target.value;
-        let Url        = encodeURI(window.location.origin + "/api/v1/ajax/cities/" + SelectedId + "/");
+        let Url        = encodeURI(`${window.location.origin}/api/v1/ajax/cities/${SelectedId}/`);
 
         Handler.classList.add("is-loading");
         this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
@@ -333,12 +332,14 @@ export default class RegisterPage
         if (StatusCode == 200)
         {
 
-            try {
+            try
+            {
 
                 let ParsedResponse = JSON.parse(Response);
                 this.Helpers.ClearSelectElement(this.CityListSelect);
 
-                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++) {
+                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
+                {
 
                     let City = ParsedResponse.Cities[Index];
                     let Option = document.createElement("option");
@@ -392,7 +393,7 @@ export default class RegisterPage
     async Link_Terms(Event)  
     {
 
-        let Url = encodeURI(window.location.origin + "/modals/terms.html");
+        let Url = encodeURI(`${window.location.origin}/modals/terms.html`);
         let Response = await fetch(Url);
         let Content = await Response.text();
 
@@ -416,7 +417,7 @@ export default class RegisterPage
     async Link_Privacy(Event)
     {
 
-        let Url = encodeURI(window.location.origin + "/modals/privacy.html");
+        let Url = encodeURI(`${window.location.origin}/modals/privacy.html`);
         let Response = await fetch(Url);
         let Content = await Response.text();
 
@@ -468,7 +469,7 @@ export default class RegisterPage
         this.CreateAccountHandle.classList.add("is-loading");
         this.CreateAccountButton.disabled = true;
 
-        let Url = encodeURI(window.location.origin + "/api/v1/ajax/users/");
+        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/users/`);
         this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccount_Callback.bind(this));
 
         return true;

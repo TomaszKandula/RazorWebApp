@@ -70,13 +70,13 @@ export default class MessageBox
         return this.LModalHandle.innerHTML = 
             `<div class="modal-background"></div>
              <div class="modal-card">
-                <article class="message ` + AFlag + `">
+                <article class="message ${AFlag}">
                     <div class="message-header">
-                        <p>` + this.GetTitle() + `</p>
+                        <p>${this.GetTitle()}</p>
                         <button id="ModalClose" class="delete" aria-label="delete"></button>
                     </div>
                     <div class="message-body">
-                        ` + this.GetContent() + `
+                        ${this.GetContent()}
                     </div>
                 </article>
             </div>`;
@@ -88,11 +88,11 @@ export default class MessageBox
             `<div class="modal-background"></div>
                 <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">` + this.GetTitle() + `</p>
+                    <p class="modal-card-title">${this.GetTitle()}</p>
                     <button id="ModalClose" class="delete" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
-                    ` + this.GetContent() + `
+                    ${this.GetContent()}
                 </section>
             </div>`;
     }
