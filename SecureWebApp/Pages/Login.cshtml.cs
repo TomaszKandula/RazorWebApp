@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Extensions.AppLogger;
 
@@ -21,7 +22,16 @@ namespace SecureWebApp.Pages
 
             try 
             {
+
+                var LoggedUser = HttpContext.Session.GetString("LoggedUser");
+
+                if (!string.IsNullOrEmpty(LoggedUser)) 
+                {
+                    return RedirectToPage("./Index");
+                }
+
                 return Page();
+
             }
             catch (Exception E)
             {

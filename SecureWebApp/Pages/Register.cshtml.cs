@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Models.Views;
@@ -35,7 +36,14 @@ namespace SecureWebApp.Pages
 
             try
             {
-                
+
+                var LoggedUser = HttpContext.Session.GetString("LoggedUser");
+
+                if (!string.IsNullOrEmpty(LoggedUser))
+                {
+                    return RedirectToPage("./Index");
+                }
+
                 CountryList = await FMainDbContext.Countries.Select(R => new CountryList() 
                 { 
                     Id   = R.Id, 

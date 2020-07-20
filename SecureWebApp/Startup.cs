@@ -38,7 +38,7 @@ namespace SecureWebApp
             AServices.AddMvc(Option => Option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             AServices.AddRazorPages().AddRazorRuntimeCompilation();
             AServices.AddControllers();
-            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(5));
+            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(15));
             AServices.AddAntiforgery(Option => Option.HeaderName = "X-CSRF-TOKEN");
 
             AServices.AddSingleton<IDnsLookup, DnsLookup>();

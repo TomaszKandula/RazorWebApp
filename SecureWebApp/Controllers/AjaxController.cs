@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Json;
@@ -276,6 +277,8 @@ namespace SecureWebApp.Controllers
                     FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
+
+                HttpContext.Session.SetString("LoggedUser", PayLoad.EmailAddr);
 
                 LResponse.IsLogged = true;
                 return StatusCode(200, LResponse);

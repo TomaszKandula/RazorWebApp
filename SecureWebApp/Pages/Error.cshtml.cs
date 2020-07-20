@@ -31,7 +31,7 @@ namespace SecureWebApp.Pages
                 if (ShowRequestId)
                 {
                     ViewData["RequestId"] = RequestId;
-                    FAppLogger.LogError(string.Format("An error occurred while processing your request: {0}", RequestId));
+                    FAppLogger.LogError($"An error occurred while processing your request: {RequestId}");
                 }
                 else 
                 {
@@ -43,7 +43,8 @@ namespace SecureWebApp.Pages
             }
             catch (Exception E)
             {
-                FAppLogger.LogFatality(string.Format("[ErrorModel.OnGet]: an error has been thrown: {0} ({1}).", E.Message, E.StackTrace));
+                var ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"[ErrorModel.OnGet]: an error has been thrown: {ErrorDesc}.");
                 throw;
             }
 
