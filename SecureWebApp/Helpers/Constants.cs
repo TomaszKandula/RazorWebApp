@@ -8,6 +8,18 @@
     public class Constants
     {
 
+        public static class Sessions 
+        {
+
+            internal class KeyNames 
+            {
+                public const string UserId       = "UserId";
+                public const string LoggedUser   = "LoggedUser";
+                public const string SessionStamp = "SessionStamp";
+            }
+
+        }
+        
         public static class Errors 
         {
 

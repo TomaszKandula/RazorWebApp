@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SecureWebApp.Helpers;
 using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp.Pages
@@ -23,7 +24,7 @@ namespace SecureWebApp.Pages
             try 
             {
 
-                var LoggedUser = HttpContext.Session.GetString("LoggedUser");
+                var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.LoggedUser);
 
                 if (!string.IsNullOrEmpty(LoggedUser)) 
                 {

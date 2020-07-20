@@ -278,7 +278,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                HttpContext.Session.SetString("LoggedUser", PayLoad.EmailAddr);
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedUser, PayLoad.EmailAddr);
 
                 LResponse.IsLogged = true;
                 return StatusCode(200, LResponse);
