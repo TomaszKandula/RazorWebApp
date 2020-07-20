@@ -12,6 +12,8 @@
 
     <section id="LoginPage" data-xsrf=@GetAntiXsrfRequestToken()>
 
+        <div id="Handle_Modal" class="modal"></div>
+
         <div class="container mt-6 mb-6">
 
             <div class="columns is-mobile mt-6 mb-6">
@@ -30,9 +32,15 @@
                         <div class="field mt-6">
                             <label class="label">Email address</label>
                             <div class="control has-icons-left has-icons-right">
-                                <input class="input" type="email" placeholder="" pattern="/\S+@@\S+\.\S+/" minlength="5" maxlength="255" required>
+                                <input id="Input_EmailAddress" class="input" type="email" placeholder="" pattern="/\S+@@\S+\.\S+/" minlength="5" maxlength="255" required>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-envelope"></i>
+                                </span>
+                                <span id="OK_EmailAddress" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_EmailAddress" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
                                 </span>
                             </div>
                         </div>
@@ -42,18 +50,24 @@
                         <div class="field mt-4">
                             <label class="label">Password</label>
                             <div class="control has-icons-left has-icons-right">
-                                <input class="input" type="password" placeholder="" minlength="8" maxlength="255" required>
+                                <input id="Input_Password" class="input" type="password" placeholder="" minlength="8" maxlength="255" required>
                                 <span class="icon is-small is-left">
                                     <i class="fas fa-key"></i>
+                                </span>
+                                <span id="OK_Password" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                                <span id="ERR_Password" class="icon is-right" style="visibility: hidden">
+                                    <i class="fas fa-exclamation-triangle"></i>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Login -->
+                        <!-- Signin -->
 
                         <div class="container mt-6 mb-6 is-grouped">
-                            <div class="control">
-                                <button class="button is-info is-block is-fullwidth" id="BtnSubmit">Login <i class="fas fa-sign-in-alt" aria-hidden="true"></i></button>
+                            <div id="Handle_Signin" class="control">
+                                <button id="Button_Signin" class="button is-info is-block is-fullwidth">Login <i class="fas fa-sign-in-alt" aria-hidden="true"></i></button>
                             </div>
                         </div>
 

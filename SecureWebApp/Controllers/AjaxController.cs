@@ -181,9 +181,9 @@ namespace SecureWebApp.Controllers
         /// </summary>
         /// <param name="PayLoad"></param>
         /// <returns></returns>
-        // POST api/v1/ajax/users/
+        // POST api/v1/ajax/users/signup/
         [ValidateAntiForgeryToken]
-        [HttpPost("users")]
+        [HttpPost("users/signup")]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate PayLoad) 
         {
 
@@ -195,7 +195,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.InvalidPayLoad.ErrorDesc;
-                    FAppLogger.LogError($"POST api/v1/ajax/users/. {LResponse.Error.ErrorDesc}.");
+                    FAppLogger.LogError($"POST api/v1/ajax/users/signup/. {LResponse.Error.ErrorDesc}.");
                     LResponse.IsUserCreated = false;
                     return StatusCode(200, LResponse);
                 }
@@ -204,7 +204,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn($"POST api/v1/ajax/users/. {LResponse.Error.ErrorDesc}");
+                    FAppLogger.LogWarn($"POST api/v1/ajax/users/signup/. {LResponse.Error.ErrorDesc}");
                     return StatusCode(200, LResponse);
                 }
 
@@ -226,7 +226,7 @@ namespace SecureWebApp.Controllers
                 LResponse.UserId = NewUser.Id;
                 LResponse.IsUserCreated = true;
                 
-                FAppLogger.LogInfo($"POST api/v1/ajax/users/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
+                FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
                 return StatusCode(200, LResponse);
 
             }
@@ -234,7 +234,58 @@ namespace SecureWebApp.Controllers
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
                 LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/users/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                FAppLogger.LogFatality($"POST api/v1/ajax/users/signup/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                return StatusCode(500, LResponse);
+            }
+
+        }
+
+        /// <summary>
+        /// Perform sign-in action.
+        /// </summary>
+        /// <param name="EmailAddr"></param>
+        /// <param name="Password"></param>
+        /// <returns></returns>
+        public async Task<bool> SignIn(string EmailAddr, string Password) 
+        {
+            var Users = await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync();
+            return BCrypt.CheckPassword(Password, Users.Select(R => R.Password).ToList().Single());
+        }
+
+        /// <summary>
+        /// Endpoint allowing singin to the website.
+        /// </summary>
+        /// <param name="PayLoad"></param>
+        /// <returns></returns>
+        // POST api/v1/ajax/users/signin/
+        [ValidateAntiForgeryToken]
+        [HttpPost("users/signin")]
+        public async Task<IActionResult> LogToAccountAsync([FromBody] UserLogin PayLoad) 
+        {
+
+            var LResponse = new UserLogged();
+            try
+            {
+
+                var CanSignIn = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
+
+                if (!CanSignIn) 
+                {
+                    LResponse.Error.ErrorCode = Constants.Errors.InvalidCredentials.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.InvalidCredentials.ErrorDesc;
+                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
+                    return StatusCode(200, LResponse);
+                }
+
+                LResponse.IsLogged = true;
+                return StatusCode(200, LResponse);
+
+            }
+            catch (Exception E)
+            {
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"POST api/v1/ajax/userssignin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 

@@ -35,6 +35,12 @@
                 public const string ErrorDesc = "The received content cannot be validated.";
             }
 
+            internal class InvalidCredentials 
+            {
+                public const string ErrorCode = "invalid_credentials";
+                public const string ErrorDesc = "Supplied email address and/or password is incorrect.";
+            }
+
         }
 
     }
