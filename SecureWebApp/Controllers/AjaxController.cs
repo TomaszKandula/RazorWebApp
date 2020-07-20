@@ -93,7 +93,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
                
@@ -101,7 +101,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
 
@@ -109,7 +109,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailDomainNotExist.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailDomainNotExist.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("GET api/v1/ajax/validation/{0}. {1}.", EmailAddress, LResponse.Error.ErrorDesc));
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
 
@@ -120,8 +120,8 @@ namespace SecureWebApp.Controllers
             catch (Exception E)
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = E.Message;
-                FAppLogger.LogFatality(string.Format("GET api/v1/ajax/validation/{0} | Error has been raised while processing request. Message: {1}.", EmailAddress, E.Message));
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"GET api/v1/ajax/validation/{EmailAddress} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
@@ -169,8 +169,8 @@ namespace SecureWebApp.Controllers
             catch (Exception E)
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = E.Message;
-                FAppLogger.LogFatality(string.Format("GET api/v1/cities/{0} | Error has been raised while processing request. Message: {1}.", Id, E.Message));
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"GET api/v1/cities/{Id} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
@@ -195,7 +195,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.InvalidPayLoad.ErrorDesc;
-                    FAppLogger.LogError(string.Format("POST api/v1/ajax/users/. {0}.", LResponse.Error.ErrorDesc));
+                    FAppLogger.LogError($"POST api/v1/ajax/users/. {LResponse.Error.ErrorDesc}.");
                     LResponse.IsUserCreated = false;
                     return StatusCode(200, LResponse);
                 }
@@ -204,7 +204,7 @@ namespace SecureWebApp.Controllers
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn(string.Format("POST api/v1/ajax/users/. {0}", LResponse.Error.ErrorDesc));
+                    FAppLogger.LogWarn($"POST api/v1/ajax/users/. {LResponse.Error.ErrorDesc}");
                     return StatusCode(200, LResponse);
                 }
 
@@ -226,15 +226,15 @@ namespace SecureWebApp.Controllers
                 LResponse.UserId = NewUser.Id;
                 LResponse.IsUserCreated = true;
                 
-                FAppLogger.LogInfo(string.Format("POST api/v1/ajax/users/ | New user '{0}' has been successfully registered.", PayLoad.EmailAddress));
+                FAppLogger.LogInfo($"POST api/v1/ajax/users/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
                 return StatusCode(200, LResponse);
 
             }
             catch (Exception E)
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = E.Message + " " + E.InnerException.Message;
-                FAppLogger.LogFatality(string.Format("POST api/v1/ajax/users/ | Error has been raised while processing request. Message: {0}", LResponse.Error.ErrorDesc));
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"POST api/v1/ajax/users/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
