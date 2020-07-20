@@ -48,7 +48,7 @@ export default class RegisterPage
         this.CityListSelect      = this.Container.querySelector("#Select_CityList");
         this.CreateAccountHandle = this.Container.querySelector("#Handle_CreateAccount");
         this.CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
-        this.ModalWindowHandle   = this.Container.querySelector("#Handle_RegisterModal");
+        this.ModalWindowHandle   = this.Container.querySelector("#Handle_Modal");
         this.TermsLink           = this.Container.querySelector("#Link_Terms");
         this.PrivacyLink         = this.Container.querySelector("#Link_Privacy");
     }
@@ -469,7 +469,7 @@ export default class RegisterPage
         this.CreateAccountHandle.classList.add("is-loading");
         this.CreateAccountButton.disabled = true;
 
-        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/users/`);
+        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/users/signup/`);
         this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccount_Callback.bind(this));
 
         return true;
