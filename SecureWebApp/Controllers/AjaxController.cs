@@ -302,10 +302,10 @@ namespace SecureWebApp.Controllers
 
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SessionId.ToString());
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedAt, DateTime.Now.ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedAt,  DateTime.Now.ToString());
 
                 LResponse.SessionId = SessionId;
-                LResponse.IsLogged = true;
+                LResponse.IsLogged  = true;
                 return StatusCode(200, LResponse);
 
             }
