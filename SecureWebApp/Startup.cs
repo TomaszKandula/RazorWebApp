@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
+using SecureWebApp.Helpers;
 using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
@@ -38,7 +39,7 @@ namespace SecureWebApp
             AServices.AddMvc(Option => Option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             AServices.AddRazorPages().AddRazorRuntimeCompilation();
             AServices.AddControllers();
-            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(15));
+            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
             AServices.AddAntiforgery(Option => Option.HeaderName = "X-CSRF-TOKEN");
 
             AServices.AddSingleton<IDnsLookup, DnsLookup>();

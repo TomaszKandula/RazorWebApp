@@ -38,7 +38,7 @@ namespace SecureWebApp.Pages
             try
             {
 
-                var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.LoggedUser);
+                var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
 
                 if (!string.IsNullOrEmpty(LoggedUser))
                 {

@@ -211,14 +211,16 @@ namespace SecureWebApp.Controllers
 
                 var NewUser = new Users()
                 { 
-                    FirstName = PayLoad.FirstName,
-                    LastName  = PayLoad.LastName,
-                    NickName  = PayLoad.NickName,
-                    EmailAddr = PayLoad.EmailAddress,
-                    Password  = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(12)),
-                    PhoneNum  = null,
-                    CountryId = PayLoad.CountryId,
-                    CityId    = PayLoad.CityId
+                    FirstName   = PayLoad.FirstName,
+                    LastName    = PayLoad.LastName,
+                    NickName    = PayLoad.NickName,
+                    EmailAddr   = PayLoad.EmailAddress,
+                    Password    = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(12)),
+                    PhoneNum    = null,
+                    CreatedAt   = DateTime.Now,
+                    IsActivated = false,
+                    CountryId   = PayLoad.CountryId,
+                    CityId      = PayLoad.CityId
                 };
 
                 FMainDbContext.Users.Add(NewUser);
@@ -242,15 +244,35 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// Perform sign-in action.
+        /// Perform sign-in action and log it to the history table.
         /// </summary>
         /// <param name="EmailAddr"></param>
         /// <param name="Password"></param>
-        /// <returns></returns>
-        public async Task<bool> SignIn(string EmailAddr, string Password) 
+        /// <returns>Valid UserId</returns>
+        public async Task<Guid> SignIn(string EmailAddr, string Password) 
         {
-            var Users = await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync();
-            return BCrypt.CheckPassword(Password, Users.Select(R => R.Password).ToList().Single());
+
+            var Users = (await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync()).Single();
+            var CheckPassword = BCrypt.CheckPassword(Password, Users.Password);
+
+            if (!CheckPassword) 
+            {
+                return Guid.Empty;
+            }
+
+            var SessionId = Guid.NewGuid();
+            var LogHistory = new LogHistory()
+            {
+                UserId    = Users.Id,
+                LoggedAt  = DateTime.Now,
+                SessionId = SessionId
+            };
+
+            FMainDbContext.LogHistory.Add(LogHistory);
+            await FMainDbContext.SaveChangesAsync();
+
+            return SessionId;
+
         }
 
         /// <summary>
@@ -268,9 +290,9 @@ namespace SecureWebApp.Controllers
             try
             {
 
-                var CanSignIn = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
+                var SessionId = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
 
-                if (!CanSignIn) 
+                if (SessionId == Guid.Empty) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidCredentials.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.InvalidCredentials.ErrorDesc;
@@ -278,8 +300,11 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedUser, PayLoad.EmailAddr);
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SessionId.ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedAt, DateTime.Now.ToString());
 
+                LResponse.SessionId = SessionId;
                 LResponse.IsLogged = true;
                 return StatusCode(200, LResponse);
 
@@ -293,6 +318,23 @@ namespace SecureWebApp.Controllers
             }
 
         }
+
+        ///// <summary>
+        ///// Endpoint allowing singin to the website.
+        ///// </summary>
+        ///// <param name="PayLoad"></param>
+        ///// <returns></returns>
+        //// GET api/v1/ajax/users/?id=1
+        //[ValidateAntiForgeryToken]
+        //[HttpGet("users")]
+        //public async Task<IActionResult> CheckUserSession([FromQuery] Guid Id) 
+        //{ 
+
+
+
+
+        
+        //}
 
     }
 

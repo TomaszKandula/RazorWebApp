@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SecureWebApp.Models.Database
 {
-
     public partial class Cities
     {
-
         public Cities()
         {
             Users = new HashSet<Users>();
@@ -17,7 +16,5 @@ namespace SecureWebApp.Models.Database
 
         public virtual Countries Country { get; set; }
         public virtual ICollection<Users> Users { get; set; }
-
     }
-
 }

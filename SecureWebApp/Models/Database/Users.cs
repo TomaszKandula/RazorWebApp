@@ -1,8 +1,14 @@
-﻿namespace SecureWebApp.Models.Database
-{
+﻿using System;
+using System.Collections.Generic;
 
+namespace SecureWebApp.Models.Database
+{
     public partial class Users
     {
+        public Users()
+        {
+            LogHistory = new HashSet<LogHistory>();
+        }
 
         public int Id { get; set; }
         public int CountryId { get; set; }
@@ -13,10 +19,11 @@
         public string EmailAddr { get; set; }
         public string PhoneNum { get; set; }
         public string Password { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsActivated { get; set; }
 
         public virtual Cities City { get; set; }
         public virtual Countries Country { get; set; }
-
+        public virtual ICollection<LogHistory> LogHistory { get; set; }
     }
-
 }

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Extensions.ConnectionService;
-using System;
 
 namespace SecureWebApp.Models.Database
 {
@@ -17,18 +17,15 @@ namespace SecureWebApp.Models.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder AOptionsBuilder)
         {
-
             var ConnectionString = FConnectionService.GetMainDatabase();
-
             /// <seealso cref="https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency"/>
-            AOptionsBuilder.UseSqlServer(ConnectionString, AddOptions =>
-                    AddOptions.EnableRetryOnFailure());
-
+            AOptionsBuilder.UseSqlServer(ConnectionString, AddOptions => AddOptions.EnableRetryOnFailure());
         }
 
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<LogHistory> LogHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -58,11 +55,25 @@ namespace SecureWebApp.Models.Database
                     .HasMaxLength(255);
             });
 
+            modelBuilder.Entity<LogHistory>(entity =>
+            {
+
+                entity.Property(e => e.LoggedAt).HasColumnType("datetime");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.LogHistory)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__UserId__Users");
+            });
+
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasIndex(e => e.EmailAddr)
                     .HasName("UQ__EmailAddr__Users")
                     .IsUnique();
+
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
                 entity.Property(e => e.EmailAddr)
                     .IsRequired()
@@ -81,15 +92,15 @@ namespace SecureWebApp.Models.Database
                     .IsRequired()
                     .HasMaxLength(255);
 
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.PhoneNum)
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .IsFixedLength();
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .IsUnicode(false)
-                    .HasMaxLength(255);
 
                 entity.HasOne(d => d.City)
                     .WithMany(p => p.Users)
@@ -108,13 +119,7 @@ namespace SecureWebApp.Models.Database
         
         }
 
-        internal object Where(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
 
     }
 

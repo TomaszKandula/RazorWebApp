@@ -5,6 +5,7 @@
 
 import Helpers    from "../functions/Helpers";
 import RestClient from "../functions/RestClient";
+import Cookies    from "../functions/Cookies";
 import MessageBox from "../components/MessageBox";
 
 
@@ -30,6 +31,7 @@ export default class LoginPage
 
         this.Dialog  = new MessageBox(this.ModalWindowHandle);
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Cookies = new Cookies();
         this.Helpers = new Helpers();
 
     }
@@ -92,30 +94,30 @@ export default class LoginPage
         this.PasswordInput.value  = "";
         this.InitErrorCheck();
 
-        OK_EmailAddress.style.visibility  = "hidden";
-        ERR_EmailAddress.style.visibility = "hidden";
+        this.OK_EmailAddress.style.visibility  = "hidden";
+        this.ERR_EmailAddress.style.visibility = "hidden";
 
-        OK_Password.style.visibility  = "hidden";
-        ERR_Password.style.visibility = "hidden";
+        this.OK_Password.style.visibility  = "hidden";
+        this.ERR_Password.style.visibility = "hidden";
 
     }
 
     Input_EmailAddress(Event)
     {
 
-        OK_EmailAddress.style.display = "visibility";
-        ERR_EmailAddress.style.display = "visibility";
+        this.OK_EmailAddress.style.display = "visibility";
+        this.ERR_EmailAddress.style.display = "visibility";
 
         if (!this.Helpers.IsEmpty(Event.target.value) && this.Helpers.ValidateEmail(Event.target.value))
         {
-            OK_EmailAddress.style.visibility  = "visible";
-            ERR_EmailAddress.style.visibility = "hidden";
+            this.OK_EmailAddress.style.visibility  = "visible";
+            this.ERR_EmailAddress.style.visibility = "hidden";
             this.IsValidEmailAddr = true;
         }
         else
         {
-            OK_EmailAddress.style.visibility  = "hidden";
-            ERR_EmailAddress.style.visibility = "visible";
+            this.OK_EmailAddress.style.visibility  = "hidden";
+            this.ERR_EmailAddress.style.visibility = "visible";
             this.IsValidEmailAddr = false;
         }
 
@@ -126,14 +128,14 @@ export default class LoginPage
 
         if (this.Helpers.IsEmpty(Event.target.value))
         {
-            OK_Password.style.visibility  = "hidden";
-            ERR_Password.style.visibility = "visible";
+            this.OK_Password.style.visibility  = "hidden";
+            this.ERR_Password.style.visibility = "visible";
             this.IsValidPassword = false;
         }
         else
         {
-            OK_Password.style.visibility  = "visible";
-            ERR_Password.style.visibility = "hidden";
+            this.OK_Password.style.visibility  = "visible";
+            this.ERR_Password.style.visibility = "hidden";
             this.IsValidPassword = true;
         }
 
@@ -188,6 +190,7 @@ export default class LoginPage
                 let ParsedResponse = JSON.parse(Response);
                 if (ParsedResponse.IsLogged)
                 {
+                    this.Cookies.SetCookie("WebService-2020-UserSession", ParsedResponse.SessionId, 0.01, "Strict");
                     window.location.replace(`${window.location.origin}/index`);
                 }
                 else

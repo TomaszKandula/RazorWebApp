@@ -39,18 +39,47 @@ export default class RegisterPage
 
     BindDom()
     {
-        this.FirstNameInput      = this.Container.querySelector("#Input_FirstName");
-        this.LastNameInput       = this.Container.querySelector("#Input_LastName");
-        this.NicknameInput       = this.Container.querySelector("#Input_Nickname");
-        this.EmailAddressInput   = this.Container.querySelector("#Input_EmailAddress");
-        this.PasswordInput       = this.Container.querySelector("#Input_Password");
-        this.CountryListSelect   = this.Container.querySelector("#Select_CountryList");
-        this.CityListSelect      = this.Container.querySelector("#Select_CityList");
+        
+        this.FirstNameInput = this.Container.querySelector("#Input_FirstName");
+        this.LastNameInput  = this.Container.querySelector("#Input_LastName");
+        this.NicknameInput  = this.Container.querySelector("#Input_Nickname");
+        this.EmailAddrInput = this.Container.querySelector("#Input_EmailAddress");
+        this.PasswordInput  = this.Container.querySelector("#Input_Password");
+
+        this.CountryListSelect = this.Container.querySelector("#Select_CountryList");
+        this.CityListSelect    = this.Container.querySelector("#Select_CityList");
+
         this.CreateAccountHandle = this.Container.querySelector("#Handle_CreateAccount");
         this.CreateAccountButton = this.Container.querySelector("#Button_CreateAccount");
-        this.ModalWindowHandle   = this.Container.querySelector("#Handle_Modal");
-        this.TermsLink           = this.Container.querySelector("#Link_Terms");
-        this.PrivacyLink         = this.Container.querySelector("#Link_Privacy");
+
+        this.ModalWindowHandle = this.Container.querySelector("#Handle_Modal");
+
+        this.TermsLink   = this.Container.querySelector("#Link_Terms");
+        this.PrivacyLink = this.Container.querySelector("#Link_Privacy");
+
+        this.OK_FirstName   = this.Container.querySelector("#OK_FirstName");
+        this.ERR_FirstName  = this.Container.querySelector("#ERR_FirstName");
+        this.Info_FirstName = this.Container.querySelector("#Info_FirstName");
+
+        this.OK_LastName   = this.Container.querySelector("#OK_LastName");
+        this.ERR_LastName  = this.Container.querySelector("#ERR_LastName");
+        this.Info_LastName = this.Container.querySelector("#Info_LastName");
+
+        this.OK_Nickname   = this.Container.querySelector("#OK_Nickname");
+        this.ERR_Nickname  = this.Container.querySelector("#ERR_Nickname");
+        this.Info_Nickname = this.Container.querySelector("#Info_Nickname");
+
+        this.OK_EmailAddress     = this.Container.querySelector("#OK_EmailAddress");
+        this.ERR_EmailAddress    = this.Container.querySelector("#ERR_EmailAddress");
+        this.Info_EmailAddress   = this.Container.querySelector("#Info_EmailAddress");
+
+        this.OK_Password   = this.Container.querySelector("#OK_Password");
+        this.ERR_Password  = this.Container.querySelector("#ERR_Password");
+        this.Info_Password = this.Container.querySelector("#Info_Password");
+
+        this.Handle_EmailAddress = this.Container.querySelector("#Handle_EmailAddress");
+        this.Handle_CityList     = this.Container.querySelector("#Handle_CityList");
+
     }
 
     AddEvents()
@@ -62,7 +91,7 @@ export default class RegisterPage
         this.CountryListSelect.addEventListener("change", (Event) => { this.Select_CountryList(Event); });
         this.CityListSelect.addEventListener("change", (Event) => { this.Select_CityList(Event); });
         this.CreateAccountButton.addEventListener("click", (Event) => { this.Button_CreateAccount(Event); });
-        this.EmailAddressInput.onkeyup = () => { this.Input_EmailAddress(); };
+        this.EmailAddrInput.onkeyup = (Event) => { this.Input_EmailAddress(Event); };
         this.TermsLink.addEventListener("click", (Event) => { this.Link_Terms(Event) });
         this.PrivacyLink.addEventListener("click", (Event) => { this.Link_Privacy(Event) });
     }
@@ -100,7 +129,7 @@ export default class RegisterPage
         this.FirstNameInput.disabled    = AState;
         this.LastNameInput.disabled     = AState;
         this.NicknameInput.disabled     = AState;
-        this.EmailAddressInput.disabled = AState;
+        this.EmailAddrInput.disabled    = AState;
         this.PasswordInput.disabled     = AState;
         this.CountryListSelect.disabled = AState;
         this.CityListSelect.disabled    = AState;
@@ -109,11 +138,11 @@ export default class RegisterPage
     ClearFields()
     {
 
-        this.FirstNameInput.value    = "";
-        this.LastNameInput.value     = "";
-        this.NicknameInput.value     = "";
-        this.EmailAddressInput.value = "";
-        this.PasswordInput.value     = "";
+        this.FirstNameInput.value = "";
+        this.LastNameInput.value  = "";
+        this.NicknameInput.value  = "";
+        this.EmailAddrInput.value = "";
+        this.PasswordInput.value  = "";
 
         this.CountryListSelect.selectedIndex = 0;
         this.Helpers.ClearSelectElement(this.CityListSelect);
@@ -125,26 +154,47 @@ export default class RegisterPage
 
     }
 
+    ClearNotifications()
+    {
+
+        this.OK_FirstName.style.visibility   = "hidden";
+        this.ERR_FirstName.style.visibility  = "hidden";
+        this.Info_FirstName.style.visibility = "hidden";
+
+        this.OK_LastName.style.visibility   = "hidden";
+        this.ERR_LastName.style.visibility  = "hidden";
+        this.Info_LastName.style.visibility = "hidden";
+
+        this.OK_Nickname.style.visibility   = "hidden";
+        this.ERR_Nickname.style.visibility  = "hidden";
+        this.Info_Nickname.style.visibility = "hidden";
+
+        this.OK_EmailAddress.style.visibility   = "hidden";
+        this.ERR_EmailAddress.style.visibility  = "hidden";
+        this.Info_EmailAddress.style.visibility = "hidden";
+
+        this.OK_Password.style.visibility   = "hidden";
+        this.ERR_Password.style.visibility  = "hidden";
+        this.Info_Password.style.visibility = "hidden";
+
+    }
+
     Input_FirstName(Event)
     {
 
-        let Verified  = this.Container.querySelector("#OK_FirstName");
-        let Malformed = this.Container.querySelector("#ERR_FirstName");
-        let Info      = this.Container.querySelector("#Info_FirstName");
-
         if (this.Helpers.IsEmpty(Event.target.value))
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "visible";
-            Info.style.display         = "inline-block";
-            this.IsValidFirstName      = false;
+            this.OK_FirstName.style.visibility  = "hidden";
+            this.ERR_FirstName.style.visibility = "visible";
+            this.Info_FirstName.style.display   = "inline-block";
+            this.IsValidFirstName = false;
         }
         else
         {
-            Verified.style.visibility  = "visible";
-            Malformed.style.visibility = "hidden";
-            Info.style.display         = "none";
-            this.IsValidFirstName      = true;
+            this.OK_FirstName.style.visibility  = "visible";
+            this.ERR_FirstName.style.visibility = "hidden";
+            this.Info_FirstName.style.display   = "none";
+            this.IsValidFirstName = true;
         }
 
     }
@@ -152,23 +202,19 @@ export default class RegisterPage
     Input_LastName(Event)
     {
 
-        let Verified  = this.Container.querySelector("#OK_LastName");
-        let Malformed = this.Container.querySelector("#ERR_LastName");
-        let Info      = this.Container.querySelector("#Info_LastName");
-
         if (this.Helpers.IsEmpty(Event.target.value))
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "visible";
-            Info.style.display         = "inline-block";
-            this.IsValidLastName       = false;
+            this.OK_LastName.style.visibility  = "hidden";
+            this.ERR_LastName.style.visibility = "visible";
+            this.Info_LastName.style.display   = "inline-block";
+            this.IsValidLastName = false;
         }
         else
         {
-            Verified.style.visibility  = "visible";
-            Malformed.style.visibility = "hidden";
-            Info.style.display         = "none";
-            this.IsValidLastName       = true;
+            this.OK_LastName.style.visibility  = "visible";
+            this.ERR_LastName.style.visibility = "hidden";
+            this.Info_LastName.style.display   = "none";
+            this.IsValidLastName  = true;
         }
 
     }
@@ -176,55 +222,45 @@ export default class RegisterPage
     Input_Nickname(Event)
     {
 
-        let Verified  = this.Container.querySelector("#OK_Nickname");
-        let Malformed = this.Container.querySelector("#ERR_Nickname");
-        let Info      = this.Container.querySelector("#Info_Nickname");
-
         if (this.Helpers.IsEmpty(Event.target.value))
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "visible";
-            Info.style.display         = "inline-block";
-            this.IsValidNickname       = false;
+            this.OK_Nickname.style.visibility  = "hidden";
+            this.ERR_Nickname.style.visibility = "visible";
+            this.Info_Nickname.style.display   = "inline-block";
+            this.IsValidNickname = false;
         }
         else
         {
-            Verified.style.visibility  = "visible";
-            Malformed.style.visibility = "hidden";
-            Info.style.display         = "none";
-            this.IsValidNickname       = true;
+            this.OK_Nickname.style.visibility  = "visible";
+            this.ERR_Nickname.style.visibility = "hidden";
+            this.Info_Nickname.style.display   = "none";
+            this.IsValidNickname = true;
         }
 
     }
 
-    Input_EmailAddress()
+    Input_EmailAddress(Event)
     {
 
-        let Handler      = this.Container.querySelector("#Handle_EmailAddress");
-        let Verified     = this.Container.querySelector("#OK_EmailAddress");
-        let Malformed    = this.Container.querySelector("#ERR_EmailAddress");
-        let Info         = this.Container.querySelector("#Info_EmailAddress");
+        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/validation/${Event.target.value}/`);
 
-        let EmailAddress = this.EmailAddressInput.value;
-        let Url          = encodeURI(`${window.location.origin}/api/v1/ajax/validation/${EmailAddress}/`);
+        this.OK_EmailAddress.style.display   = "visibility";
+        this.ERR_EmailAddress.style.display  = "visibility";
+        this.Info_EmailAddress.style.display = "visibility";
 
-        Verified.style.display  = "visibility";
-        Malformed.style.display = "visibility";
-        Info.style.display      = "visibility";
+        Handle_EmailAddress.classList.add("is-loading");
 
-        Handler.classList.add("is-loading");
-
-        if (!this.Helpers.IsEmpty(EmailAddress) && this.Helpers.ValidateEmail(EmailAddress))
+        if (!this.Helpers.IsEmpty(Event.target.value) && this.Helpers.ValidateEmail(Event.target.value))
         {
             this.Ajax.Execute("GET", Url, null, this.CheckEmailAddress_Callback.bind(this));
         }
         else
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "hidden";
-            Info.style.display = "inline-block";
-            Info.innerHTML     = "Valid email address is mandatory.";
-            Handler.classList.remove("is-loading");
+            this.OK_EmailAddress.style.visibility  = "hidden";
+            this.ERR_EmailAddress.style.visibility = "hidden";
+            this.Info_EmailAddress.style.display = "inline-block";
+            this.Info_EmailAddress.innerHTML     = "Valid email address is mandatory.";
+            this.Handle_EmailAddress.classList.remove("is-loading");
             this.IsValidEmailAddress = false;
         }
 
@@ -233,12 +269,7 @@ export default class RegisterPage
     CheckEmailAddress_Callback(Response, StatusCode)
     {
 
-        let Handler   = this.Container.querySelector("#Handle_EmailAddress");
-        let Verified  = this.Container.querySelector("#OK_EmailAddress");
-        let Malformed = this.Container.querySelector("#ERR_EmailAddress");
-        let Info      = this.Container.querySelector("#Info_EmailAddress");
-
-        Handler.classList.remove("is-loading");
+        Handle_EmailAddress.classList.remove("is-loading");
 
         if (StatusCode === 200)
         {
@@ -249,18 +280,18 @@ export default class RegisterPage
                 let ParsedResponse = JSON.parse(Response);
                 if (ParsedResponse.IsEmailValid)
                 {
-                    Verified.style.visibility  = "visible";
-                    Malformed.style.visibility = "hidden";
-                    Info.style.display = "none";
-                    Info.innerHTML     = "";
+                    this.OK_EmailAddress.style.visibility  = "visible";
+                    this.ERR_EmailAddress.style.visibility = "hidden";
+                    this.Info_EmailAddress.style.display = "none";
+                    this.Info_EmailAddress.innerHTML     = "";
                     this.IsValidEmailAddress = true;
                 }
                 else
                 {
-                    Verified.style.visibility  = "hidden";
-                    Malformed.style.visibility = "visible";
-                    Info.style.display = "inline-block";
-                    Info.innerHTML     = ParsedResponse.Error.ErrorDesc;
+                    this.OK_EmailAddress.style.visibility  = "hidden";
+                    this.ERR_EmailAddress.style.visibility = "visible";
+                    this.Info_EmailAddress.style.display = "inline-block";
+                    this.Info_EmailAddress.innerHTML     = ParsedResponse.Error.ErrorDesc;
                     this.IsValidEmailAddress = false;
                 }
 
@@ -277,12 +308,19 @@ export default class RegisterPage
         }
         else
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "hidden";
-            Info.style.display = "inline-block";
-            Info.innerHTML     = "An error has occured during the processing";
-            alert(`An error has occured during the processing. Returned status code: ${StatusCode}`);
+
+            this.OK_EmailAddress.style.visibility = "hidden";
+            this.ERR_EmailAddress.style.visibility = "hidden";
+            this.Info_EmailAddress.style.display = "inline-block";
+            this.Info_EmailAddress.innerHTML     = "An error has occured during the processing";
+
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Email Address Check");
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
+            this.Dialog.Show();
+
             this.IsValidEmailAddress = false;
+
         }
 
     }
@@ -290,44 +328,34 @@ export default class RegisterPage
     Input_Password(Event)
     {
 
-        let Verified  = this.Container.querySelector("#OK_Password");
-        let Malformed = this.Container.querySelector("#ERR_Password");
-        let Info      = this.Container.querySelector("#Info_Password");
-
         if (!this.Helpers.ValidatePassword(Event.target.value))
         {
-            Verified.style.visibility  = "hidden";
-            Malformed.style.visibility = "visible";
-            Info.style.display         = "inline-block";
-            this.IsValidPassword       = false;
+            this.OK_Password.style.visibility  = "hidden";
+            this.ERR_Password.style.visibility = "visible";
+            this.Info_Password.style.display   = "inline-block";
+            this.IsValidPassword = false;
         }
         else
         {
-            Verified.style.visibility  = "visible";
-            Malformed.style.visibility = "hidden";
-            Info.style.display         = "none";
-            this.IsValidPassword       = true;
+            this.OK_Password.style.visibility  = "visible";
+            this.ERR_Password.style.visibility = "hidden";
+            this.Info_Password.style.display   = "none";
+            this.IsValidPassword = true;
         }
 
     }
 
     Select_CountryList(Event)
     {
-
-        let Handler    = this.Container.querySelector("#Handle_CityList");
-        let SelectedId = Event.target.value;
-        let Url        = encodeURI(`${window.location.origin}/api/v1/ajax/cities/${SelectedId}/`);
-
-        Handler.classList.add("is-loading");
+        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/cities/${Event.target.value}/`);
+        this.Handle_CityList.classList.add("is-loading");
         this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
-
     }
 
     GetCountryList_Callback(Response, StatusCode)
     {
 
-        let Handler = this.Container.querySelector("#Handle_CityList");
-        Handler.classList.remove("is-loading");
+        this.Handle_CityList.classList.remove("is-loading");
 
         if (StatusCode == 200)
         {
@@ -458,13 +486,14 @@ export default class RegisterPage
             FirstName:    this.FirstNameInput.value,
             LastName:     this.LastNameInput.value,
             NickName:     this.NicknameInput.value,
-            EmailAddress: this.EmailAddressInput.value,
+            EmailAddress: this.EmailAddrInput.value,
             Password:     this.PasswordInput.value,
             CountryId:    Number(this.CountryListSelect.value),
             CityId:       Number(this.CityListSelect.value)
         });
 
         this.ClearFields();
+        this.ClearNotifications()
         this.DisableFields(true);
         this.CreateAccountHandle.classList.add("is-loading");
         this.CreateAccountButton.disabled = true;

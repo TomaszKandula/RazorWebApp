@@ -1,8 +1,16 @@
 ﻿@page
 @model IndexModel
 
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@functions
+{
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
+    }
+}
 
-    <section id="IndexPage">
+    <section id="IndexPage" data-xsrf=@GetAntiXsrfRequestToken()>
 
         <section class="hero is-medium is-info">
 

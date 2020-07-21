@@ -11,11 +11,14 @@
         public static class Sessions 
         {
 
+            /* Use this value to determin user session timeout */
+            public const int IdleTimeout = 15;
+
             internal class KeyNames 
             {
-                public const string UserId       = "UserId";
-                public const string LoggedUser   = "LoggedUser";
-                public const string SessionStamp = "SessionStamp";
+                public const string SessionId = "SessionId";
+                public const string EmailAddr = "EmailAddr";
+                public const string LoggedAt  = "LoggedAt";
             }
 
         }
