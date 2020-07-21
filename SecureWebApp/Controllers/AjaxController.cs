@@ -320,13 +320,13 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// Endpoint allowing singin to the website.
+        /// Use to check if session is alive or not.
         /// </summary>
-        /// <param name="PayLoad"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
         // GET api/v1/ajax/session/?Id={SessionId}
         [ValidateAntiForgeryToken]
-        [HttpGet("session/{sessionid}")]
+        [HttpGet("session/{id}")]
         public IActionResult CheckUserSession([FromQuery] Guid Id)
         {
 
