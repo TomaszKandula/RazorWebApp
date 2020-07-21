@@ -6,9 +6,10 @@
 export default class IndexPage
 {
 
-    constructor(Container)
+    constructor(AContainer, ANavButtons)
     {
-        this.Container = Container;
+        this.Container  = AContainer;
+        this.NavButtons = ANavButtons;
     }
 
     Initialize()

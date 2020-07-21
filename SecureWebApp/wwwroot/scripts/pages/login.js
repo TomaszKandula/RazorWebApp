@@ -12,9 +12,10 @@ import MessageBox from "../components/MessageBox";
 export default class LoginPage
 {
 
-    constructor(Container)
+    constructor(AContainer, ANavButtons)
     {
-        this.Container = Container;
+        this.Container  = AContainer;
+        this.NavButtons = ANavButtons;
     } 
 
     Initialize()
@@ -190,8 +191,14 @@ export default class LoginPage
                 let ParsedResponse = JSON.parse(Response);
                 if (ParsedResponse.IsLogged)
                 {
+
                     this.Cookies.SetCookie("WebService-2020-UserSession", ParsedResponse.SessionId, 0.01, "Strict");
+
+                    /* This is demo application and we only redirect to the main page.
+                     * However, in real application, one may want to redirect user to user page, etc. */
+
                     window.location.replace(`${window.location.origin}/index`);
+
                 }
                 else
                 {

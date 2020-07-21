@@ -11,9 +11,10 @@ import MessageBox from "../components/MessageBox";
 export default class RegisterPage
 {
 
-    constructor(Container)
+    constructor(AContainer, ANavButtons)
     {
-        this.Container = Container;
+        this.Container  = AContainer;
+        this.NavButtons = ANavButtons;
     }
 
     Initialize()

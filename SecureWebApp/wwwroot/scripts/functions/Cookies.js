@@ -13,6 +13,7 @@ export default class Cookies
         if (ADays)
         {
 
+            // We set time in miliseconds
             LDate.setTime(
                 LDate.getTime() + (ADays * 24 * 60 * 60 * 1000)
             );
@@ -34,12 +35,12 @@ export default class Cookies
 
             let LCookie = LCookieArray[Index];
 
-            while (LCookie.charAt(0) == " ")
+            while (LCookie.charAt(0) === " ")
             {
                 LCookie = LCookie.substring(1, LCookie.length);
             }
 
-            if (LCookie.indexOf(LCookieName) == 0)
+            if (LCookie.indexOf(LCookieName) === 0)
             {
                 return LCookie.substring(LCookieName.length, LCookie.length);
             }
