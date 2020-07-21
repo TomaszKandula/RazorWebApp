@@ -38,12 +38,11 @@ CREATE TABLE Users
 )
 
 
-CREATE TABLE LogHistory
+CREATE TABLE SigninHistory
 (
     Id          INT IDENTITY(1,1) NOT NULL,
     UserId	INT NOT NULL,
     LoggedAt    DATETIME NOT NULL,
-    SessionID   UNIQUEIDENTIFIER NOT NULL,
-    CONSTRAINT PK__Id__LogHistory PRIMARY KEY (Id),
+    CONSTRAINT PK__Id__SigninHistory PRIMARY KEY (Id),
     CONSTRAINT FK__UserId__Users FOREIGN KEY (UserId) REFERENCES Users (Id)
 )

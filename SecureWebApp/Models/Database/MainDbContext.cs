@@ -25,7 +25,7 @@ namespace SecureWebApp.Models.Database
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<LogHistory> LogHistory { get; set; }
+        public virtual DbSet<SigninHistory> SigninHistory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,13 +55,13 @@ namespace SecureWebApp.Models.Database
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<LogHistory>(entity =>
+            modelBuilder.Entity<SigninHistory>(entity =>
             {
 
                 entity.Property(e => e.LoggedAt).HasColumnType("datetime");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.LogHistory)
+                    .WithMany(p => p.SigninHistory)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserId__Users");

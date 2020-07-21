@@ -261,14 +261,13 @@ namespace SecureWebApp.Controllers
             }
 
             var SessionId = Guid.NewGuid();
-            var LogHistory = new LogHistory()
+            var LogHistory = new SigninHistory()
             {
                 UserId    = Users.Id,
                 LoggedAt  = DateTime.Now,
-                SessionId = SessionId
             };
 
-            FMainDbContext.LogHistory.Add(LogHistory);
+            FMainDbContext.SigninHistory.Add(LogHistory);
             await FMainDbContext.SaveChangesAsync();
 
             return SessionId;

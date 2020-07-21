@@ -7,7 +7,7 @@ namespace SecureWebApp.Models.Database
     {
         public Users()
         {
-            LogHistory = new HashSet<LogHistory>();
+            SigninHistory = new HashSet<SigninHistory>();
         }
 
         public int Id { get; set; }
@@ -24,6 +24,6 @@ namespace SecureWebApp.Models.Database
 
         public virtual Cities City { get; set; }
         public virtual Countries Country { get; set; }
-        public virtual ICollection<LogHistory> LogHistory { get; set; }
+        public virtual ICollection<SigninHistory> SigninHistory { get; set; }
     }
 }
