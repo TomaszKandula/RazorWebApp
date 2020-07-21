@@ -35,6 +35,8 @@ export default class LoginPage
         this.Cookies = new Cookies();
         this.Helpers = new Helpers();
 
+        // call to render nav bar buttons (always Signup + Login)
+
     }
 
     BindDom()

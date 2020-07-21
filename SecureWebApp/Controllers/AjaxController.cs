@@ -313,28 +313,47 @@ namespace SecureWebApp.Controllers
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
                 LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/userssignin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                FAppLogger.LogFatality($"POST api/v1/ajax/users/signin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
         }
 
-        ///// <summary>
-        ///// Endpoint allowing singin to the website.
-        ///// </summary>
-        ///// <param name="PayLoad"></param>
-        ///// <returns></returns>
-        //// GET api/v1/ajax/users/?id=1
-        //[ValidateAntiForgeryToken]
-        //[HttpGet("users")]
-        //public async Task<IActionResult> CheckUserSession([FromQuery] Guid Id) 
-        //{ 
+        /// <summary>
+        /// Endpoint allowing singin to the website.
+        /// </summary>
+        /// <param name="PayLoad"></param>
+        /// <returns></returns>
+        // GET api/v1/ajax/session/?Id={SessionId}
+        [ValidateAntiForgeryToken]
+        [HttpGet("session/{sessionid}")]
+        public IActionResult CheckUserSession([FromQuery] Guid Id)
+        {
 
+            var LResponse = new ReturnSessionState();
+            try
+            {
 
+                var SessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
 
+                if (SessionId != Id.ToString()) 
+                {
+                    LResponse.IsSessionAlive = false;
+                }
 
-        
-        //}
+                LResponse.IsSessionAlive = true;
+                return StatusCode(200, LResponse);
+
+            }
+            catch (Exception E)
+            {
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"POST api/v1/ajax/session/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                return StatusCode(500, LResponse);
+            }
+
+        }
 
     }
 

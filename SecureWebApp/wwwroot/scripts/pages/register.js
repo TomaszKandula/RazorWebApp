@@ -36,6 +36,8 @@ export default class RegisterPage
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Helpers = new Helpers();
 
+        // call to render nav bar buttons (always Signup + Login)
+
     }
 
     BindDom()

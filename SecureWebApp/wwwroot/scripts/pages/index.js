@@ -20,6 +20,10 @@ export default class IndexPage
             return null;
         }
 
+        // call to render nav bar buttons:
+        // singup + login - if session expired / no session
+        // logout - if user is logged (session valid)
+
     }
 
 }
