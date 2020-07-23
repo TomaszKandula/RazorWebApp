@@ -36,16 +36,18 @@ namespace SecureWebApp.Pages
                         IsEssential = false,
                         SameSite    = SameSiteMode.Strict,
                         HttpOnly    = true,
-                        Secure      = false,//Set to true before deployment
+                        Secure      = false,//Set to true before deployment on HTTPS
                     };
 
-                    /* We add short-lived HttpOnly cookie containing Session Id to the response header. 
+                    /* 
+                     * We add short-lived HttpOnly cookie containing Session Id to the response header. 
                      * This token would be later necessary to request data from API for logged user. 
                      * Such API request must contain Anit-Forgery token along with Session Id in the request header. 
                      * If session expires, then any requests to the API will fail and user will have to login again. 
                      * Please note that Session Id is randomly generated key with short lifespan; and it is restricted 
                      * to this domain only. Thus, if CORS is enabled, make sure it allows only certain domain, 
-                     * on which front-end runs. */
+                     * on which front-end runs. 
+                     */
 
                     HttpContext.Response.Cookies.Append("SessionId", LSessionId, LCookieOptions);
 
