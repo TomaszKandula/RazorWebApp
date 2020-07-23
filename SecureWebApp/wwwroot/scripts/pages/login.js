@@ -2,12 +2,11 @@
 
 "use strict";
 
-
 import Helpers      from "../functions/Helpers";
 import RestClient   from "../functions/RestClient";
+import Cookies      from "../functions/Cookies";
 import MessageBox   from "../components/MessageBox";
 import LoginButtons from "../components/LoginButtons";
-
 
 export default class LoginPage
 {
@@ -32,6 +31,7 @@ export default class LoginPage
 
         this.Dialog  = new MessageBox(this.ModalWindowHandle);
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Cookies = new Cookies();
         this.Helpers = new Helpers();
 
         this.Render_Buttons();
@@ -204,10 +204,21 @@ export default class LoginPage
                 if (ParsedResponse.IsLogged)
                 {
 
-                    /* This is demo application and we only redirect to the main page.
+                    /* 
+                     * We set cookie that tells our UI that user has been logged, and some
+                     * parts of the UI may be changed on that occasion. This does not have 
+                     * to be protected as it does not affect signin or session itself.
+                     * This is UI related cookie only.
+                     */
+
+                    this.Cookies.SetCookie("user_session", "alive", 0.11, "Strict", null);
+
+                    /* 
+                     * This is demo application and we only redirect to the main page.
                      * However, in real application, one may want to redirect user to another page. 
                      * Please also note: the page that user is redirected to must add HttpOnly cookie
-                     * to the response header. */
+                     * to the response header. 
+                     */
 
                     window.location.replace(`${window.location.origin}/index`);
 

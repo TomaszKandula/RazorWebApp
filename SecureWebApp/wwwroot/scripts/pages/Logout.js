@@ -4,7 +4,7 @@
 
 import Cookies from "../functions/Cookies";
 
-export default class Logout
+export default class LogoutPage
 {
 
     constructor(AContainer)
@@ -20,10 +20,9 @@ export default class Logout
             return null;
         }
 
-
-
+        this.Cookies = new Cookies();
+        Cookies.EraseCookie("user_session");
 
     }
-
 
 }

@@ -2,9 +2,8 @@
 
 "use strict";
 
-
+import Cookies      from "../functions/Cookies";
 import LoginButtons from "../components/LoginButtons";
-
 
 export default class IndexPage
 {
@@ -24,12 +23,14 @@ export default class IndexPage
         }
 
         this.BindDom();
+        this.Cookies = new Cookies();
+        let SessionState = Cookies.GetCookie("user_session");
 
         this.MoveToRegister = function () { window.location.replace(`${window.location.origin}/register`) };
         this.MoveToLogin    = function () { window.location.replace(`${window.location.origin}/login`) };
         this.LogoutUser     = function () { window.location.replace(`${window.location.origin}/logout`) };
 
-        if (this.Container.dataset.logout === "False")
+        if (SessionState != "alive")
         {
             this.LoginButtons = new LoginButtons(this.NavButtons, "Signup_Login", this.MoveToRegister, this.MoveToLogin, null);
             this.LoginButtons.Show();

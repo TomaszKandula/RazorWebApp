@@ -23,7 +23,6 @@ namespace SecureWebApp.Pages
 
             try 
             {
-                var RenderLogout = false;
                 var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
                 var LExpiresAt = HttpContext.Session.GetString(Constants.Sessions.KeyNames.ExpiresAt);
 
@@ -49,11 +48,9 @@ namespace SecureWebApp.Pages
                      * on which front-end runs. */
 
                     HttpContext.Response.Cookies.Append("SessionId", LSessionId, LCookieOptions);
-                    RenderLogout = true;
 
                 }
 
-                ViewData["RenderLogout"] = RenderLogout;
                 return Page();
 
             }
