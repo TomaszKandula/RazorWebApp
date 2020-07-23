@@ -18,7 +18,7 @@
             {
                 public const string SessionId = "SessionId";
                 public const string EmailAddr = "EmailAddr";
-                public const string LoggedAt  = "LoggedAt";
+                public const string ExpiresAt = "ExpiresAt";
             }
 
         }

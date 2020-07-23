@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.DnsLookup;
@@ -42,6 +44,7 @@ namespace SecureWebApp
             AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
             AServices.AddAntiforgery(Option => Option.HeaderName = "X-CSRF-TOKEN");
 
+            AServices.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             AServices.AddSingleton<IDnsLookup, DnsLookup>();
             AServices.AddSingleton<IAppLogger, AppLogger>();
             AServices.AddScoped<IConnectionService, ConnectionService>();

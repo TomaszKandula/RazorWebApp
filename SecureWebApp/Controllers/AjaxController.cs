@@ -301,9 +301,8 @@ namespace SecureWebApp.Controllers
 
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SessionId.ToString());
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedAt,  DateTime.Now.ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString());
 
-                LResponse.SessionId = SessionId;
                 LResponse.IsLogged  = true;
                 return StatusCode(200, LResponse);
 
@@ -316,43 +315,7 @@ namespace SecureWebApp.Controllers
                 return StatusCode(500, LResponse);
             }
 
-        }
-
-        /// <summary>
-        /// Use to check if session is alive or not.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        // GET api/v1/ajax/session/?Id={SessionId}
-        [ValidateAntiForgeryToken]
-        [HttpGet("session/{id}")]
-        public IActionResult CheckUserSession([FromQuery] Guid Id)
-        {
-
-            var LResponse = new ReturnSessionState();
-            try
-            {
-
-                var SessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
-
-                if (SessionId != Id.ToString()) 
-                {
-                    LResponse.IsSessionAlive = false;
-                }
-
-                LResponse.IsSessionAlive = true;
-                return StatusCode(200, LResponse);
-
-            }
-            catch (Exception E)
-            {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/session/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
-            }
-
-        }
+        }     
 
     }
 

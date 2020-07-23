@@ -3,10 +3,10 @@
 "use strict";
 
 
-import Helpers    from "../functions/Helpers";
-import RestClient from "../functions/RestClient";
-import Cookies    from "../functions/Cookies";
-import MessageBox from "../components/MessageBox";
+import Helpers      from "../functions/Helpers";
+import RestClient   from "../functions/RestClient";
+import MessageBox   from "../components/MessageBox";
+import LoginButtons from "../components/LoginButtons";
 
 
 export default class LoginPage
@@ -32,10 +32,20 @@ export default class LoginPage
 
         this.Dialog  = new MessageBox(this.ModalWindowHandle);
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
-        this.Cookies = new Cookies();
         this.Helpers = new Helpers();
 
-        // call to render nav bar buttons (always Signup + Login)
+        this.Render_Buttons();
+
+    }
+
+    Render_Buttons()
+    {
+
+        let MoveToRegister = function () { window.location.replace(`${window.location.origin}/register`) };
+        let MoveToLogin = function () { window.location.replace(`${window.location.origin}/login`) };
+
+        this.LoginButtons = new LoginButtons(this.NavButtons, "Signup_Login", MoveToRegister, MoveToLogin, null);
+        this.LoginButtons.Show();
 
     }
 
@@ -194,10 +204,10 @@ export default class LoginPage
                 if (ParsedResponse.IsLogged)
                 {
 
-                    this.Cookies.SetCookie("WebService-2020-UserSession", ParsedResponse.SessionId, 0.01, "Strict");
-
                     /* This is demo application and we only redirect to the main page.
-                     * However, in real application, one may want to redirect user to user page, etc. */
+                     * However, in real application, one may want to redirect user to another page. 
+                     * Please also note: the page that user is redirected to must add HttpOnly cookie
+                     * to the response header. */
 
                     window.location.replace(`${window.location.origin}/index`);
 

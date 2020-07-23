@@ -10,7 +10,9 @@
     }
 }
 
-    <section id="IndexPage" data-xsrf=@GetAntiXsrfRequestToken()>
+    <section id="IndexPage" data-xsrf=@GetAntiXsrfRequestToken() data-logout=@ViewData["RenderLogout"]>
+
+        <div id="Handle_Modal" class="modal"></div>
 
         <section class="hero is-medium is-info">
 

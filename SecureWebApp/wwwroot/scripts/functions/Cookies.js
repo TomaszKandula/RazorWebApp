@@ -3,10 +3,18 @@
 "use strict";
 
 
+import Helpers from "../functions/Helpers";
+
+
 export default class Cookies
 {
 
-    SetCookie(AName, AValue, ADays, ASameSite)
+    constructor()
+    {
+        this.Helpers = new Helpers();
+    }
+
+    SetCookie(ACookieName, AValue, ADays, ASameSite, ASecure)
     {
 
         let LDate = new Date();
@@ -18,16 +26,18 @@ export default class Cookies
                 LDate.getTime() + (ADays * 24 * 60 * 60 * 1000)
             );
 
-            document.cookie = `${AName}=${AValue}; expires=${LDate.toUTCString()}"; path=/; SameSite=${ASameSite}`;
+            let LSecure = !this.Helpers.IsEmpty(ASecure) ? `; ${ASecure}` : "";
+            let LNewCookie = `${ACookieName}=${AValue}; expires=${LDate.toUTCString()}; path=/; SameSite=${ASameSite} ${LSecure}`;
+            document.cookie = LNewCookie;
 
         }
 
     }
 
-    GetCookie(AName)
+    GetCookie(ACookieName)
     {
 
-        let LCookieName = `${AName}=`;
+        let LCookieName = `${ACookieName}=`;
         let LCookieArray = document.cookie.split(";");
 
         for (let Index = 0; Index < LCookieArray.length; Index++)
@@ -51,9 +61,9 @@ export default class Cookies
 
     }
 
-    EraseCookie(AName)
+    EraseCookie(ACookieName)
     {
-        document.cookie = `${AName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+        document.cookie = `${ACookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
     }
 
 }

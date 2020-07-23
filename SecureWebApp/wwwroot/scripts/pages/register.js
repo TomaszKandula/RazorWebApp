@@ -3,9 +3,10 @@
 "use strict";
 
 
-import Helpers    from "../functions/Helpers";
-import RestClient from "../functions/RestClient";
-import MessageBox from "../components/MessageBox";
+import Helpers      from "../functions/Helpers";
+import RestClient   from "../functions/RestClient";
+import MessageBox   from "../components/MessageBox";
+import LoginButtons from "../components/LoginButtons";
 
 
 export default class RegisterPage
@@ -36,7 +37,18 @@ export default class RegisterPage
         this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Helpers = new Helpers();
 
-        // call to render nav bar buttons (always Signup + Login)
+        this.Render_Buttons();
+
+    }
+
+    Render_Buttons()
+    {
+
+        let MoveToRegister = function () { window.location.replace(`${window.location.origin}/register`) };
+        let MoveToLogin = function () { window.location.replace(`${window.location.origin}/login`) };
+
+        this.LoginButtons = new LoginButtons(this.NavButtons, "Signup_Login", MoveToRegister, MoveToLogin, null);
+        this.LoginButtons.Show();
 
     }
 
