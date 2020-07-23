@@ -24,7 +24,7 @@ export default class IndexPage
 
         this.BindDom();
         this.Cookies = new Cookies();
-        let SessionState = Cookies.GetCookie("user_session");
+        let SessionState = this.Cookies.GetCookie("user_session");
 
         this.MoveToRegister = function () { window.location.replace(`${window.location.origin}/register`) };
         this.MoveToLogin    = function () { window.location.replace(`${window.location.origin}/login`) };

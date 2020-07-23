@@ -21,7 +21,7 @@ export default class LogoutPage
         }
 
         this.Cookies = new Cookies();
-        Cookies.EraseCookie("user_session");
+        this.Cookies.EraseCookie("user_session");
 
     }
 
