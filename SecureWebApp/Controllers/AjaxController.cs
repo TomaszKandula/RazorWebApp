@@ -301,8 +301,9 @@ namespace SecureWebApp.Controllers
 
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SessionId.ToString());
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.LoggedAt,  DateTime.Now.ToString());
 
+                LResponse.SessionId = SessionId;
                 LResponse.IsLogged  = true;
                 return StatusCode(200, LResponse);
 
@@ -315,8 +316,8 @@ namespace SecureWebApp.Controllers
                 return StatusCode(500, LResponse);
             }
 
-        }     
-
+        }
+        
     }
 
 }
