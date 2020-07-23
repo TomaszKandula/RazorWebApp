@@ -2,12 +2,10 @@
 
 "use strict";
 
-
 import Helpers      from "../functions/Helpers";
 import RestClient   from "../functions/RestClient";
 import MessageBox   from "../components/MessageBox";
 import LoginButtons from "../components/LoginButtons";
-
 
 export default class RegisterPage
 {
