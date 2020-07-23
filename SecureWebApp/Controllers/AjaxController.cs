@@ -317,43 +317,7 @@ namespace SecureWebApp.Controllers
             }
 
         }
-
-        /// <summary>
-        /// Use to check if session is alive or not.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        // GET api/v1/ajax/session/?Id={SessionId}
-        [ValidateAntiForgeryToken]
-        [HttpGet("session/{id}")]
-        public IActionResult CheckUserSession([FromQuery] Guid Id)
-        {
-
-            var LResponse = new ReturnSessionState();
-            try
-            {
-
-                var SessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
-
-                if (SessionId != Id.ToString()) 
-                {
-                    LResponse.IsSessionAlive = false;
-                }
-
-                LResponse.IsSessionAlive = true;
-                return StatusCode(200, LResponse);
-
-            }
-            catch (Exception E)
-            {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/session/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
-            }
-
-        }
-
+        
     }
 
 }
