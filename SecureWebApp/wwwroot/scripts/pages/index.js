@@ -2,8 +2,8 @@
 
 "use strict";
 
-import Cookies      from "../functions/Cookies";
-import LoginButtons from "../components/LoginButtons";
+import Cookies      from "../functions/cookies";
+import LoginButtons from "../components/loginButtons";
 
 export default class IndexPage
 {

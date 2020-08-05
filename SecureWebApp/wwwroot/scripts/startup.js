@@ -2,9 +2,9 @@
 
 "use strict";
 
-import IndexPage    from "./pages/Index";
-import LoginPage    from "./pages/Login";
-import LogoutPage   from "./pages/Logout";
+import IndexPage    from "./pages";
+import LoginPage    from "./pages/login";
+import LogoutPage   from "./pages/logout";
 import RegisterPage from "./pages/Register";
 import ErrorPage    from "./pages/Error";
 

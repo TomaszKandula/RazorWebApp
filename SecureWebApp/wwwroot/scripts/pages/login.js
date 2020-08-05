@@ -2,11 +2,11 @@
 
 "use strict";
 
-import Helpers      from "../functions/Helpers";
-import RestClient   from "../functions/RestClient";
-import Cookies      from "../functions/Cookies";
-import MessageBox   from "../components/MessageBox";
-import LoginButtons from "../components/LoginButtons";
+import Helpers      from "../functions/helpers";
+import RestClient   from "../functions/restClient";
+import Cookies      from "../functions/cookies";
+import MessageBox   from "../components/messageBox";
+import LoginButtons from "../components/loginButtons";
 
 export default class LoginPage
 {

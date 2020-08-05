@@ -2,7 +2,7 @@
 
 "use strict";
 
-import Cookies from "../functions/Cookies";
+import Cookies from "../functions/cookies";
 
 export default class LogoutPage
 {

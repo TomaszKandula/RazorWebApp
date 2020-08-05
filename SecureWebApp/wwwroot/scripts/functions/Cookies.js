@@ -3,7 +3,7 @@
 "use strict";
 
 
-import Helpers from "../functions/Helpers";
+import Helpers from "./helpers";
 
 
 export default class Cookies

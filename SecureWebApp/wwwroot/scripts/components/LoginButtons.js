@@ -17,9 +17,29 @@ export default class LoginButtons
 
     Show()
     {
+
         this.Render();
         this.BindDom();
         this.AddEvents();
+
+        if (this.Handle_Signup)
+        {
+            this.Handle_Signup.classList.add("fade-in-animate");
+            this.Handle_Signup.classList.remove("set-invisible");
+        }
+
+        if (this.Handle_Login)
+        {
+            this.Handle_Login.classList.add("fade-in-animate");
+            this.Handle_Login.classList.remove("set-invisible");
+        }
+
+        if (this.Handle_Logout)
+        {
+            this.Handle_Logout.classList.add("fade-in-animate");
+            this.Handle_Logout.classList.remove("set-invisible"); 
+        }
+
     }
 
     BindDom()
@@ -39,10 +59,10 @@ export default class LoginButtons
     Render_Signup_Login()
     {
         return this.LButtonHandle.innerHTML = 
-            `<div id="Handle_Signup" class="button is-info">
+            `<div id="Handle_Signup" class="button is-info set-invisible">
                 <strong>Sign up</strong>
             </div>
-            <div id="Handle_Login" class="button is-light">
+            <div id="Handle_Login" class="button is-light set-invisible">
                 Log in
             </div>`;
     }
@@ -50,7 +70,7 @@ export default class LoginButtons
     Render_Logout()
     {
         return this.LButtonHandle.innerHTML =
-            `<div id="Handle_Logout" class="button is-light">
+            `<div id="Handle_Logout" class="button is-light set-invisible">
                 Log out
             </div>`;
     }
