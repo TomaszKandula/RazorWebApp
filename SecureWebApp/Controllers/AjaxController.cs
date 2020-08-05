@@ -248,29 +248,33 @@ namespace SecureWebApp.Controllers
         /// </summary>
         /// <param name="EmailAddr"></param>
         /// <param name="Password"></param>
-        /// <returns>Valid UserId</returns>
-        public async Task<Guid> SignIn(string EmailAddr, string Password) 
+        /// <returns></returns>
+        public async Task<Tuple<Guid, bool>> SignIn(string EmailAddr, string Password) 
         {
 
             var Users = (await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync()).Single();
-            var CheckPassword = BCrypt.CheckPassword(Password, Users.Password);
+            if (!Users.IsActivated) 
+            {
+                return Tuple.Create(Guid.Empty, false);
+            }
 
+            var CheckPassword = BCrypt.CheckPassword(Password, Users.Password);
             if (!CheckPassword) 
             {
-                return Guid.Empty;
+                return Tuple.Create(Guid.Empty, true);
             }
 
             var SessionId = Guid.NewGuid();
             var LogHistory = new SigninHistory()
             {
-                UserId    = Users.Id,
-                LoggedAt  = DateTime.Now,
+                UserId   = Users.Id,
+                LoggedAt = DateTime.Now,
             };
 
             FMainDbContext.SigninHistory.Add(LogHistory);
             await FMainDbContext.SaveChangesAsync();
 
-            return SessionId;
+            return Tuple.Create(SessionId, true);
 
         }
 
@@ -289,9 +293,9 @@ namespace SecureWebApp.Controllers
             try
             {
 
-                var SessionId = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
+                var SignInResult = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
 
-                if (SessionId == Guid.Empty) 
+                if (SignInResult.Item1 == Guid.Empty && SignInResult.Item2 == true) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidCredentials.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.InvalidCredentials.ErrorDesc;
@@ -299,7 +303,15 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SessionId.ToString());
+                if (SignInResult.Item2 == false) 
+                {
+                    LResponse.Error.ErrorCode = Constants.Errors.AccountNotActivated.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.AccountNotActivated.ErrorDesc;
+                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
+                    return StatusCode(200, LResponse);
+                }
+
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SignInResult.Item1.ToString());
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString());
 

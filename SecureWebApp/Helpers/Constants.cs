@@ -56,6 +56,12 @@
                 public const string ErrorDesc = "Supplied email address and/or password is incorrect.";
             }
 
+            internal class AccountNotActivated
+            {
+                public const string ErrorCode = "account_not_activated";
+                public const string ErrorDesc = "Your account is not activated.";
+            }
+
         }
 
     }
