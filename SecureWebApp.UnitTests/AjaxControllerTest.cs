@@ -1,23 +1,17 @@
 using Xunit;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SecureWebApp.Controllers;
+using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.DnsLookup;
-using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Models.Database;
 
 namespace SecureWebApp.UnitTests
 {
 
     public class Startup 
-    {
-
-        public Startup() 
-        { 
-        
-        }
-    
+    {   
     }
 
     public class DbFixture
@@ -27,7 +21,7 @@ namespace SecureWebApp.UnitTests
         {
             var LServices = new ServiceCollection();
             LServices.AddDbContext<MainDbContext>(Options => Options
-                .UseSqlServer("Server=.\\MSSQLSERVER19;Initial Catalog=TestDatabase;User ID=Tomek;Password=<password>;Integrated Security=True;Connection Timeout=30;"), ServiceLifetime
+                .UseSqlServer("Server=.\\MSSQLSERVER19;Initial Catalog=TestDatabase;User ID=Tomek;Password=;Integrated Security=True;Connection Timeout=30;"), ServiceLifetime
                 .Transient);
             FServiceProvider = LServices.BuildServiceProvider();
         }
@@ -48,8 +42,8 @@ namespace SecureWebApp.UnitTests
             FServiceProvider = ADbFixture.FServiceProvider;
             MainDbContext FMainDbContext = FServiceProvider.GetService<MainDbContext>();
 
-            IAppLogger FAppLogger = new Mocks.AppLogger.AppLogger();
-            IDnsLookup FDnsLookup = new Mocks.DnsLookup.DnsLookup();
+            IAppLogger FAppLogger = new Mocks.AppLogger();
+            IDnsLookup FDnsLookup = new Mocks.DnsLookup();
 
             FAjaxController = new AjaxController(
                 FMainDbContext,
@@ -72,7 +66,7 @@ namespace SecureWebApp.UnitTests
         [InlineData("tokan@wp.pl")]
         [InlineData("tokan@dfds.com")]
         [InlineData("tokan@onet.pl")]
-        public async Task IsEmailAddressExist_TestAsync(string AEmailAddress)
+        public async Task IsEmailAddressExist_Test(string AEmailAddress)
         {
             var LResult = await FAjaxController.IsEmailAddressExist(AEmailAddress);
             Assert.True(LResult, $"Email address domain '{AEmailAddress}' does not exist.");

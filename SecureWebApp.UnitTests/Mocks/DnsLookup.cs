@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace SecureWebApp.UnitTests.Mocks.DnsLookup
+namespace SecureWebApp.UnitTests.Mocks
 {
 
-    public sealed class DnsLookup : Extensions.DnsLookup.DnsLookup, IDnsLookup
+    public sealed class DnsLookup : Extensions.DnsLookup.IDnsLookup
     {
 
-        public override async Task<bool> IsDomainExist(string AEmailAddress)
+        public async Task<bool> IsDomainExist(string AEmailAddress)
         {
 
             try
