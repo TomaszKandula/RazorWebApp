@@ -178,6 +178,36 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
+        /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
+        /// </summary>
+        /// <param name="PayLoad"></param>
+        /// <param name="PasswordSalt"></param>
+        /// <returns></returns>
+        public async Task<int> SignUp(UserCreate PayLoad, int PasswordSalt) 
+        { 
+        
+            var NewUser = new Users()
+            { 
+                FirstName   = PayLoad.FirstName,
+                LastName    = PayLoad.LastName,
+                NickName    = PayLoad.NickName,
+                EmailAddr   = PayLoad.EmailAddress,
+                Password    = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(PasswordSalt)),
+                PhoneNum    = null,
+                CreatedAt   = DateTime.Now,
+                IsActivated = false,
+                CountryId   = PayLoad.CountryId,
+                CityId      = PayLoad.CityId
+            };
+
+            FMainDbContext.Users.Add(NewUser);
+            await FMainDbContext.SaveChangesAsync();
+
+            return NewUser.Id;
+
+        }
+
+        /// <summary>
         /// Endpoint adding new user to the database.
         /// </summary>
         /// <param name="PayLoad"></param>
@@ -209,24 +239,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                var NewUser = new Users()
-                { 
-                    FirstName   = PayLoad.FirstName,
-                    LastName    = PayLoad.LastName,
-                    NickName    = PayLoad.NickName,
-                    EmailAddr   = PayLoad.EmailAddress,
-                    Password    = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(12)),
-                    PhoneNum    = null,
-                    CreatedAt   = DateTime.Now,
-                    IsActivated = false,
-                    CountryId   = PayLoad.CountryId,
-                    CityId      = PayLoad.CityId
-                };
-
-                FMainDbContext.Users.Add(NewUser);
-                await FMainDbContext.SaveChangesAsync();
-
-                LResponse.UserId = NewUser.Id;
+                LResponse.UserId = await SignUp(PayLoad, 12);
                 LResponse.IsUserCreated = true;
                 
                 FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
