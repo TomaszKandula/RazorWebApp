@@ -14,7 +14,7 @@ namespace SecureWebApp.Extensions.DnsLookup
         /// <seealso cref="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        public async Task<bool> IsDomainExist(string AEmailAddress) 
+        public virtual async Task<bool> IsDomainExist(string AEmailAddress) 
         {
 
             try 

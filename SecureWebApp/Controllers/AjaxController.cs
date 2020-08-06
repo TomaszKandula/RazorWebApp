@@ -23,18 +23,18 @@ namespace SecureWebApp.Controllers
     public class AjaxController : Controller
     {
 
-        private readonly IAppLogger    FAppLogger;
         private readonly MainDbContext FMainDbContext;
+        private readonly IAppLogger    FAppLogger;
         private readonly IDnsLookup    FDnsLookup;
 
         public AjaxController(
-            IAppLogger    AAppLogger,
             MainDbContext AMainDbContext,
+            IAppLogger    AAppLogger,
             IDnsLookup    ADnsLookup
         )
         {
-            FAppLogger     = AAppLogger;
             FMainDbContext = AMainDbContext;
+            FAppLogger     = AAppLogger;
             FDnsLookup     = ADnsLookup;
         }
 

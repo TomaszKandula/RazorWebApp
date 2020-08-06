@@ -1,25 +1,13 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Extensions.ConnectionService;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace SecureWebApp.Models.Database
 {
 
-    public partial class MainDbContext : DbContext
+    public class MainDbContext : DbContext
     {
-        
-        private readonly IConnectionService FConnectionService;
 
-        public MainDbContext(DbContextOptions<MainDbContext> options, IConnectionService AConnectionService) : base(options)
-        {
-            FConnectionService = AConnectionService;
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder AOptionsBuilder)
-        {
-            var ConnectionString = FConnectionService.GetMainDatabase();
-            /// <seealso cref="https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency"/>
-            AOptionsBuilder.UseSqlServer(ConnectionString, AddOptions => AddOptions.EnableRetryOnFailure());
+        public MainDbContext(DbContextOptions<MainDbContext> AOptions) : base(AOptions)
+        { 
         }
 
         public virtual DbSet<Cities> Cities { get; set; }
@@ -114,12 +102,8 @@ namespace SecureWebApp.Models.Database
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__CountryId__Users");
             });
-
-            OnModelCreatingPartial(modelBuilder);
-        
+       
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     }
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -10,7 +11,6 @@ using SecureWebApp.Helpers;
 using SecureWebApp.Models.Database;
 using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
-using SecureWebApp.Extensions.ConnectionService;
 
 namespace SecureWebApp
 {
@@ -45,8 +45,7 @@ namespace SecureWebApp
 
             AServices.AddSingleton<IDnsLookup, DnsLookup>();
             AServices.AddSingleton<IAppLogger, AppLogger>();
-            AServices.AddScoped<IConnectionService, ConnectionService>();
-            AServices.AddDbContext<MainDbContext>();
+            AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), Options => Options.EnableRetryOnFailure()));
 
             AServices.AddResponseCompression(Options =>
             {
