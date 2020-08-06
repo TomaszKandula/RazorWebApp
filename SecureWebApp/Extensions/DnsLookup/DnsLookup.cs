@@ -5,7 +5,7 @@ using DnsClient;
 namespace SecureWebApp.Extensions.DnsLookup
 {
 
-    public class DnsLookup : IDnsLookup
+    public sealed class DnsLookup : IDnsLookup
     {
 
         /// <summary>
@@ -14,7 +14,7 @@ namespace SecureWebApp.Extensions.DnsLookup
         /// <seealso cref="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        public virtual async Task<bool> IsDomainExist(string AEmailAddress) 
+        public async Task<bool> IsDomainExist(string AEmailAddress) 
         {
 
             try 
