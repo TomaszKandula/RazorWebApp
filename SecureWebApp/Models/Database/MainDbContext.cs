@@ -7,7 +7,7 @@ namespace SecureWebApp.Models.Database
     {
 
         public MainDbContext(DbContextOptions<MainDbContext> AOptions) : base(AOptions)
-        { 
+        {
         }
 
         public virtual DbSet<Cities> Cities { get; set; }

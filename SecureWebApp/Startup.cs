@@ -1,7 +1,7 @@
 using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +18,9 @@ namespace SecureWebApp
     public class Startup
     {
 
-        public IConfiguration FConfiguration { get; }
+        private readonly IConfiguration FConfiguration;
 
-        public Startup(IConfiguration AConfiguration)
+        public Startup(IConfiguration AConfiguration) 
         {
             FConfiguration = AConfiguration;
         }
@@ -45,7 +45,7 @@ namespace SecureWebApp
 
             AServices.AddSingleton<IDnsLookup, DnsLookup>();
             AServices.AddSingleton<IAppLogger, AppLogger>();
-            AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), Options => Options.EnableRetryOnFailure()));
+            AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AddOptions => AddOptions.EnableRetryOnFailure())); 
 
             AServices.AddResponseCompression(Options =>
             {
