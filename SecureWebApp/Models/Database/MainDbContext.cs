@@ -10,6 +10,10 @@ namespace SecureWebApp.Models.Database
         {
         }
 
+        public MainDbContext() 
+        {        
+        }
+
         public virtual DbSet<Cities> Cities { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Users> Users { get; set; }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +10,9 @@ using SecureWebApp.Helpers;
 using SecureWebApp.Models.Json;
 using SecureWebApp.Models.Views;
 using SecureWebApp.Models.Database;
+using SecureWebApp.Extensions.BCrypt;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.DnsLookup;
-using System.Collections.Generic;
-using SecureWebApp.Extensions.BCrypt;
 
 namespace SecureWebApp.Controllers
 {

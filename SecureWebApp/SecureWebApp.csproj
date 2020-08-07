@@ -24,7 +24,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
     <PackageReference Include="SeriLog.AspNetCore" Version="3.2.0" />
-    <PackageReference Include="Xunit.DependencyInjection" Version="7.0.2" />
   </ItemGroup>
 
 </Project>
