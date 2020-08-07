@@ -108,7 +108,7 @@ namespace SecureWebApp.UnitTests
         [Theory]
         [InlineData(178, 80880, "john.kowalski@wp.pl")]
         [InlineData(178, 80880, "john.kowalski@onet.pl")]
-        public async Task SignUp_Test(int ACityId, int ACountryId, string AEmailAddress) 
+        public async Task SignUp_Test(int ACountryId, int ACityId, string AEmailAddress) 
         {
 
             // Arrange
