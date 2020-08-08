@@ -129,6 +129,53 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
+        /// Return list of all available countries.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<CountryList>> ReturnCountryList() 
+        {
+
+            var LCountries = await FMainDbContext.Countries
+                .AsNoTracking()
+                .Select(R => new CountryList() 
+                { 
+                    Id = R.Id,
+                    Name = R.CountryName
+                })
+                .ToListAsync();
+
+            return LCountries;
+        
+        }
+
+        /// <summary>
+        /// Endpoint returning list of countries in JSON format.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        // GET api/v1/ajax/countries/
+        [ValidateAntiForgeryToken]
+        [HttpGet("countries")]
+        public async Task<IActionResult> ReturnCountryAsync(int Id)
+        {
+
+            var LResponse = new ReturnCountryList();
+            try
+            {
+                LResponse.Countries = await ReturnCountryList();
+                return StatusCode(200, LResponse);
+            }
+            catch (Exception E)
+            {
+                LResponse.Error.ErrorCode = E.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                FAppLogger.LogFatality($"GET api/v1/ajax/countries/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                return StatusCode(500, LResponse);
+            }
+
+        }
+
+        /// <summary>
         /// Return list of cities for given Country Id.
         /// </summary>
         /// <param name="AId"></param>
@@ -171,7 +218,7 @@ namespace SecureWebApp.Controllers
             {
                 LResponse.Error.ErrorCode = E.HResult.ToString();
                 LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/cities/{Id} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{Id} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
