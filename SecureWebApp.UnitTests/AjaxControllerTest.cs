@@ -1,5 +1,6 @@
 using Moq;
 using Xunit;
+using FluentAssertions;
 using MockQueryable.Moq;
 using System;
 using System.Linq;
@@ -57,31 +58,43 @@ namespace SecureWebApp.UnitTests
         [InlineData("bob.dylan@gmail.com")]
         public void IsEmailAddressCorrect_Test(string AEmailAddress)
         {
+
             var LResult = FAjaxController.IsEmailAddressCorrect(AEmailAddress);
-            Assert.True(LResult, $"Email address '{AEmailAddress}' is malformed.");
+
+            LResult.Should().BeTrue();
+
         }
 
         [Theory]
         [InlineData("bob.dylan@gmail.com")]
         public async Task IsEmailAddressExist_Test(string AEmailAddress)
         {
+
             var LResult = await FAjaxController.IsEmailAddressExist(AEmailAddress);
-            Assert.True(LResult, $"Email address domain '{AEmailAddress}' does not exist.");
+
+            LResult.Should().BeTrue();
+
         }
 
         [Theory]
         [InlineData(1)]
         public async Task ReturnCityList_Test(int ACityId)
         {
+
             var LResult = await FAjaxController.ReturnCityList(ACityId);
-            Assert.True(LResult.Any(), $"List is empty for CountryId = {ACityId}.");
+
+            LResult.Any().Should().BeTrue();
+
         }
 
         [Fact]
         public async Task ReturnCountryList_Test()
         {
+
             var LResult = await FAjaxController.ReturnCountryList();
-            Assert.True(LResult.Any(), "List is empty!");
+
+            LResult.Any().Should().BeTrue();
+
         }
 
         [Theory]
@@ -98,8 +111,8 @@ namespace SecureWebApp.UnitTests
                 IsGuidEmpty = true;
             }
 
-            Assert.False(IsGuidEmpty, $"Cannot login with '{AEmailAddr}' and '{APassword}'. Session cannot be created.");
-            Assert.True(LResult.Item2, $"Cannot login with '{AEmailAddr}' and '{APassword}'. Account is inactive.");
+            IsGuidEmpty.Should().BeFalse();
+            LResult.Item2.Should().BeTrue();
 
         }
 
@@ -121,7 +134,7 @@ namespace SecureWebApp.UnitTests
             };
 
             // Act
-            var LResult = await FAjaxController.SignUp(PayLoad, 12);
+            await FAjaxController.SignUp(PayLoad, 12);
 
             // Verify action
             FMockDbContext.Verify(R => R.SaveChangesAsync(CancellationToken.None), Times.Once);
