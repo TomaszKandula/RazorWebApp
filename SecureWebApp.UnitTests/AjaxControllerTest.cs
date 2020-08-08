@@ -123,8 +123,8 @@ namespace SecureWebApp.UnitTests
             // Act
             var LResult = await FAjaxController.SignUp(PayLoad, 12);
 
-            // Verify
-            FMockDbContext.Verify(x => x.SaveChangesAsync(CancellationToken.None), Times.Once);
+            // Verify action
+            FMockDbContext.Verify(R => R.SaveChangesAsync(CancellationToken.None), Times.Once);
 
         }
 

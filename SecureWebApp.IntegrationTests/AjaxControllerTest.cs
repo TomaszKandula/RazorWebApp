@@ -159,10 +159,9 @@ namespace SecureWebApp.IntegrationTests
             // Act
             FMainDbContext.SigninHistory.Add(SigninHistory);
             await FMainDbContext.SaveChangesAsync();
-            var NewId = SigninHistory.Id;
 
             // Assert
-            Assert.NotEqual(0, NewId);
+            Assert.NotEqual(0, SigninHistory.Id);
 
         }
 
