@@ -151,12 +151,11 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint returning list of countries in JSON format.
         /// </summary>
-        /// <param name="Id"></param>
         /// <returns></returns>
         // GET api/v1/ajax/countries/
         [ValidateAntiForgeryToken]
         [HttpGet("countries")]
-        public async Task<IActionResult> ReturnCountryAsync(int Id)
+        public async Task<IActionResult> ReturnCountryAsync()
         {
 
             var LResponse = new ReturnCountryList();
