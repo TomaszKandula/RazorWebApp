@@ -1,4 +1,5 @@
 using Xunit;
+using FluentAssertions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,8 +70,9 @@ namespace SecureWebApp.IntegrationTests
                 .Select(R => R)
                 .ToListAsync();            
            
-            Assert.True(LResult.Any(), "List is empty!");
-        
+            LResult.Any().Should().BeTrue();
+
+
         }
 
         [Fact]
@@ -82,7 +84,7 @@ namespace SecureWebApp.IntegrationTests
                 .Select(R => R)
                 .ToListAsync();
 
-            Assert.True(LResult.Any(), "List is empty!");
+            LResult.Any().Should().BeTrue();
 
         }
 
@@ -95,7 +97,7 @@ namespace SecureWebApp.IntegrationTests
                 .Select(R => R)
                 .ToListAsync();
 
-            Assert.True(LResult.Any(), "List is empty!");
+            LResult.Any().Should().BeTrue();
 
         }
 
@@ -108,7 +110,7 @@ namespace SecureWebApp.IntegrationTests
                 .Select(R => R)
                 .ToListAsync();
 
-            Assert.True(LResult.Any(), "List is empty!");
+            LResult.Any().Should().BeTrue();
 
         }
 
@@ -137,10 +139,9 @@ namespace SecureWebApp.IntegrationTests
             // Act
             FMainDbContext.Users.Add(Users);
             await FMainDbContext.SaveChangesAsync();
-            var NewUserId = Users.Id;
 
             // Assert
-            Assert.NotEqual(0, NewUserId);
+            Users.Id.Should().BeGreaterThan(1);
         
         }
 
@@ -161,7 +162,7 @@ namespace SecureWebApp.IntegrationTests
             await FMainDbContext.SaveChangesAsync();
 
             // Assert
-            Assert.NotEqual(0, SigninHistory.Id);
+            SigninHistory.Id.Should().BeGreaterThan(1);
 
         }
 
@@ -185,7 +186,7 @@ namespace SecureWebApp.IntegrationTests
             var LResult = await FDnsLookup.IsDomainExist(LEmailAddress);
 
             // Assert
-            Assert.True(LResult, "Email domain does not exist!");
+            LResult.Should().BeTrue();
 
         }
 
