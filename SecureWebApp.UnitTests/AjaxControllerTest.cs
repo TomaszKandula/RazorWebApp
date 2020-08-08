@@ -24,12 +24,12 @@ namespace SecureWebApp.UnitTests
         public AjaxControllerTest()
         {
 
-            // Create instances for mocked dependencies           
+            // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<Mocks.MainDbContext>();
             IAppLogger FAppLogger = new Mocks.AppLogger();
             IDnsLookup FDnsLookup = new Mocks.DnsLookup();
 
-            // Upload dummy data
+            // Upload pre-fixed dummy data
             var CountriesDbSet = DummyData.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
             var CitiesDbSet = DummyData.ReturnDummyCities().AsQueryable().BuildMockDbSet();
             var UsersDbSet = DummyData.ReturnDummyUsers().AsQueryable().BuildMockDbSet();
@@ -62,6 +62,21 @@ namespace SecureWebApp.UnitTests
         {
             var LResult = await FAjaxController.IsEmailAddressExist(AEmailAddress);
             Assert.True(LResult, $"Email address domain '{AEmailAddress}' does not exist.");
+        }
+
+        [Theory]
+        [InlineData(1)]
+        public async Task ReturnCityList_Test(int ACityId)
+        {
+            var LResult = await FAjaxController.ReturnCityList(ACityId);
+            Assert.True(LResult.Any(), $"List is empty for CountryId = {ACityId}.");
+        }
+
+        [Fact]
+        public async Task ReturnCountryList_Test()
+        {
+            var LResult = await FAjaxController.ReturnCountryList();
+            Assert.True(LResult.Any(), "List is empty!");
         }
 
     }
