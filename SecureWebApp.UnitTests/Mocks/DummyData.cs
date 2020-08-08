@@ -48,6 +48,12 @@ namespace SecureWebApp.UnitTests.Mocks
                 {
                     CityName = "Barcelona",
                     CountryId = 2
+                },
+
+                new Cities
+                {
+                    CityName = "Madrid",
+                    CountryId = 2
                 }
 
             };
@@ -71,7 +77,7 @@ namespace SecureWebApp.UnitTests.Mocks
                     PhoneNum    = null,
                     Password    = "TestUnhashedPassword1",
                     CreatedAt   = DateTime.Now,
-                    IsActivated = false,
+                    IsActivated = true,
                     CityId      = 1,
                     CountryId   = 1
                 },
@@ -83,9 +89,9 @@ namespace SecureWebApp.UnitTests.Mocks
                     NickName    = "Fred",
                     EmailAddr   = "f.mercury@gmail.com",
                     PhoneNum    = null,
-                    Password    = "TestUnhashedPassword2",
+                    Password    = "$2a$12$O0.Q.zXRLN7Frcn.xZzwFOHR2wJLtkUVEUq0Qstqgf18sMIfv5.Qy",
                     CreatedAt   = DateTime.Now,
-                    IsActivated = false,
+                    IsActivated = true,
                     CityId      = 1,
                     CountryId   = 1
                 }
@@ -93,6 +99,30 @@ namespace SecureWebApp.UnitTests.Mocks
             };
 
             return LUsers;
+
+        }
+
+        public static List<SigninHistory> ReturnSigninHistory() 
+        {
+
+            var LSigninHistory = new List<SigninHistory>()
+            {
+                
+                new SigninHistory
+                { 
+                    UserId   = 1,
+                    LoggedAt = DateTime.Parse("2020-07-30 15:30:00")
+                },
+
+                new SigninHistory
+                {
+                    UserId   = 2,
+                    LoggedAt = DateTime.Parse("2020-07-05 11:30:00")
+                }
+
+            };
+
+            return LSigninHistory;
 
         }
 
