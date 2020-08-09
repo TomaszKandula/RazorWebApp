@@ -54,4 +54,4 @@ Focuses on testing dependencies and database setup. One dependecy is skipped (IA
 
 ## Unit Tests
 
-Covers all the logic used in AJAX controllers (note that endpoints are not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking, [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
+Covers all the logic used in AJAX controllers (note that endpoints does not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking, [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
