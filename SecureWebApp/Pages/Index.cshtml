@@ -55,7 +55,7 @@
                             User input is validated on the front-end and on the back-end.
                         </li>
                         <li>
-                            Instead of raw SQL we use OR/M (EF Core), so we do not use ADO.NET with custom SQL string.
+                            Instead of ADO.NET with custom SQL string, we use OR/M (Entity Framework Core).
                         </li>
                         <li>
                             User password is hashed and salted with <a href="https://auth0.com/blog/hashing-in-action-understanding-bcrypt/" target="_blank">BCrypt</a>.
@@ -66,8 +66,8 @@
                 </div>
 
                 <p>
-                    Currently, this example application focuses more on the back-end than on the front-end. The selected CSS framework have no any jQuery/JavaScript code, so the custom JavaScript logic has been written. 
-                    It is fairly simple front-end (multipages, no SPA) with only few components, it uses Anit-Forgery Token along with Session Id (both HTTP only).
+                    Currently, this example application focuses more on the back-end than on the front-end. The selected CSS framework have no jQuery/JavaScript code, so the custom JavaScript logic has been written. 
+                    It is fairly simple front-end (multipages, no SPA) with only few components, it uses Anti-Forgery Token along with Session Id (both HTTP only).
                 </p>
 
             </div>
@@ -82,13 +82,17 @@
                     How does it work?
                 </h2>
 
-                <p>
-                    There are five web pages, among them most important are <strong>Register page</strong> (allows to create new user account) and <strong>Login page</strong> (allows to login to the given account). 
-                    Once the account is created we display modal window with the confirmation. However, if the user is logged, then we setup a 15 minutes session and redirect back to this page. 
-                    The back-end uses Web API so when a user is logged, further API calls to the controllers must contain both XSRF token and Session Id. Please be mindful that this is not complete solution 
-                    (for example, we do not send email to the user to confirm registration, by default, newly created account is activated), the scope of this demo application is limited. 
-                    Never the less, this application may be extended later on.
-                </p>
+                <div class="mb-3">
+                    There are five web pages, among them most important are <strong>Register page</strong> (allows to create new user account) and <strong>Login page</strong> (allows to login to the given account).
+                    Once the account is created we display modal window with the confirmation. However, if the user is logged, then we setup a 15 minutes session and redirect back to this page.
+                </div>
+                <div class="mb-3">
+                    The back-end uses Web API so when a user is logged, further API calls to the controllers must contain both XSRF token and Session Id. Please be mindful that this is not complete solution
+                    (for example, we do not send registration confirmation email, thus by default, newly created account is activated), the scope of this demo application is limited.
+                </div>
+                <div class="mb-3">
+                    Never the less, this demo application maybe extended later on.
+                </div>
 
             </div>
 
@@ -128,10 +132,10 @@
                 <div class="content">
                     <ol class="is-upper-roman">
                         <li>
-                            NET Core 3.1 / C#/ Razor Pages / Web API.
+                            NET Core 3.1, C# language, Razor Pages, Web API.
                         </li>
                         <li>
-                            SQL Database / Entity Framework Core.
+                            SQL Database, Entity Framework Core.
                         </li>
                         <li>
                             Unit Tests and Integration Tests are provided.
