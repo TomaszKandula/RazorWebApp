@@ -4,13 +4,13 @@ using FluentAssertions;
 using MockQueryable.Moq;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using SecureWebApp.Controllers;
 using SecureWebApp.Models.Json;
 using SecureWebApp.UnitTests.Mocks;
 using SecureWebApp.Extensions.AppLogger;
 using SecureWebApp.Extensions.DnsLookup;
-using System.Threading;
 
 namespace SecureWebApp.UnitTests
 {
