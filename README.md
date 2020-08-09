@@ -21,7 +21,7 @@ The article __I said goodbye to Stored Procedures__ has been extended by another
 1. NET Core 3.1, C# language, Razor Pages, Web API.
 1. SQL Database, Entity Framework Core.
 
-Unit Tests and Integration Tests are provided.
+Unit Tests and Integration Tests are provided using [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions).
 
 ## Setting-up the database
 
@@ -50,8 +50,8 @@ The database have only four tables, because this example have already setup data
 
 ## Integration Tests
 
-Focuses on testing dependencies and database setup with [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions). One dependecy is skipped (IAppLogger) that abstracts away used logger. There are no HTTP tests so far.
+Focuses on testing dependencies and database setup. One dependecy is skipped (IAppLogger) that abstracts away used logger. There are no HTTP tests so far.
 
 ## Unit Tests
 
-Covers all the logic used in AJAX controllers (note that endpoints are not provide any business logic, they are only responsible for handling requests, validation etc.). [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions) are used and all dependencies are mocked. For mocking, [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
+Covers all the logic used in AJAX controllers (note that endpoints are not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking, [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
