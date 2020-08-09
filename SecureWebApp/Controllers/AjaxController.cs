@@ -352,6 +352,15 @@ namespace SecureWebApp.Controllers
             try
             {
 
+                if (!ModelState.IsValid)
+                {
+                    LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
+                    LResponse.Error.ErrorDesc = Constants.Errors.InvalidPayLoad.ErrorDesc;
+                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
+                    LResponse.IsLogged = false;
+                    return StatusCode(200, LResponse);
+                }
+
                 var SignInResult = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
 
                 if (SignInResult.Item1 == Guid.Empty && SignInResult.Item2 == true) 
