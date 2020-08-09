@@ -46,10 +46,10 @@ namespace SecureWebApp.IntegrationTests
     public class AjaxControllerTest : IClassFixture<DbFixture>
     {
 
-        private ServiceProvider FServiceProvider;
-        private MainDbContext   FMainDbContext;
-        private IAppLogger      FAppLogger;
-        private IDnsLookup      FDnsLookup;
+        private readonly ServiceProvider FServiceProvider;
+        private readonly MainDbContext   FMainDbContext;
+        private readonly IAppLogger      FAppLogger;
+        private readonly IDnsLookup      FDnsLookup;
 
         public AjaxControllerTest(DbFixture ADbFixture)
         {
