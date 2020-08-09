@@ -1,11 +1,8 @@
 # SecureWebAapp
 
-Opposite of the __Unsecure WebApp__ example available at [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
+Opposite of the __Unsecure WebApp__ example available at [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) that is an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
-## Purpose
-
-The article __I said goodbye to Stored Procedures__ has been extended by another short article titled 
-[SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) that also has been posted on [Medium.com](https://medium.com/), and this demo application has been built as an example of an application that is in compliance with some security best practices describded in the article. 
+The purpose of this demo application is to present an example of an application that is in compliance with some security best practices describded in the article.
 
 ## Tech-stack
 
