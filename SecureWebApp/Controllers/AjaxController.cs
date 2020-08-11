@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Json;
-using SecureWebApp.Models.Views;
-using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.BCrypt;
 using SecureWebApp.Extensions.AppLogger;
-using SecureWebApp.Extensions.DnsLookup;
 
 namespace SecureWebApp.Controllers
 {
@@ -23,56 +16,13 @@ namespace SecureWebApp.Controllers
     public class AjaxController : Controller
     {
 
-        private readonly MainDbContext FMainDbContext;
-        private readonly IAppLogger    FAppLogger;
-        private readonly IDnsLookup    FDnsLookup;
+        private readonly ILogicContext FLogicContext;
+        private readonly IAppLogger FAppLogger;
 
-        public AjaxController(
-            MainDbContext AMainDbContext,
-            IAppLogger    AAppLogger,
-            IDnsLookup    ADnsLookup
-        )
+        public AjaxController(ILogicContext ALogicContext, IAppLogger AAppLogger) 
         {
-            FMainDbContext = AMainDbContext;
-            FAppLogger     = AAppLogger;
-            FDnsLookup     = ADnsLookup;
-        }
-
-        /// <summary>
-        /// Parse given email address using MailAddress class provided in NET Core.
-        /// This is alternative approach to classic RegEx.
-        /// </summary>
-        /// <param name="AEmailAddress"></param>
-        /// <returns></returns>
-        public bool IsEmailAddressCorrect(string AEmailAddress)
-        {
-            try
-            {
-                var LEmailAddress = new MailAddress(AEmailAddress);
-                return true;
-            }
-            catch (FormatException)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Check if given email address aready exists.
-        /// </summary>
-        /// <param name="AEmailAddress"></param>
-        /// <returns></returns>
-        public async Task<bool> IsEmailAddressExist(string AEmailAddress) 
-        {
-
-            var LEmailList = await FMainDbContext.Users
-                .AsNoTracking()
-                .Where(R => R.EmailAddr == AEmailAddress)
-                .Select(R => R.EmailAddr)
-                .ToListAsync();
-
-            return LEmailList.Any();
-
+            FLogicContext = ALogicContext;
+            FAppLogger = AAppLogger;
         }
 
         /// <summary>
@@ -90,7 +40,7 @@ namespace SecureWebApp.Controllers
             try 
             {
 
-                if (!IsEmailAddressCorrect(EmailAddress)) 
+                if (!FLogicContext.Emails.IsEmailAddressCorrect(EmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
@@ -98,7 +48,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
                
-                if (await IsEmailAddressExist(EmailAddress)) 
+                if (await FLogicContext.Emails.IsEmailAddressExist(EmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
@@ -106,7 +56,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                if (!await FDnsLookup.IsDomainExist(EmailAddress)) 
+                if (!await FLogicContext.Emails.IsEmailDomainExist(EmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailDomainNotExist.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailDomainNotExist.ErrorDesc;
@@ -129,26 +79,6 @@ namespace SecureWebApp.Controllers
         }
 
         /// <summary>
-        /// Return list of all available countries.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<List<CountryList>> ReturnCountryList() 
-        {
-
-            var LCountries = await FMainDbContext.Countries
-                .AsNoTracking()
-                .Select(R => new CountryList() 
-                { 
-                    Id = R.Id,
-                    Name = R.CountryName
-                })
-                .ToListAsync();
-
-            return LCountries;
-        
-        }
-
-        /// <summary>
         /// Endpoint returning list of countries in JSON format.
         /// </summary>
         /// <returns></returns>
@@ -161,7 +91,7 @@ namespace SecureWebApp.Controllers
             var LResponse = new ReturnCountryList();
             try
             {
-                LResponse.Countries = await ReturnCountryList();
+                LResponse.Countries = await FLogicContext.Repository.ReturnCountryList();
                 return StatusCode(200, LResponse);
             }
             catch (Exception E)
@@ -171,28 +101,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"GET api/v1/ajax/countries/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
-        }
-
-        /// <summary>
-        /// Return list of cities for given Country Id.
-        /// </summary>
-        /// <param name="AId"></param>
-        /// <returns></returns>
-        public async Task<List<CityList>> ReturnCityList(int AId) 
-        {
-
-            var LCities = await FMainDbContext.Cities
-                .AsNoTracking()
-                .Where(R => R.CountryId == AId)
-                .Select(R => new CityList()
-                {
-                    Id = R.Id,
-                    Name = R.CityName
-                })
-                .ToListAsync();
-
-            return LCities;
 
         }
 
@@ -210,7 +118,7 @@ namespace SecureWebApp.Controllers
             var LResponse = new ReturnCityList();
             try 
             {
-                LResponse.Cities = await ReturnCityList(Id);
+                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(Id);
                 return StatusCode(200, LResponse);
             } 
             catch (Exception E)
@@ -220,36 +128,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"GET api/v1/ajax/cities/{Id} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
-        }
-
-        /// <summary>
-        /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
-        /// </summary>
-        /// <param name="PayLoad"></param>
-        /// <param name="PasswordSalt"></param>
-        /// <returns></returns>
-        public async Task<int> SignUp(UserCreate PayLoad, int PasswordSalt) 
-        { 
-        
-            var NewUser = new Users()
-            { 
-                FirstName   = PayLoad.FirstName,
-                LastName    = PayLoad.LastName,
-                NickName    = PayLoad.NickName,
-                EmailAddr   = PayLoad.EmailAddress,
-                Password    = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(PasswordSalt)),
-                PhoneNum    = null,
-                CreatedAt   = DateTime.Now,
-                IsActivated = false,
-                CountryId   = PayLoad.CountryId,
-                CityId      = PayLoad.CityId
-            };
-
-            FMainDbContext.Users.Add(NewUser);
-            await FMainDbContext.SaveChangesAsync();
-
-            return NewUser.Id;
 
         }
 
@@ -277,7 +155,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                if (await IsEmailAddressExist(PayLoad.EmailAddress))
+                if (await FLogicContext.Emails.IsEmailAddressExist(PayLoad.EmailAddress))
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
@@ -285,7 +163,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                LResponse.UserId = await SignUp(PayLoad, 12);
+                LResponse.UserId = await FLogicContext.Accounts.SignUp(PayLoad, 12);
                 LResponse.IsUserCreated = true;
                 
                 FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
@@ -299,41 +177,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"POST api/v1/ajax/users/signup/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
-        }
-
-        /// <summary>
-        /// Perform sign-in action and log it to the history table.
-        /// </summary>
-        /// <param name="EmailAddr"></param>
-        /// <param name="Password"></param>
-        /// <returns></returns>
-        public async Task<Tuple<Guid, bool>> SignIn(string EmailAddr, string Password) 
-        {
-
-            var Users = (await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync()).Single();
-            if (!Users.IsActivated) 
-            {
-                return Tuple.Create(Guid.Empty, false);
-            }
-
-            var CheckPassword = BCrypt.CheckPassword(Password, Users.Password);
-            if (!CheckPassword) 
-            {
-                return Tuple.Create(Guid.Empty, true);
-            }
-
-            var SessionId = Guid.NewGuid();
-            var LogHistory = new SigninHistory()
-            {
-                UserId   = Users.Id,
-                LoggedAt = DateTime.Now,
-            };
-
-            FMainDbContext.SigninHistory.Add(LogHistory);
-            await FMainDbContext.SaveChangesAsync();
-
-            return Tuple.Create(SessionId, true);
 
         }
 
@@ -361,7 +204,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                var SignInResult = await SignIn(PayLoad.EmailAddr, PayLoad.Password);
+                var SignInResult = await FLogicContext.Accounts.SignIn(PayLoad.EmailAddr, PayLoad.Password);
 
                 if (SignInResult.Item1 == Guid.Empty && SignInResult.Item2 == true) 
                 {
