@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SecureWebApp.Logic;
 using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp.IntegrationTests
@@ -33,9 +33,9 @@ namespace SecureWebApp.IntegrationTests
 
             var LServices = new ServiceCollection();
 
-            LServices.AddSingleton<IDnsLookup, DnsLookup>();
-            LServices.AddSingleton<IAppLogger, AppLogger>();
             LServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(ConnectionString), ServiceLifetime.Transient);
+            LServices.AddSingleton<IAppLogger, AppLogger>();
+            LServices.AddScoped<ILogicContext, LogicContext>();
 
             FServiceProvider = LServices.BuildServiceProvider();
 
@@ -47,16 +47,20 @@ namespace SecureWebApp.IntegrationTests
     {
 
         private readonly ServiceProvider FServiceProvider;
+        
         private readonly MainDbContext   FMainDbContext;
         private readonly IAppLogger      FAppLogger;
-        private readonly IDnsLookup      FDnsLookup;
+        private readonly ILogicContext   FLogicContext;
 
         public AjaxControllerTest(DbFixture ADbFixture)
         {
+            
             FServiceProvider = ADbFixture.FServiceProvider;
-            FMainDbContext   = FServiceProvider.GetService<MainDbContext>();
-            FAppLogger       = FServiceProvider.GetService<IAppLogger>();
-            FDnsLookup       = FServiceProvider.GetService<IDnsLookup>();
+            
+            FMainDbContext = FServiceProvider.GetService<MainDbContext>();
+            FAppLogger     = FServiceProvider.GetService<IAppLogger>();
+            FLogicContext  = FServiceProvider.GetService<ILogicContext>();
+
         }
 
         /* TESTS FOR DATA RETRIEVAL */
@@ -183,7 +187,7 @@ namespace SecureWebApp.IntegrationTests
                 .Single();
 
             // Act
-            var LResult = await FDnsLookup.IsDomainExist(LEmailAddress);
+            var LResult = await FLogicContext.Emails.IsEmailDomainExist(LEmailAddress);
 
             // Assert
             LResult.Should().BeTrue();
