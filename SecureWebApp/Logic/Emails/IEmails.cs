@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SecureWebApp.Logic
+namespace SecureWebApp.Logic.Emails
 {
 
     public interface IEmails

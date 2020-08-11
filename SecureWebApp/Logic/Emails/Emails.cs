@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DnsClient;
 using SecureWebApp.Models.Database;
 
-namespace SecureWebApp.Logic
+namespace SecureWebApp.Logic.Emails
 {
 
     public class Emails : IEmails
