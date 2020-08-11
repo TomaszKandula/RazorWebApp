@@ -1,5 +1,5 @@
-﻿using SecureWebApp.Logic.Accounts;
-using SecureWebApp.Logic.Emails;
+﻿using SecureWebApp.Logic.Emails;
+using SecureWebApp.Logic.Accounts;
 using SecureWebApp.Logic.Repository;
 using SecureWebApp.Models.Database;
 
@@ -20,7 +20,7 @@ namespace SecureWebApp.Logic
             FMainDbContext = AMainDbContext;
         }
 
-        public IAccounts _Accounts 
+        public IAccounts Accounts 
         {
 
             get
@@ -37,7 +37,7 @@ namespace SecureWebApp.Logic
 
         }
 
-        public IEmails _Emails
+        public IEmails Emails
         {
 
             get
@@ -54,7 +54,7 @@ namespace SecureWebApp.Logic
 
         }
 
-        public IRepository _Repository
+        public IRepository Repository
         {
 
             get
