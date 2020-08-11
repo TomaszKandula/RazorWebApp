@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SecureWebApp.Models.Views;
 
-namespace SecureWebApp.Logic
+namespace SecureWebApp.Logic.Repository
 {
 
     public interface IRepository

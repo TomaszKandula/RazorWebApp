@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Models.Views;
 using SecureWebApp.Models.Database;
 
-namespace SecureWebApp.Logic
+namespace SecureWebApp.Logic.Repository
 {
 
     public class Repository : IRepository
