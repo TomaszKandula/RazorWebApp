@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.DnsLookup;
 using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp
@@ -44,7 +43,6 @@ namespace SecureWebApp
             AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
             AServices.AddAntiforgery(Option => Option.HeaderName = "X-CSRF-TOKEN");
 
-            AServices.AddSingleton<IDnsLookup, DnsLookup>();
             AServices.AddSingleton<IAppLogger, AppLogger>();
             AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AddOptions => AddOptions.EnableRetryOnFailure()));
 
