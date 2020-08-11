@@ -6,11 +6,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SecureWebApp.Controllers;
 using SecureWebApp.Models.Json;
 using SecureWebApp.UnitTests.Mocks;
-using SecureWebApp.Extensions.AppLogger;
-using SecureWebApp.Extensions.DnsLookup;
+using SecureWebApp.Logic.Emails;
+using SecureWebApp.Logic.Accounts;
+using SecureWebApp.Logic.Repository;
 
 namespace SecureWebApp.UnitTests
 {
@@ -22,16 +22,16 @@ namespace SecureWebApp.UnitTests
     public class AjaxControllerTest
     {
 
-        private readonly AjaxController FAjaxController;
         private readonly Mock<MainDbContext> FMockDbContext;
+        private readonly IAccounts   FAccounts;
+        private readonly IEmails     FEmails;
+        private readonly IRepository FRepository;
 
         public AjaxControllerTest()
         {
 
             // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<MainDbContext>();
-            IAppLogger FAppLogger = new Mocks.AppLogger();
-            IDnsLookup FDnsLookup = new Mocks.DnsLookup();
 
             // Upload pre-fixed dummy data
             var CountriesDbSet = DummyData.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
@@ -46,11 +46,9 @@ namespace SecureWebApp.UnitTests
             FMockDbContext.Setup(R => R.SigninHistory).Returns(SigninHistory.Object);
 
             // Create test instance with mocked depenencies
-            FAjaxController = new AjaxController(
-                FMockDbContext.Object,
-                FAppLogger,
-                FDnsLookup
-            );
+            FAccounts   = new Accounts(FMockDbContext.Object);
+            FEmails     = new Emails(FMockDbContext.Object);
+            FRepository = new Repository(FMockDbContext.Object);
 
         }
 
@@ -59,7 +57,7 @@ namespace SecureWebApp.UnitTests
         public void IsEmailAddressCorrect_Test(string AEmailAddress)
         {
 
-            var LResult = FAjaxController.IsEmailAddressCorrect(AEmailAddress);
+            var LResult = FEmails.IsEmailAddressCorrect(AEmailAddress);
 
             LResult.Should().BeTrue();
 
@@ -70,7 +68,7 @@ namespace SecureWebApp.UnitTests
         public async Task IsEmailAddressExist_Test(string AEmailAddress)
         {
 
-            var LResult = await FAjaxController.IsEmailAddressExist(AEmailAddress);
+            var LResult = await FEmails.IsEmailAddressExist(AEmailAddress);
 
             LResult.Should().BeTrue();
 
@@ -81,7 +79,7 @@ namespace SecureWebApp.UnitTests
         public async Task ReturnCityList_Test(int ACityId)
         {
 
-            var LResult = await FAjaxController.ReturnCityList(ACityId);
+            var LResult = await FRepository.ReturnCityList(ACityId);
 
             LResult.Any().Should().BeTrue();
 
@@ -91,7 +89,7 @@ namespace SecureWebApp.UnitTests
         public async Task ReturnCountryList_Test()
         {
 
-            var LResult = await FAjaxController.ReturnCountryList();
+            var LResult = await FRepository.ReturnCountryList();
 
             LResult.Any().Should().BeTrue();
 
@@ -102,7 +100,7 @@ namespace SecureWebApp.UnitTests
         public async Task SignIn_Test(string AEmailAddr, string APassword)
         {
 
-            var LResult = await FAjaxController.SignIn(AEmailAddr, APassword);
+            var LResult = await FAccounts.SignIn(AEmailAddr, APassword);
 
             var IsGuidEmpty = false;
 
@@ -134,7 +132,7 @@ namespace SecureWebApp.UnitTests
             };
 
             // Act
-            await FAjaxController.SignUp(PayLoad, 12);
+            await FAccounts.SignUp(PayLoad, 12);
 
             // Verify action
             FMockDbContext.Verify(R => R.SaveChangesAsync(CancellationToken.None), Times.Once);
