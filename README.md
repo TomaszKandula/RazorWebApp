@@ -1,8 +1,13 @@
 # SecureWebAapp
 
-Opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) that is an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
+Opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
-The purpose of this demo application is to present an example of an application that is in compliance with some security best practices describded in the article.
+The purpose of this demo application is to present an example of an application that is in compliance with some security best practices describded in the article. Therefore:
+
+1. User input is validated on the front-end and on the back-end.
+1. We mostly use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token. 
+1. Instead of ADO.NET with custom SQL string, we use OR/M (Entity Framework Core) and LINQ.
+1. User password is hashed and salted with [BCrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/). Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
 
 ## Tech-stack
 
@@ -51,4 +56,4 @@ Focuses on testing dependencies and database setup. One dependecy is skipped (IA
 
 ## Unit Tests
 
-Covers all the logic used in AJAX controllers (note that endpoints does not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking, [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
+Covers all the logic used in AJAX controller (note that endpoints does not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
