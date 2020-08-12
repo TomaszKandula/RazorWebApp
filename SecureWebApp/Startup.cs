@@ -58,6 +58,8 @@ namespace SecureWebApp
         public void Configure(IApplicationBuilder AApplication, IWebHostEnvironment AEnvironment)
         {
 
+            AApplication.UseResponseCompression();
+
             if (AEnvironment.IsDevelopment())
             {
                 AApplication.UseDeveloperExceptionPage();
