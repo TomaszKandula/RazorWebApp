@@ -162,12 +162,14 @@ namespace SecureWebApp.IntegrationTests
         {
 
             // Arrange
+            var Number = new Random();
+            var NewEmailName = $"Bob{Number.Next()}@gmail.com";
             var Users = new Users() 
             { 
                 FirstName   = "Bob",
                 LastName    = "Dylan",
                 NickName    = "Bob",
-                EmailAddr   = "bob.dylan@gmail.com",
+                EmailAddr   = NewEmailName,
                 PhoneNum    = null,
                 Password    = "TestUnhashedPassword",
                 CreatedAt   = DateTime.Now,
@@ -180,9 +182,11 @@ namespace SecureWebApp.IntegrationTests
             FMainDbContext.Users.Add(Users);
             await FMainDbContext.SaveChangesAsync();
 
+            var GetEmailAddress = (await FMainDbContext.Users.Where(R => R.Id == Users.Id).Select(R => R.EmailAddr).ToListAsync()).Single();
+
             // Assert
-            Users.Id.Should().BeGreaterThan(1);
-        
+            GetEmailAddress.Should().Be(NewEmailName);
+
         }
 
         [Theory]
