@@ -52,7 +52,7 @@ The database have only four tables, because this example have already setup data
 
 ## Integration Tests
 
-Focuses on testing dependencies and database setup. There are no HTTP tests so far.
+Focuses on testing dependencies and theirs configuration. There are no HTTP tests so far.
 
 ## Unit Tests
 
