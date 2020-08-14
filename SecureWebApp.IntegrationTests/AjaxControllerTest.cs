@@ -182,7 +182,11 @@ namespace SecureWebApp.IntegrationTests
             FMainDbContext.Users.Add(Users);
             await FMainDbContext.SaveChangesAsync();
 
-            var GetEmailAddress = (await FMainDbContext.Users.Where(R => R.Id == Users.Id).Select(R => R.EmailAddr).ToListAsync()).Single();
+            var GetEmailAddress = (await FMainDbContext.Users
+                .Where(R => R.Id == Users.Id)
+                .Select(R => R.EmailAddr)
+                .ToListAsync())
+                .Single();
 
             // Assert
             GetEmailAddress.Should().Be(NewEmailName);
