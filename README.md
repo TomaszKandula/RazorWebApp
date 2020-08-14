@@ -52,7 +52,7 @@ The database have only four tables, because this example have already setup data
 
 ## Integration Tests
 
-Focuses on testing dependencies and database setup. One dependecy is skipped (IAppLogger) that abstracts away used logger. There are no HTTP tests so far.
+Focuses on testing dependencies and database setup. There are no HTTP tests so far.
 
 ## Unit Tests
 
