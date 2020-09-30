@@ -1,255 +1,174 @@
 using Xunit;
 using FluentAssertions;
-using System;
-using System.IO;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using SecureWebApp.Logic;
-using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.AppLogger;
-using Serilog;
-using Serilog.Events;
+using Newtonsoft.Json;
+using SecureWebApp.Models.Json;
+using SecureWebApp.IntegrationTests.CustomRest;
+using SecureWebApp.IntegrationTests.Configuration;
 
 namespace SecureWebApp.IntegrationTests
 {
 
-    public class Startup
-    {
-    }
-
-    public class DbFixture
+    public class AjaxControllerTest : IClassFixture<TestFixture<SecureWebApp.Startup>>
     {
 
-        public ServiceProvider FServiceProvider { get; private set; }
-
-        public DbFixture()
-        {
-
-            var LConfiguration = new ConfigurationBuilder().AddUserSecrets<DbFixture>().Build();
-            var ConnectionString = LConfiguration.GetValue<string>("DbConnect");
-            var LServices = new ServiceCollection();
-
-            LServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(ConnectionString), ServiceLifetime.Transient);
-            LServices.AddSingleton<IAppLogger, AppLogger>();
-            LServices.AddScoped<ILogicContext, LogicContext>();
-            FServiceProvider = LServices.BuildServiceProvider();
-
+        public class Startup 
+        {        
         }
 
-    }
+        private readonly HttpClient FHttpClient;
 
-    public class AjaxControllerTest : IClassFixture<DbFixture>
-    {
-
-        private readonly ServiceProvider FServiceProvider;
-        
-        private readonly MainDbContext   FMainDbContext;
-        private readonly IAppLogger      FAppLogger;
-        private readonly ILogicContext   FLogicContext;
-
-        public AjaxControllerTest(DbFixture ADbFixture)
+        public AjaxControllerTest(TestFixture<SecureWebApp.Startup> ACustomFixture)
         {
-            
-            FServiceProvider = ADbFixture.FServiceProvider;
-            
-            FMainDbContext = FServiceProvider.GetService<MainDbContext>();
-            FAppLogger     = FServiceProvider.GetService<IAppLogger>();
-            FLogicContext  = FServiceProvider.GetService<ILogicContext>();
-
+            FHttpClient = ACustomFixture.FClient;
         }
 
-        /* APPLOGGER CONFIG TESTS */
-
-        [Fact]
-        public void SeriLogConfig()
+        [Theory]
+        [InlineData("tokan@dfds.com")]
+        public async Task CheckEmailAsync(string AEmailAddress) 
         {
 
             // Arrange
-            var LogsPath = AppDomain.CurrentDomain.BaseDirectory + "\\test-logs";
-            var FileName = $"log-{string.Format("{0:yyyyMMdd}", DateTime.Now)}.txt";
+            var LEndpoint = $"/api/v1/ajax/validation/{AEmailAddress}";
+            var LAuthString = "";
 
-            var TestTextInfo  = "Integration Tests for SeriLog sitting behind AppLogger (INFO).";
-            var TestTextWarn  = "Integration Tests for SeriLog sitting behind AppLogger (WARN).";
-            var TestTextError = "Integration Tests for SeriLog sitting behind AppLogger (ERROR).";
-            var TestTextFatal = "Integration Tests for SeriLog sitting behind AppLogger (FATAL).";
+            // Act
+            var LResult = new RestResponse();
 
-            if (!Directory.Exists(LogsPath))
+            using (var LRestClient = new RestClient())
             {
-                Directory.CreateDirectory(LogsPath);
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
             }
 
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
-                .Enrich.FromLogContext()
-                .WriteTo.File
-                (
-                    LogsPath + "\\log-.txt",
-                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                    rollingInterval: RollingInterval.Day,
-                    rollOnFileSizeLimit: true,
-                    retainedFileCountLimit: null,
-                    shared: false
-                 )
-                .CreateLogger();
-
-            // Act
-            FAppLogger.LogInfo(TestTextInfo);
-            FAppLogger.LogWarn(TestTextWarn);
-            FAppLogger.LogError(TestTextError);
-            FAppLogger.LogFatality(TestTextFatal);
-
-            // Release file lock and get the content
-            Log.CloseAndFlush();
-            var TestLogFile = File.ReadAllText(LogsPath + "\\" + FileName);
+            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LResult.ResponseContent);
 
             // Assert
-            TestLogFile.Should().Contain(TestTextInfo);
-            TestLogFile.Should().Contain(TestTextWarn);
-            TestLogFile.Should().Contain(TestTextError);
-            TestLogFile.Should().Contain(TestTextFatal);
-
-        }
-
-        /* TESTS FOR DATA RETRIEVAL */
-
-        [Fact]
-        public async Task GetUserList_Test()
-        {
-            
-            var LResult = await FMainDbContext.Users
-                .AsNoTracking()
-                .Select(R => R)
-                .ToListAsync();            
-           
-            LResult.Any().Should().BeTrue();
-
+            LResult.StatusCode.Should().Be(200);
+            LDeserialized.IsEmailValid.Should().BeFalse();
 
         }
 
         [Fact]
-        public async Task GetCities_Test() 
-        {
-
-            var LResult = await FMainDbContext.Cities
-                .AsNoTracking()
-                .Select(R => R)
-                .ToListAsync();
-
-            LResult.Any().Should().BeTrue();
-
-        }
-
-        [Fact]
-        public async Task GetCountries_Test() 
-        {
-
-            var LResult = await FMainDbContext.Countries
-                .AsNoTracking()
-                .Select(R => R)
-                .ToListAsync();
-
-            LResult.Any().Should().BeTrue();
-
-        }
-
-        [Fact]
-        public async Task GetSigninHistory_Test() 
-        {
-
-            var LResult = await FMainDbContext.SigninHistory
-                .AsNoTracking()
-                .Select(R => R)
-                .ToListAsync();
-
-            LResult.Any().Should().BeTrue();
-
-        }
-
-        /* TESTS FOR DATA WRITING */
-
-        [Theory]
-        [InlineData(178, 80880)]
-        public async Task TryToAddNewUser_Test(int ACountryId, int ACityId) 
+        public async Task ReturnCountryAsync() 
         {
 
             // Arrange
-            var Number = new Random();
-            var NewEmailName = $"Bob{Number.Next()}@gmail.com";
-            var Users = new Users() 
-            { 
-                FirstName   = "Bob",
-                LastName    = "Dylan",
-                NickName    = "Bob",
-                EmailAddr   = NewEmailName,
-                PhoneNum    = null,
-                Password    = "TestUnhashedPassword",
-                CreatedAt   = DateTime.Now,
-                IsActivated = false,
-                CityId      = ACityId,
-                CountryId   = ACountryId
-            };
+            var LEndpoint = $"/api/v1/ajax/countries/";
+            var LAuthString = "";
 
             // Act
-            FMainDbContext.Users.Add(Users);
-            await FMainDbContext.SaveChangesAsync();
+            var LResult = new RestResponse();
 
-            var GetEmailAddress = (await FMainDbContext.Users
-                .Where(R => R.Id == Users.Id)
-                .Select(R => R.EmailAddr)
-                .ToListAsync())
-                .Single();
+            using (var LRestClient = new RestClient())
+            {
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
+            }
+
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LResult.ResponseContent);
 
             // Assert
-            GetEmailAddress.Should().Be(NewEmailName);
+            LResult.StatusCode.Should().Be(200);
+            LDeserialized.Countries.Should().HaveCount(249);
 
         }
 
         [Theory]
         [InlineData(1)]
-        public async Task TryToAddToSigninHistory_Test(int UserId)
+        public async Task ReturnCityAsync(int AId) 
         {
 
             // Arrange
-            var SigninHistory = new SigninHistory() 
-            { 
-                UserId   = UserId,
-                LoggedAt = DateTime.Now
-            };
+            var LEndpoint = $"/api/v1/ajax/cities/{AId}";
+            var LAuthString = "";
 
             // Act
-            FMainDbContext.SigninHistory.Add(SigninHistory);
-            await FMainDbContext.SaveChangesAsync();
+            var LResult = new RestResponse();
+
+            using (var LRestClient = new RestClient())
+            {
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
+            }
+
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LResult.ResponseContent);
 
             // Assert
-            SigninHistory.Id.Should().BeGreaterThan(1);
+            LResult.StatusCode.Should().Be(200);
+            LDeserialized.Cities.Should().HaveCount(11);
 
         }
 
-        /* GET FROM DATABASE AND CALL DNS LOOKUP */
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        public async Task CheckEmailDomain_Test(int UserId) 
+        [Fact]
+        public async Task CreateAccountAsync()
         {
 
             // Arrange
-            var LEmailAddress = (await FMainDbContext.Users
-                .AsNoTracking()
-                .Where(R => R.Id == UserId)
-                .Select(R => R.EmailAddr)
-                .ToListAsync())
-                .Single();
+            var LEndpoint = $"/api/v1/ajax/users/signup/";
+            var LAuthString = "";
+
+            var LPayLoad = new UserCreate()
+            {
+                FirstName    = "John",
+                LastName     = "Deer",
+                NickName     = "Deer",
+                EmailAddress = "johnny.d@gmail.com",
+                Password     = "johnny123456789",
+                CityId       = 187,
+                CountryId    = 47
+            };
+
+            var LSerializedPayLoad = JsonConvert.SerializeObject(LPayLoad);
 
             // Act
-            var LResult = await FLogicContext.Emails.IsEmailDomainExist(LEmailAddress);
+            var LResult = new RestResponse();
+
+            using (var LRestClient = new RestClient())
+            {
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("post", LAuthString, LEndpoint, LSerializedPayLoad);
+            }
+
+            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LResult.ResponseContent);
 
             // Assert
-            LResult.Should().BeTrue();
+            LResult.StatusCode.Should().Be(200);
+            LDeserialized.IsUserCreated.Should().BeTrue();
+
+        }
+
+        [Fact]
+        public async Task LogToAccountAsync()
+        {
+
+            // Arrange
+            var LEndpoint = $"/api/v1/ajax/users/signin/";
+            var LAuthString = "";
+
+            var LPayLoad = new UserLogin()
+            {
+                EmailAddr = "tokan@dfds.com",
+                Password = "Timex#099#"
+            };
+
+            var LSerializedPayLoad = JsonConvert.SerializeObject(LPayLoad);
+
+            // Act
+            var LResult = new RestResponse();
+
+            using (var LRestClient = new RestClient())
+            {
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("post", LAuthString, LEndpoint, LSerializedPayLoad);
+            }
+
+            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LResult.ResponseContent);
+
+            // Assert
+            LResult.StatusCode.Should().Be(200);
+            LDeserialized.IsLogged.Should().BeTrue();
 
         }
 
