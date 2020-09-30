@@ -1,16 +1,6 @@
 ﻿@page
-@model LoginModel
 
-@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
-@functions
-{
-    public string GetAntiXsrfRequestToken()
-    {
-        return Xsrf.GetAndStoreTokens(Model.HttpContext).RequestToken;
-    }
-}
-
-    <section id="LoginPage" data-xsrf=@GetAntiXsrfRequestToken()>
+    <section id="LoginPage" data-xsrf=@ViewData["XCSRF"]>
 
         <div id="Handle_Modal" class="modal"></div>
 

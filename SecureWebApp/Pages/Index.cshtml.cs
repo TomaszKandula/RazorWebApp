@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Helpers;
 using SecureWebApp.Extensions.AppLogger;
@@ -12,10 +13,12 @@ namespace SecureWebApp.Pages
     {
 
         private readonly IAppLogger FAppLogger;
+        private readonly IAntiforgery FAntiforgery;
 
-        public IndexModel(IAppLogger AAppLogger)
+        public IndexModel(IAppLogger AAppLogger, IAntiforgery AAntiforgery)
         {
             FAppLogger = AAppLogger;
+            FAntiforgery = AAntiforgery;
         }
 
         public IActionResult OnGet()
@@ -23,6 +26,9 @@ namespace SecureWebApp.Pages
 
             try 
             {
+
+                ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
+
                 var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
                 var LExpiresAt = HttpContext.Session.GetString(Constants.Sessions.KeyNames.ExpiresAt);
 

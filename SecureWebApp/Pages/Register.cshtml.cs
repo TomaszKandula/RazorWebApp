@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Views;
@@ -19,17 +20,16 @@ namespace SecureWebApp.Pages
 
         private readonly IAppLogger    FAppLogger;
         private readonly MainDbContext FMainDbContext;
+        private readonly IAntiforgery  FAntiforgery;
 
         [BindProperty]
         public List<CountryList> CountryList { get; set; }
 
-        public RegisterModel(
-            IAppLogger    AAppLogger,
-            MainDbContext AMainDbContext
-        )
+        public RegisterModel(IAppLogger AAppLogger, MainDbContext AMainDbContext, IAntiforgery AAntiforgery)
         {
             FAppLogger     = AAppLogger;
             FMainDbContext = AMainDbContext;
+            FAntiforgery   = AAntiforgery;
         }
 
         public async Task<IActionResult> OnGet()
@@ -38,6 +38,7 @@ namespace SecureWebApp.Pages
             try
             {
 
+                ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
 
                 if (!string.IsNullOrEmpty(LoggedUser))
