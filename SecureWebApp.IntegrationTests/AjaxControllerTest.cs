@@ -24,6 +24,21 @@ namespace SecureWebApp.IntegrationTests
             FHttpClient = ACustomFixture.FClient;
         }
 
+        [Fact]
+        public async Task GetIndexPage()
+        {
+
+            var LResult = new RestResponse();
+            using (var LRestClient = new RestClient())
+            {
+                LRestClient.FHttpClient = FHttpClient;
+                LResult = await LRestClient.Execute("get", string.Empty, string.Empty, string.Empty);
+            }
+
+            LResult.ResponseContent.Should().NotBeNullOrEmpty();
+
+        }
+
         [Theory]
         [InlineData("tokan@dfds.com")]
         public async Task CheckEmailAsync(string AEmailAddress) 
