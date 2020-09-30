@@ -46,7 +46,7 @@ The database have only four tables, because this example have already setup data
 
 Focuses on testing HTTP responses, dependencies and theirs configuration.
 
-Note: due to the fact that we use Razor Pages, befor running test, we will require to:
+Note: due to the fact that we use Razor Pages, before running test, we will require to:
 
 1. Place `xunit.runner.json` with `{"shadowCopy": false}` in `bin\debug\<TargetFramework>\` folder.
 1. Add to the project file (already commited in this repo):
