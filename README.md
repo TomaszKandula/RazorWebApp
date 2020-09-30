@@ -40,19 +40,11 @@ Connection string have to be setup in __secrets.json__ (SecureWebAapp project):
 }
 ```
 
-and for Integration Test (SecureWebAapp.IntegrationTests project):
-
-```
-{
-    "DbConnect": "<your_connection_string_goes_here>"
-}
-```
-
 The database have only four tables, because this example have already setup database context, one may use SQL script to create tables and populate Cities and Countries from CSV files, all provided here: [Database Examples](https://github.com/TomaszKandula/SecureWebApp/tree/master/DatabaseExamples).
 
 ## Integration Tests
 
-Focuses on testing dependencies and theirs configuration. There are no HTTP tests so far (to be changed soon).
+Focuses on testing HTTP responses, dependencies and theirs configuration.
 
 ## Unit Tests
 
