@@ -46,6 +46,24 @@ The database have only four tables, because this example have already setup data
 
 Focuses on testing HTTP responses, dependencies and theirs configuration.
 
+Note: due to the fact that we use Razor Pages, befor running test, we will require to:
+
+1. Place `xunit.runner.json` with `{"shadowCopy": false}` in `bin\debug\<TargetFramework>\` folder.
+1. Add to the project file (already commited in this repo):
+
+```
+  <Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+
+    <ItemGroup>
+      <DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
+    </ItemGroup>
+
+    <Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
+  </Target>
+```
+
+More details: [Integration tests with ASP.NET Core causes missing references from Razor files](https://github.com/aspnet/Razor/issues/1212).
+
 ## Unit Tests
 
 Covers all the logic used in AJAX controller (note that endpoints does not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
