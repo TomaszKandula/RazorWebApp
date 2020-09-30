@@ -54,6 +54,14 @@ namespace SecureWebApp.Pages
                 .AsNoTracking()
                 .ToListAsync();
 
+                var HtmlList = "";
+                foreach (var Country in CountryList)
+                {
+                    HtmlList += $"<option value = '{Country.Id}'>{Country.Name}</option>";
+                }
+
+                ViewData["CountryList"] = HtmlList;
+
                 return Page();
             
             }

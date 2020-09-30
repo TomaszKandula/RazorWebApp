@@ -1,4 +1,5 @@
 ﻿@page
+@model RegisterModel
 
     <section id="RegisterPage" data-xsrf=@ViewData["XCSRF"]>
 
@@ -119,10 +120,7 @@
                             <div class="control">
                                 <div id="Handle_CountryList" class="select">
                                     <select id="Select_CountryList">
-                                        @foreach (var Country in Model.CountryList)
-                                        {
-                                            <option value="@Country.Id">@Country.Name</option>
-                                        }
+                                        @Html.Raw(@ViewData["CountryList"])
                                     </select>
                                 </div>
                             </div>
