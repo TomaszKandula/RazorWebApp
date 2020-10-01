@@ -44,7 +44,7 @@ The database have only four tables, because this example have already setup data
 
 ## Integration Tests
 
-Focuses on testing HTTP responses, dependencies and theirs configuration.
+Focuses on testing HTTP responses (uses Anti-Forgery Token), dependencies and theirs configuration.
 
 Note: due to the fact that we use Razor Pages, before running test, we will require to:
 
