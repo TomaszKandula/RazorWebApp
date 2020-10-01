@@ -28,9 +28,9 @@ namespace SecureWebApp.Pages
             {
 
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-                var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
+                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
 
-                if (!string.IsNullOrEmpty(LoggedUser)) 
+                if (!string.IsNullOrEmpty(LLoggedUser)) 
                 {
                     return RedirectToPage("./Index");
                 }
@@ -38,10 +38,12 @@ namespace SecureWebApp.Pages
                 return Page();
 
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                var ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"[LoginModel.OnGet]: an error has been thrown: {ErrorDesc}.");
+                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
+                FAppLogger.LogFatality($"[LoginModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
 

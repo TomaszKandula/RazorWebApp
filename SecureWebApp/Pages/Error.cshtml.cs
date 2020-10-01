@@ -41,10 +41,12 @@ namespace SecureWebApp.Pages
                 return Page();
 
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                var ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"[ErrorModel.OnGet]: an error has been thrown: {ErrorDesc}.");
+                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
+                FAppLogger.LogFatality($"[ErrorModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
 

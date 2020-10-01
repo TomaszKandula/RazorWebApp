@@ -39,36 +39,38 @@ namespace SecureWebApp.Pages
             {
 
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-                var LoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
+                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
 
-                if (!string.IsNullOrEmpty(LoggedUser))
+                if (!string.IsNullOrEmpty(LLoggedUser))
                 {
                     return RedirectToPage("./Index");
                 }
 
-                CountryList = await FMainDbContext.Countries.Select(R => new CountryList() 
+                CountryList = await FMainDbContext.Countries.Select(ACountries => new CountryList() 
                 { 
-                    Id   = R.Id, 
-                    Name = R.CountryName 
+                    Id   = ACountries.Id, 
+                    Name = ACountries.CountryName 
                 })
                 .AsNoTracking()
                 .ToListAsync();
 
-                var HtmlList = "";
-                foreach (var Country in CountryList)
+                var LHtmlList = "";
+                foreach (var LCountry in CountryList)
                 {
-                    HtmlList += $"<option value = '{Country.Id}'>{Country.Name}</option>";
+                    LHtmlList += $"<option value = '{LCountry.Id}'>{LCountry.Name}</option>";
                 }
 
-                ViewData["CountryList"] = HtmlList;
+                ViewData["CountryList"] = LHtmlList;
 
                 return Page();
             
             }
-            catch (Exception E) 
+            catch (Exception LException) 
             {
-                var ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"[RegisterModel.OnGet]: an error has been thrown: {ErrorDesc}.");
+                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
+                FAppLogger.LogFatality($"[RegisterModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
 
