@@ -28,33 +28,33 @@ namespace SecureWebApp
         public void ConfigureServices(IServiceCollection AServices)
         {
 
-            AServices.AddMvc(Option => Option.CacheProfiles
-                .Add("ResponseCache", new CacheProfile()
+            AServices.AddMvc(AOption => AOption.CacheProfiles
+                .Add("ResponseCache", new CacheProfile
                 {
                     Duration = 5,
                     Location = ResponseCacheLocation.Any,
                     NoStore = false
                 }));
 
-            AServices.AddMvc(Option => Option.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            AServices.AddMvc(AOption => AOption.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             AServices.AddRazorPages().AddRazorRuntimeCompilation();
             AServices.AddControllers();
 
-            AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
-            AServices.AddAntiforgery(Option =>
+            AServices.AddSession(AOptions => AOptions.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
+            AServices.AddAntiforgery(AOption =>
             {
-                Option.Cookie.Name = "AntiForgeryTokenCookie";
-                Option.HeaderName = "AntiForgeryTokenField";
+                AOption.Cookie.Name = "AntiForgeryTokenCookie";
+                AOption.HeaderName = "AntiForgeryTokenField";
             });
 
             AServices.AddSingleton<IAppLogger, AppLogger>();
-            AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AddOptions => AddOptions.EnableRetryOnFailure()));
+            AServices.AddDbContext<MainDbContext>(AOptions => AOptions.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AAddOptions => AAddOptions.EnableRetryOnFailure()));
 
             AServices.AddScoped<ILogicContext, LogicContext>();
 
-            AServices.AddResponseCompression(Options =>
+            AServices.AddResponseCompression(AOptions =>
             {
-                Options.Providers.Add<GzipCompressionProvider>();
+                AOptions.Providers.Add<GzipCompressionProvider>();
             });
 
         }
@@ -78,10 +78,10 @@ namespace SecureWebApp
             AApplication.UseAuthorization();
             AApplication.UseBrowserLink();
             AApplication.UseSession();
-            AApplication.UseEndpoints(Endpoints =>
+            AApplication.UseEndpoints(AEndpoints =>
             {
-                Endpoints.MapRazorPages();
-                Endpoints.MapControllers();
+                AEndpoints.MapRazorPages();
+                AEndpoints.MapControllers();
             });
 
         }

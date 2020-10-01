@@ -2,28 +2,24 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
 namespace SecureWebApp
 {
 
-    public class Program
+    public static class Program
     {
+        private static IWebHostBuilder CreateWebHostBuilder(string[] AArgs) =>
+            WebHost.CreateDefaultBuilder(AArgs).UseStartup<Startup>().UseSerilog();
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] Args) =>
-            WebHost.CreateDefaultBuilder(Args)
-                .UseStartup<Startup>()
-                .UseSerilog();
-
-        public static int Main(string[] Args)
+        public static int Main(string[] AArgs)
         {
 
-            var LogsPath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
-            if (!Directory.Exists(LogsPath))
+            var LOgsPath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
+            if (!Directory.Exists(LOgsPath))
             {
-                Directory.CreateDirectory(LogsPath);
+                Directory.CreateDirectory(LOgsPath);
             }
 
             Log.Logger = new LoggerConfiguration()
@@ -31,7 +27,7 @@ namespace SecureWebApp
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
                 .Enrich.FromLogContext()
                 .WriteTo.File(
-                    LogsPath + "\\log-.txt",
+                    LOgsPath + "\\log-.txt",
                     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}",
                     rollingInterval: RollingInterval.Day,
                     rollOnFileSizeLimit: true,
@@ -42,12 +38,12 @@ namespace SecureWebApp
             try
             {
                 Log.Information("Starting WebHost...");
-                CreateWebHostBuilder(Args).Build().Run();
+                CreateWebHostBuilder(AArgs).Build().Run();
                 return 0;
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                Log.Fatal(E, "WebHost has been terminated unexpectedly.");
+                Log.Fatal(LException, "WebHost has been terminated unexpectedly.");
                 return 1;
             }
             finally
