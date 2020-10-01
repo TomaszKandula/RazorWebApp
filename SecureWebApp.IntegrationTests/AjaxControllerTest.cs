@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
 using SecureWebApp.Models.Json;
 using SecureWebApp.IntegrationTests.Extractor;
-using SecureWebApp.IntegrationTests.CustomRest;
 using SecureWebApp.IntegrationTests.Configuration;
 
 namespace SecureWebApp.IntegrationTests
