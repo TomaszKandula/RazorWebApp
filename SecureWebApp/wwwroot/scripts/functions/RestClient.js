@@ -21,7 +21,7 @@ export default class RestClient
 
             LRequest.open(AMethod, AUrl, true);
             LRequest.setRequestHeader("Content-Type", this.LContentType);
-            LRequest.setRequestHeader("X-CSRF-TOKEN", this.LCustomToken);
+            LRequest.setRequestHeader("AntiForgeryTokenField", this.LCustomToken);
 
             LRequest.onload = function ()
             {

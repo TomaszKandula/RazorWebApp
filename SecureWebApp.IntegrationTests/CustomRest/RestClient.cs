@@ -25,7 +25,7 @@ namespace SecureWebApp.IntegrationTests.CustomRest
         {
 
             if (!string.IsNullOrEmpty(AAuthString)) 
-                FHttpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-CSRF-TOKEN", AAuthString);
+                FHttpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", AAuthString);
 
             switch (AMethod.ToUpper())
             {

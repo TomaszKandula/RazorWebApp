@@ -1,9 +1,11 @@
 using Xunit;
+using Newtonsoft.Json;
 using FluentAssertions;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using Microsoft.Net.Http.Headers;
 using SecureWebApp.Models.Json;
+using SecureWebApp.IntegrationTests.Extractor;
 using SecureWebApp.IntegrationTests.CustomRest;
 using SecureWebApp.IntegrationTests.Configuration;
 
@@ -24,43 +26,28 @@ namespace SecureWebApp.IntegrationTests
             FHttpClient = ACustomFixture.FClient;
         }
 
-        [Fact]
-        public async Task GetIndexPage()
-        {
-
-            var LResult = new RestResponse();
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("get", string.Empty, string.Empty, string.Empty);
-            }
-
-            LResult.ResponseContent.Should().NotBeNullOrEmpty();
-
-        }
-
         [Theory]
         [InlineData("tokan@dfds.com")]
         public async Task CheckEmailAsync(string AEmailAddress) 
         {
 
             // Arrange
-            var LEndpoint = $"/api/v1/ajax/validation/{AEmailAddress}";
-            var LAuthString = "";
+            var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
+            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
-            var LResult = new RestResponse();
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/validation/{AEmailAddress}");
 
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
-            }
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
-            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LResult.ResponseContent);
+            var LResponse = await FHttpClient.SendAsync(LNewRequest);
+            var LContent = await LResponse.Content.ReadAsStringAsync();
+
+            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LContent);
 
             // Assert
-            LResult.StatusCode.Should().Be(200);
+            LResponse.StatusCode.Should().Be(200);
             LDeserialized.IsEmailValid.Should().BeFalse();
 
         }
@@ -70,22 +57,22 @@ namespace SecureWebApp.IntegrationTests
         {
 
             // Arrange
-            var LEndpoint = $"/api/v1/ajax/countries/";
-            var LAuthString = "";
+            var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
+            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
-            var LResult = new RestResponse();
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/ajax/countries");
 
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
-            }
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LResult.ResponseContent);
+            var LResponse = await FHttpClient.SendAsync(LNewRequest);
+            var LContent = await LResponse.Content.ReadAsStringAsync();
+
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LContent);
 
             // Assert
-            LResult.StatusCode.Should().Be(200);
+            LResponse.StatusCode.Should().Be(200);
             LDeserialized.Countries.Should().HaveCount(249);
 
         }
@@ -96,22 +83,22 @@ namespace SecureWebApp.IntegrationTests
         {
 
             // Arrange
-            var LEndpoint = $"/api/v1/ajax/cities/{AId}";
-            var LAuthString = "";
+            var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
+            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
-            var LResult = new RestResponse();
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/cities/{AId}");
 
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("get", LAuthString, LEndpoint, string.Empty);
-            }
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LResult.ResponseContent);
+            var LResponse = await FHttpClient.SendAsync(LNewRequest);
+            var LContent = await LResponse.Content.ReadAsStringAsync();
+
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LContent);
 
             // Assert
-            LResult.StatusCode.Should().Be(200);
+            LResponse.StatusCode.Should().Be(200);
             LDeserialized.Cities.Should().HaveCount(11);
 
         }
@@ -121,8 +108,14 @@ namespace SecureWebApp.IntegrationTests
         {
 
             // Arrange
-            var LEndpoint = $"/api/v1/ajax/users/signup/";
-            var LAuthString = "";
+            var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
+            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+
+            // Act
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Post, "/api/v1/ajax/users/signup/");
+
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
             var LPayLoad = new UserCreate()
             {
@@ -135,22 +128,16 @@ namespace SecureWebApp.IntegrationTests
                 CountryId    = 47
             };
 
-            var LSerializedPayLoad = JsonConvert.SerializeObject(LPayLoad);
+            LNewRequest.Content = new StringContent(JsonConvert.SerializeObject(LPayLoad), System.Text.Encoding.Default, "application/json");
 
-            // Act
-            var LResult = new RestResponse();
+            var LResponse = await FHttpClient.SendAsync(LNewRequest);
+            var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("post", LAuthString, LEndpoint, LSerializedPayLoad);
-            }
-
-            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LResult.ResponseContent);
+            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LContent);
 
             // Assert
-            LResult.StatusCode.Should().Be(200);
-            LDeserialized.IsUserCreated.Should().BeTrue();
+            LResponse.StatusCode.Should().Be(200);
+            LDeserialized.IsUserCreated.Should().BeFalse();
 
         }
 
@@ -159,30 +146,30 @@ namespace SecureWebApp.IntegrationTests
         {
 
             // Arrange
-            var LEndpoint = $"/api/v1/ajax/users/signin/";
-            var LAuthString = "";
+            var LRegisterPageResponse = await FHttpClient.GetAsync("/login");
+            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+
+            // Act
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Post, "/api/v1/ajax/users/signin/");
+
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
             var LPayLoad = new UserLogin()
             {
                 EmailAddr = "tokan@dfds.com",
-                Password = "Timex#099#"
+                Password  = "Timex#099#"
             };
 
-            var LSerializedPayLoad = JsonConvert.SerializeObject(LPayLoad);
+            LNewRequest.Content = new StringContent(JsonConvert.SerializeObject(LPayLoad), System.Text.Encoding.Default, "application/json");
 
-            // Act
-            var LResult = new RestResponse();
+            var LResponse = await FHttpClient.SendAsync(LNewRequest);
+            var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            using (var LRestClient = new RestClient())
-            {
-                LRestClient.FHttpClient = FHttpClient;
-                LResult = await LRestClient.Execute("post", LAuthString, LEndpoint, LSerializedPayLoad);
-            }
-
-            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LResult.ResponseContent);
+            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LContent);
 
             // Assert
-            LResult.StatusCode.Should().Be(200);
+            LResponse.StatusCode.Should().Be(200);
             LDeserialized.IsLogged.Should().BeTrue();
 
         }

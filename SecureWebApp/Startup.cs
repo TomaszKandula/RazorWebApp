@@ -41,7 +41,11 @@ namespace SecureWebApp
             AServices.AddControllers();
 
             AServices.AddSession(Options => Options.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
-            AServices.AddAntiforgery(Option => Option.HeaderName = "X-CSRF-TOKEN");
+            AServices.AddAntiforgery(Option =>
+            {
+                Option.Cookie.Name = "AntiForgeryTokenCookie";
+                Option.HeaderName = "AntiForgeryTokenField";
+            });
 
             AServices.AddSingleton<IAppLogger, AppLogger>();
             AServices.AddDbContext<MainDbContext>(Options => Options.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AddOptions => AddOptions.EnableRetryOnFailure()));
