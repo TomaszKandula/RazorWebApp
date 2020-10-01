@@ -11,18 +11,18 @@ namespace SecureWebApp.Logic.Accounts
         /// <summary>
         /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
         /// </summary>
-        /// <param name="PayLoad"></param>
-        /// <param name="PasswordSalt"></param>
+        /// <param name="APayLoad"></param>
+        /// <param name="APasswordSalt"></param>
         /// <returns></returns>
-        Task<int> SignUp(UserCreate PayLoad, int PasswordSalt);
+        Task<int> SignUp(UserCreate APayLoad, int APasswordSalt);
 
         /// <summary>
         /// Perform sign-in action and log it to the history table.
         /// </summary>
-        /// <param name="EmailAddr"></param>
-        /// <param name="Password"></param>
+        /// <param name="AEmailAddr"></param>
+        /// <param name="APassword"></param>
         /// <returns></returns>
-        Task<Tuple<Guid, bool>> SignIn(string EmailAddr, string Password);
+        Task<Tuple<Guid, bool>> SignIn(string AEmailAddr, string APassword);
 
     }
 

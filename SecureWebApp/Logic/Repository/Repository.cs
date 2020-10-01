@@ -27,10 +27,10 @@ namespace SecureWebApp.Logic.Repository
 
             var LCountries = await FMainDbContext.Countries
                 .AsNoTracking()
-                .Select(R => new CountryList()
+                .Select(ACountries => new CountryList()
                 {
-                    Id = R.Id,
-                    Name = R.CountryName
+                    Id = ACountries.Id,
+                    Name = ACountries.CountryName
                 })
                 .ToListAsync();
 
@@ -48,11 +48,11 @@ namespace SecureWebApp.Logic.Repository
 
             var LCities = await FMainDbContext.Cities
                 .AsNoTracking()
-                .Where(R => R.CountryId == AId)
-                .Select(R => new CityList()
+                .Where(ACities => ACities.CountryId == AId)
+                .Select(ACities => new CityList()
                 {
-                    Id = R.Id,
-                    Name = R.CityName
+                    Id = ACities.Id,
+                    Name = ACities.CityName
                 })
                 .ToListAsync();
 

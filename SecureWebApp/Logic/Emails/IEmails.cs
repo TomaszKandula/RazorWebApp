@@ -24,7 +24,7 @@ namespace SecureWebApp.Logic.Emails
         /// <summary>
         /// Check if given address email have valid domain.
         /// </summary>
-        /// <seealso cref="https://dnsclient.michaco.net"/>
+        /// <seealso href="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
         Task<bool> IsEmailDomainExist(string AEmailAddress);

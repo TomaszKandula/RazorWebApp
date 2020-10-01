@@ -22,65 +22,69 @@ namespace SecureWebApp.Logic.Accounts
         /// <summary>
         /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
         /// </summary>
-        /// <param name="PayLoad"></param>
-        /// <param name="PasswordSalt"></param>
+        /// <param name="APayLoad"></param>
+        /// <param name="APasswordSalt"></param>
         /// <returns></returns>
-        public async Task<int> SignUp(UserCreate PayLoad, int PasswordSalt) 
+        public async Task<int> SignUp(UserCreate APayLoad, int APasswordSalt) 
         { 
         
-            var NewUser = new Users()
+            var LNewUser = new Users
             { 
-                FirstName   = PayLoad.FirstName,
-                LastName    = PayLoad.LastName,
-                NickName    = PayLoad.NickName,
-                EmailAddr   = PayLoad.EmailAddress,
-                Password    = BCrypt.HashPassword(PayLoad.Password, BCrypt.GenerateSalt(PasswordSalt)),
+                FirstName   = APayLoad.FirstName,
+                LastName    = APayLoad.LastName,
+                NickName    = APayLoad.NickName,
+                EmailAddr   = APayLoad.EmailAddress,
+                Password    = BCrypt.HashPassword(APayLoad.Password, BCrypt.GenerateSalt(APasswordSalt)),
                 PhoneNum    = null,
                 CreatedAt   = DateTime.Now,
                 IsActivated = false,
-                CountryId   = PayLoad.CountryId,
-                CityId      = PayLoad.CityId
+                CountryId   = APayLoad.CountryId,
+                CityId      = APayLoad.CityId
             };
 
-            FMainDbContext.Users.Add(NewUser);
+            await FMainDbContext.Users.AddAsync(LNewUser);
             await FMainDbContext.SaveChangesAsync();
 
-            return NewUser.Id;
+            return LNewUser.Id;
 
         }
 
         /// <summary>
         /// Perform sign-in action and log it to the history table.
         /// </summary>
-        /// <param name="EmailAddr"></param>
-        /// <param name="Password"></param>
+        /// <param name="AEmailAddr"></param>
+        /// <param name="APassword"></param>
         /// <returns></returns>
-        public async Task<Tuple<Guid, bool>> SignIn(string EmailAddr, string Password)
+        public async Task<Tuple<Guid, bool>> SignIn(string AEmailAddr, string APassword)
         {
 
-            var Users = (await FMainDbContext.Users.Where(r => r.EmailAddr == EmailAddr).ToListAsync()).Single();
-            if (!Users.IsActivated)
+            var LUsers = (await FMainDbContext.Users
+                .Where(AUsers => AUsers.EmailAddr == AEmailAddr)
+                .ToListAsync())
+                .Single();
+            
+            if (!LUsers.IsActivated)
             {
                 return Tuple.Create(Guid.Empty, false);
             }
 
-            var CheckPassword = BCrypt.CheckPassword(Password, Users.Password);
-            if (!CheckPassword)
+            var LCheckPassword = BCrypt.CheckPassword(APassword, LUsers.Password);
+            if (!LCheckPassword)
             {
                 return Tuple.Create(Guid.Empty, true);
             }
 
-            var SessionId = Guid.NewGuid();
-            var LogHistory = new SigninHistory()
+            var LSessionId = Guid.NewGuid();
+            var LLogHistory = new SigninHistory()
             {
-                UserId = Users.Id,
+                UserId = LUsers.Id,
                 LoggedAt = DateTime.Now,
             };
 
-            FMainDbContext.SigninHistory.Add(LogHistory);
+            await FMainDbContext.SigninHistory.AddAsync(LLogHistory);
             await FMainDbContext.SaveChangesAsync();
 
-            return Tuple.Create(SessionId, true);
+            return Tuple.Create(LSessionId, true);
 
         }
 

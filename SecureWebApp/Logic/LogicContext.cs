@@ -22,53 +22,17 @@ namespace SecureWebApp.Logic
 
         public IAccounts Accounts 
         {
-
-            get
-            {
-
-                if (FAccounts == null) 
-                {
-                    FAccounts = new Accounts.Accounts(FMainDbContext);
-                }
-
-                return FAccounts;
-
-            }
-
+            get { return FAccounts ?? (FAccounts = new Accounts.Accounts(FMainDbContext)); }
         }
 
         public IEmails Emails
         {
-
-            get
-            {
-
-                if (FEmails == null)
-                {
-                    FEmails = new Emails.Emails(FMainDbContext);
-                }
-
-                return FEmails;
-
-            }
-
+            get { return FEmails ?? (FEmails = new Emails.Emails(FMainDbContext)); }
         }
 
         public IRepository Repository
         {
-
-            get
-            {
-
-                if (FRepository == null)
-                {
-                    FRepository = new Repository.Repository(FMainDbContext);
-                }
-
-                return FRepository;
-
-            }
-
+            get { return FRepository ?? (FRepository = new Repository.Repository(FMainDbContext)); }
         }
 
     }
