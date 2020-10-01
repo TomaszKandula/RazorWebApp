@@ -22,7 +22,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
         /// <returns></returns>
-        Task<Tuple<Guid, bool>> SignIn(string AEmailAddr, string APassword);
+        Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword);
 
     }
 

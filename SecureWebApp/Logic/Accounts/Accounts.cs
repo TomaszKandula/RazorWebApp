@@ -55,7 +55,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
         /// <returns></returns>
-        public async Task<Tuple<Guid, bool>> SignIn(string AEmailAddr, string APassword)
+        public async Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword)
         {
 
             var LUsers = (await FMainDbContext.Users
@@ -65,13 +65,13 @@ namespace SecureWebApp.Logic.Accounts
             
             if (!LUsers.IsActivated)
             {
-                return Tuple.Create(Guid.Empty, false);
+                return (Guid.Empty, false);
             }
 
             var LCheckPassword = BCrypt.CheckPassword(APassword, LUsers.Password);
             if (!LCheckPassword)
             {
-                return Tuple.Create(Guid.Empty, true);
+                return (Guid.Empty, true);
             }
 
             var LSessionId = Guid.NewGuid();
@@ -84,7 +84,7 @@ namespace SecureWebApp.Logic.Accounts
             await FMainDbContext.SigninHistory.AddAsync(LLogHistory);
             await FMainDbContext.SaveChangesAsync();
 
-            return Tuple.Create(LSessionId, true);
+            return (LSessionId, true);
 
         }
 

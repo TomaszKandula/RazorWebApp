@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -28,39 +29,39 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint validating supplied email address. It checks format and email domain, and if it is already registered in database.
         /// </summary>
-        /// <param name="EmailAddress"></param>
+        /// <param name="AEmailAddress"></param>
         /// <returns></returns>
         // GET api/v1/ajax/validation/{emailaddress}/
         [ValidateAntiForgeryToken]
         [HttpGet("validation/{emailaddress}")]
-        public async Task<IActionResult> CheckEmailAsync(string EmailAddress)
+        public async Task<IActionResult> CheckEmailAsync(string AEmailAddress)
         {
 
             var LResponse = new EmailValidation();
             try 
             {
 
-                if (!FLogicContext.Emails.IsEmailAddressCorrect(EmailAddress)) 
+                if (!FLogicContext.Emails.IsEmailAddressCorrect(AEmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAddressMalformed.ErrorDesc;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
                
-                if (await FLogicContext.Emails.IsEmailAddressExist(EmailAddress)) 
+                if (await FLogicContext.Emails.IsEmailAddressExist(AEmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
 
-                if (!await FLogicContext.Emails.IsEmailDomainExist(EmailAddress)) 
+                if (!await FLogicContext.Emails.IsEmailDomainExist(AEmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailDomainNotExist.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailDomainNotExist.ErrorDesc;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{EmailAddress}. {LResponse.Error.ErrorDesc}.");
+                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
                     return StatusCode(200, LResponse);
                 }
 
@@ -68,11 +69,13 @@ namespace SecureWebApp.Controllers
                 return StatusCode(200, LResponse);
 
             } 
-            catch (Exception E)
+            catch (Exception LException)
             {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/validation/{EmailAddress} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                LResponse.Error.ErrorCode = LException.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
+                FAppLogger.LogFatality($"GET api/v1/ajax/validation/{AEmailAddress} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
@@ -94,10 +97,12 @@ namespace SecureWebApp.Controllers
                 LResponse.Countries = await FLogicContext.Repository.ReturnCountryList();
                 return StatusCode(200, LResponse);
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                LResponse.Error.ErrorCode = LException.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
                 FAppLogger.LogFatality($"GET api/v1/ajax/countries/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
@@ -107,25 +112,27 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint returning list of cities for given Country Id in JSON format.
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="AId"></param>
         /// <returns></returns>
         // GET api/v1/ajax/cities/{id}/
         [ValidateAntiForgeryToken]
         [HttpGet("cities/{id}")]
-        public async Task<IActionResult> ReturnCityAsync(int Id) 
+        public async Task<IActionResult> ReturnCityAsync(int AId) 
         {
 
             var LResponse = new ReturnCityList();
             try 
             {
-                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(Id);
+                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(AId);
                 return StatusCode(200, LResponse);
             } 
-            catch (Exception E)
+            catch (Exception LException)
             {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{Id} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                LResponse.Error.ErrorCode = LException.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
+                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{AId} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
@@ -134,12 +141,12 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint adding new user to the database.
         /// </summary>
-        /// <param name="PayLoad"></param>
+        /// <param name="APayLoad"></param>
         /// <returns></returns>
         // POST api/v1/ajax/users/signup/
         [ValidateAntiForgeryToken]
         [HttpPost("users/signup")]
-        public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate PayLoad) 
+        public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate APayLoad) 
         {
 
             var LResponse = new UserCreated();
@@ -155,7 +162,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                if (await FLogicContext.Emails.IsEmailAddressExist(PayLoad.EmailAddress))
+                if (await FLogicContext.Emails.IsEmailAddressExist(APayLoad.EmailAddress))
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAlreadyExists.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.EmailAlreadyExists.ErrorDesc;
@@ -163,17 +170,19 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                LResponse.UserId = await FLogicContext.Accounts.SignUp(PayLoad, 12);
+                LResponse.UserId = await FLogicContext.Accounts.SignUp(APayLoad, 12);
                 LResponse.IsUserCreated = true;
                 
-                FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{PayLoad.EmailAddress}' has been successfully registered.");
+                FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{APayLoad.EmailAddress}' has been successfully registered.");
                 return StatusCode(200, LResponse);
 
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                LResponse.Error.ErrorCode = LException.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
                 FAppLogger.LogFatality($"POST api/v1/ajax/users/signup/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
@@ -183,12 +192,12 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint allowing singin to the website.
         /// </summary>
-        /// <param name="PayLoad"></param>
+        /// <param name="APayLoad"></param>
         /// <returns></returns>
         // POST api/v1/ajax/users/signin/
         [ValidateAntiForgeryToken]
         [HttpPost("users/signin")]
-        public async Task<IActionResult> LogToAccountAsync([FromBody] UserLogin PayLoad) 
+        public async Task<IActionResult> LogToAccountAsync([FromBody] UserLogin APayLoad) 
         {
 
             var LResponse = new UserLogged();
@@ -204,9 +213,9 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                var SignInResult = await FLogicContext.Accounts.SignIn(PayLoad.EmailAddr, PayLoad.Password);
+                var (LSessionId, LIsSignedIn) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
 
-                if (SignInResult.Item1 == Guid.Empty && SignInResult.Item2 == true) 
+                if (LSessionId == Guid.Empty && LIsSignedIn) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidCredentials.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.InvalidCredentials.ErrorDesc;
@@ -214,7 +223,7 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                if (SignInResult.Item2 == false) 
+                if (!LIsSignedIn) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.AccountNotActivated.ErrorCode;
                     LResponse.Error.ErrorDesc = Constants.Errors.AccountNotActivated.ErrorDesc;
@@ -222,18 +231,20 @@ namespace SecureWebApp.Controllers
                     return StatusCode(200, LResponse);
                 }
 
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, SignInResult.Item1.ToString());
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, PayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, LSessionId.ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, APayLoad.EmailAddr);
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString(CultureInfo.InvariantCulture));
 
                 LResponse.IsLogged  = true;
                 return StatusCode(200, LResponse);
 
             }
-            catch (Exception E)
+            catch (Exception LException)
             {
-                LResponse.Error.ErrorCode = E.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(E.InnerException?.Message) ? E.Message : $"{E.Message} ({ E.InnerException.Message}).";
+                LResponse.Error.ErrorCode = LException.HResult.ToString();
+                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
+                    ? LException.Message 
+                    : $"{LException.Message} ({ LException.InnerException.Message}).";
                 FAppLogger.LogFatality($"POST api/v1/ajax/users/signin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
