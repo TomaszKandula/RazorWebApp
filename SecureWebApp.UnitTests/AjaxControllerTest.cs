@@ -34,16 +34,16 @@ namespace SecureWebApp.UnitTests
             FMockDbContext = new Mock<MainDbContext>();
 
             // Upload pre-fixed dummy data
-            var CountriesDbSet = DummyData.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
-            var CitiesDbSet    = DummyData.ReturnDummyCities().AsQueryable().BuildMockDbSet();
-            var UsersDbSet     = DummyData.ReturnDummyUsers().AsQueryable().BuildMockDbSet();
-            var SigninHistory  = DummyData.ReturnSigninHistory().AsQueryable().BuildMockDbSet();
+            var LCountriesDbSet = DummyData.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
+            var LCitiesDbSet    = DummyData.ReturnDummyCities().AsQueryable().BuildMockDbSet();
+            var LUsersDbSet     = DummyData.ReturnDummyUsers().AsQueryable().BuildMockDbSet();
+            var LSigninHistory  = DummyData.ReturnSigninHistory().AsQueryable().BuildMockDbSet();
 
             // Populate database tables with dummy data
-            FMockDbContext.Setup(R => R.Countries).Returns(CountriesDbSet.Object);
-            FMockDbContext.Setup(R => R.Cities).Returns(CitiesDbSet.Object);
-            FMockDbContext.Setup(R => R.Users).Returns(UsersDbSet.Object);
-            FMockDbContext.Setup(R => R.SigninHistory).Returns(SigninHistory.Object);
+            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Countries).Returns(LCountriesDbSet.Object);
+            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Cities).Returns(LCitiesDbSet.Object);
+            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Users).Returns(LUsersDbSet.Object);
+            FMockDbContext.Setup(AMainDbContext => AMainDbContext.SigninHistory).Returns(LSigninHistory.Object);
 
             // Create test instance with mocked depenencies
             FAccounts   = new Accounts(FMockDbContext.Object);
@@ -56,43 +56,31 @@ namespace SecureWebApp.UnitTests
         [InlineData("bob.dylan@gmail.com")]
         public void IsEmailAddressCorrect_Test(string AEmailAddress)
         {
-
             var LResult = FEmails.IsEmailAddressCorrect(AEmailAddress);
-
             LResult.Should().BeTrue();
-
         }
 
         [Theory]
         [InlineData("bob.dylan@gmail.com")]
         public async Task IsEmailAddressExist_Test(string AEmailAddress)
         {
-
             var LResult = await FEmails.IsEmailAddressExist(AEmailAddress);
-
             LResult.Should().BeTrue();
-
         }
 
         [Theory]
         [InlineData(1)]
         public async Task ReturnCityList_Test(int ACityId)
         {
-
             var LResult = await FRepository.ReturnCityList(ACityId);
-
             LResult.Any().Should().BeTrue();
-
         }
 
         [Fact]
         public async Task ReturnCountryList_Test()
         {
-
             var LResult = await FRepository.ReturnCountryList();
-
             LResult.Any().Should().BeTrue();
-
         }
 
         [Theory]
@@ -101,15 +89,9 @@ namespace SecureWebApp.UnitTests
         {
 
             var LResult = await FAccounts.SignIn(AEmailAddr, APassword);
+            var LIsGuidEmpty = LResult.Item1 == Guid.Empty;
 
-            var IsGuidEmpty = false;
-
-            if (LResult.Item1 == Guid.Empty)
-            {
-                IsGuidEmpty = true;
-            }
-
-            IsGuidEmpty.Should().BeFalse();
+            LIsGuidEmpty.Should().BeFalse();
             LResult.Item2.Should().BeTrue();
 
         }
@@ -120,7 +102,7 @@ namespace SecureWebApp.UnitTests
         {
 
             // Arrange
-            var PayLoad = new UserCreate()
+            var LPayLoad = new UserCreate
             {
                 FirstName    = "Ester",
                 LastName     = "Expósito",
@@ -132,10 +114,10 @@ namespace SecureWebApp.UnitTests
             };
 
             // Act
-            await FAccounts.SignUp(PayLoad, 12);
+            await FAccounts.SignUp(LPayLoad, 12);
 
             // Verify action
-            FMockDbContext.Verify(R => R.SaveChangesAsync(CancellationToken.None), Times.Once);
+            FMockDbContext.Verify(AMainDbContext => AMainDbContext.SaveChangesAsync(CancellationToken.None), Times.Once);
 
         }
 
