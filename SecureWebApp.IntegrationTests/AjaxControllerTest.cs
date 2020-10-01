@@ -11,7 +11,7 @@ using SecureWebApp.IntegrationTests.Configuration;
 namespace SecureWebApp.IntegrationTests
 {
 
-    public class AjaxControllerTest : IClassFixture<TestFixture<SecureWebApp.Startup>>
+    public class AjaxControllerTest : IClassFixture<TestFixture<Startup>>
     {
 
         public class Startup 
@@ -22,7 +22,7 @@ namespace SecureWebApp.IntegrationTests
 
         public AjaxControllerTest(TestFixture<SecureWebApp.Startup> ACustomFixture)
         {
-            FHttpClient = ACustomFixture.FClient;
+            FHttpClient = ACustomFixture.Client;
         }
 
         [Theory]

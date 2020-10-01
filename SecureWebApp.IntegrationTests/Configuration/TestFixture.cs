@@ -14,19 +14,18 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 namespace SecureWebApp.IntegrationTests.Configuration
 {
 
-    public class TestFixture<TStartup> : IDisposable
+    public sealed class TestFixture<TStartup> : IDisposable
     {
-
-        public TestServer FServer { get; }
-        public HttpClient FClient { get; }
+        private TestServer Server { get; }
+        public HttpClient Client { get; }
 
         public void Dispose()
         {
-            FClient.Dispose();
-            FServer.Dispose();
+            Client.Dispose();
+            Server.Dispose();
         }
 
-        private static string GetProjectPath(string AprojectRelativePath, Assembly AStartupAssembly)
+        private static string GetProjectPath(string AProjectRelativePath, Assembly AStartupAssembly)
         {
 
             var LProjectName = AStartupAssembly.GetName().Name;
@@ -38,16 +37,12 @@ namespace SecureWebApp.IntegrationTests.Configuration
 
                 LDirectoryInfo = LDirectoryInfo.Parent;
 
-                var LProjectDirectoryInfo = new DirectoryInfo(Path.Combine(LDirectoryInfo.FullName, AprojectRelativePath));
+                var LProjectDirectoryInfo = new DirectoryInfo(Path.Combine(LDirectoryInfo.FullName, AProjectRelativePath));
 
-                if (LProjectDirectoryInfo.Exists)
+                if (!LProjectDirectoryInfo.Exists) continue;
+                if (new FileInfo(Path.Combine(LProjectDirectoryInfo.FullName, LProjectName, $"{LProjectName}.csproj")).Exists)
                 {
-
-                    if (new FileInfo(Path.Combine(LProjectDirectoryInfo.FullName, LProjectName, $"{LProjectName}.csproj")).Exists)
-                    {
-                        return Path.Combine(LProjectDirectoryInfo.FullName, LProjectName);
-                    }
-
+                    return Path.Combine(LProjectDirectoryInfo.FullName, LProjectName);
                 }
 
             }
@@ -57,7 +52,7 @@ namespace SecureWebApp.IntegrationTests.Configuration
 
         }
 
-        protected virtual void InitializeServices(IServiceCollection AServices)
+        private static void InitializeServices(IServiceCollection AServices)
         {
 
             var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
@@ -86,7 +81,7 @@ namespace SecureWebApp.IntegrationTests.Configuration
         {
         }
 
-        protected TestFixture(string ARelativeTargetProjectParentDir)
+        private TestFixture(string ARelativeTargetProjectParentDir)
         {
 
             var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
@@ -104,14 +99,14 @@ namespace SecureWebApp.IntegrationTests.Configuration
                 .UseStartup(typeof(TStartup));
 
             // Create instance of test server
-            FServer = new TestServer(LWebHostBuilder);
+            Server = new TestServer(LWebHostBuilder);
 
             // Add configuration for client
-            FClient = FServer.CreateClient();
-            FClient.Timeout = TimeSpan.FromSeconds(600);
-            FClient.BaseAddress = new Uri("http://localhost:5000");
-            FClient.DefaultRequestHeaders.Accept.Clear();
-            FClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Client = Server.CreateClient();
+            Client.Timeout = TimeSpan.FromSeconds(600);
+            Client.BaseAddress = new Uri("http://localhost:5000");
+            Client.DefaultRequestHeaders.Accept.Clear();
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
         }
 

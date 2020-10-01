@@ -23,7 +23,7 @@ namespace SecureWebApp.IntegrationTests.Extractor
         private static string ExtractAntiForgeryCookieValueFrom(HttpResponseMessage AResponse)
         {
 
-            string LAntiForgeryCookie = AResponse.Headers.GetValues("Set-Cookie").FirstOrDefault(AHeaders => AHeaders.Contains(AntiForgeryCookieName));
+            var LAntiForgeryCookie = AResponse.Headers.GetValues("Set-Cookie").FirstOrDefault(AHeaders => AHeaders.Contains(AntiForgeryCookieName));
 
             if (LAntiForgeryCookie is null)
             {
@@ -37,10 +37,10 @@ namespace SecureWebApp.IntegrationTests.Extractor
         private static string ExtractAntiForgeryToken(string AHtmlBody)
         {
 
-            var LDataTag = "data-xsrf=\"";
-            var LDataLen = 155;
+            const string LDataTag = "data-xsrf=\"";
+            const int LDataLen = 155;
 
-            var LDataValue = AHtmlBody.Substring(AHtmlBody.IndexOf(LDataTag) + LDataTag.Length, LDataLen);
+            var LDataValue = AHtmlBody.Substring(AHtmlBody.IndexOf(LDataTag, StringComparison.Ordinal) + LDataTag.Length, LDataLen);
 
             if (!string.IsNullOrWhiteSpace(LDataValue) && !string.IsNullOrEmpty(LDataValue)) 
             {
