@@ -6,11 +6,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SecureWebApp.Controllers.Models;
-using SecureWebApp.UnitTests.Mocks;
 using SecureWebApp.Logic.Emails;
 using SecureWebApp.Logic.Accounts;
+using SecureWebApp.UnitTests.Mocks;
 using SecureWebApp.Logic.Repository;
+using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.UnitTests
 {

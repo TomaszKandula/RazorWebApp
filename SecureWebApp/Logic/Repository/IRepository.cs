@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using SecureWebApp.Controllers.ViewModels;
+using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Logic.Repository
 {

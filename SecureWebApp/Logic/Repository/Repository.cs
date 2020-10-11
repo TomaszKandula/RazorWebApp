@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Database;
-using SecureWebApp.Controllers.ViewModels;
+using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Logic.Repository
 {

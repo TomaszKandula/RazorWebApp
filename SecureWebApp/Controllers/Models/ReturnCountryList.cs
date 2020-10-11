@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using SecureWebApp.Controllers.ViewModels;
+using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Controllers.Models
 {

@@ -1,4 +1,4 @@
-﻿namespace SecureWebApp.Controllers.ViewModels
+﻿namespace SecureWebApp.ViewModel
 {
 
     public class CityList
