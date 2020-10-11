@@ -45,7 +45,7 @@ namespace SecureWebApp.UnitTests
             FMockDbContext.Setup(AMainDbContext => AMainDbContext.Users).Returns(LUsersDbSet.Object);
             FMockDbContext.Setup(AMainDbContext => AMainDbContext.SigninHistory).Returns(LSigninHistory.Object);
 
-            // Create test instance with mocked depenencies
+            // Create test instance with mocked dependencies
             FAccounts   = new Accounts(FMockDbContext.Object);
             FEmails     = new Emails(FMockDbContext.Object);
             FRepository = new Repository(FMockDbContext.Object);
