@@ -15,7 +15,7 @@ namespace SecureWebApp.Logic.Emails
         bool IsEmailAddressCorrect(string AEmailAddress);
 
         /// <summary>
-        /// Check if given email address aready exists.
+        /// Check if given email address ready exists.
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
