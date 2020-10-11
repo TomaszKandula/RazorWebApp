@@ -12,7 +12,7 @@
         public static class Sessions 
         {
 
-            /* Use this value to determin user session timeout */
+            /* Use this value to determine user session timeout */
             public const int IdleTimeout = 15;
 
             internal static class KeyNames 

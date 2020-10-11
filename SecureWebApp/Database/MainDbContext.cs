@@ -19,90 +19,90 @@ namespace SecureWebApp.Database
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<SigninHistory> SigninHistory { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder AModelBuilder)
         {
 
-            modelBuilder.Entity<Cities>(entity =>
+            AModelBuilder.Entity<Cities>(AEntity =>
             {
-                entity.Property(e => e.CityName)
+                AEntity.Property(ACities => ACities.CityName)
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Cities)
-                    .HasForeignKey(d => d.CountryId)
+                AEntity.HasOne(ACities => ACities.Country)
+                    .WithMany(ACountries => ACountries.Cities)
+                    .HasForeignKey(ACities => ACities.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__CountryId__Cities");
             });
 
-            modelBuilder.Entity<Countries>(entity =>
+            AModelBuilder.Entity<Countries>(AEntity =>
             {
-                entity.Property(e => e.CountryCode)
+                AEntity.Property(ACountries => ACountries.CountryCode)
                     .IsRequired()
                     .HasMaxLength(2)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CountryName)
+                AEntity.Property(ACountries => ACountries.CountryName)
                     .IsRequired()
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<SigninHistory>(entity =>
+            AModelBuilder.Entity<SigninHistory>(AEntity =>
             {
 
-                entity.Property(e => e.LoggedAt).HasColumnType("datetime");
+                AEntity.Property(ASigninHistory => ASigninHistory.LoggedAt).HasColumnType("datetime");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.SigninHistory)
-                    .HasForeignKey(d => d.UserId)
+                AEntity.HasOne(ASigninHistory => ASigninHistory.User)
+                    .WithMany(AUsers => AUsers.SigninHistory)
+                    .HasForeignKey(ASigninHistory => ASigninHistory.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserId__Users");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            AModelBuilder.Entity<Users>(AEntity =>
             {
-                entity.HasIndex(e => e.EmailAddr)
+                AEntity.HasIndex(AUsers => AUsers.EmailAddr)
                     .HasName("UQ__EmailAddr__Users")
                     .IsUnique();
 
-                entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+                AEntity.Property(AUsers => AUsers.CreatedAt).HasColumnType("datetime");
 
-                entity.Property(e => e.EmailAddr)
+                AEntity.Property(AUsers => AUsers.EmailAddr)
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FirstName)
+                AEntity.Property(AUsers => AUsers.FirstName)
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.LastName)
+                AEntity.Property(AUsers => AUsers.LastName)
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.NickName)
+                AEntity.Property(AUsers => AUsers.NickName)
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.Password)
+                AEntity.Property(AUsers => AUsers.Password)
                     .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PhoneNum)
+                AEntity.Property(AUsers => AUsers.PhoneNum)
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .IsFixedLength();
 
-                entity.HasOne(d => d.City)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.CityId)
+                AEntity.HasOne(AUsers => AUsers.City)
+                    .WithMany(ACities => ACities.Users)
+                    .HasForeignKey(AUsers => AUsers.CityId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__CityId__Users");
 
-                entity.HasOne(d => d.Country)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.CountryId)
+                AEntity.HasOne(AUsers => AUsers.Country)
+                    .WithMany(ACountries => ACountries.Users)
+                    .HasForeignKey(AUsers => AUsers.CountryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__CountryId__Users");
             });
