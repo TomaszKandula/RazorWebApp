@@ -69,6 +69,14 @@ namespace SecureWebApp.UnitTests
         }
 
         [Theory]
+        [InlineData("tokan@dfds.com")]
+        public async Task IsEmailDomainExist(string AEmailAddress)
+        {
+            var LResult = await FEmails.IsEmailDomainExist(AEmailAddress);
+            LResult.Should().BeTrue();
+        }
+
+        [Theory]
         [InlineData(1)]
         public async Task ReturnCityList_Test(int ACityId)
         {
