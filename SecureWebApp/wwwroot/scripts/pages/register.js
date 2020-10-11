@@ -360,7 +360,7 @@ export default class RegisterPage
 
     Select_CountryList(Event)
     {
-        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/cities/${Event.target.value}/`);
+        let Url = encodeURI(`${window.location.origin}/api/v1/ajax/cities/?countryid=${Event.target.value}`);
         this.Handle_CityList.classList.add("is-loading");
         this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
     }
