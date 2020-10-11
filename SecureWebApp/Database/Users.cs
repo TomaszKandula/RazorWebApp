@@ -3,13 +3,8 @@ using System.Collections.Generic;
 
 namespace SecureWebApp.Database
 {
-    public partial class Users
+    public class Users
     {
-        public Users()
-        {
-            SigninHistory = new HashSet<SigninHistory>();
-        }
-
         public int Id { get; set; }
         public int CountryId { get; set; }
         public int CityId { get; set; }
@@ -24,6 +19,6 @@ namespace SecureWebApp.Database
 
         public virtual Cities City { get; set; }
         public virtual Countries Country { get; set; }
-        public virtual ICollection<SigninHistory> SigninHistory { get; set; }
+        public virtual ICollection<SigninHistory> SigninHistory { get; set; } = new HashSet<SigninHistory>();
     }
 }
