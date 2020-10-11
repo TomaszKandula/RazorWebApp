@@ -29,6 +29,7 @@ namespace SecureWebApp.Logic.Emails
         {
             try
             {
+                // ReSharper disable once UnusedVariable
                 var LEmailAddress = new MailAddress(AEmailAddress);
                 return true;
             }
@@ -39,7 +40,7 @@ namespace SecureWebApp.Logic.Emails
         }
 
         /// <summary>
-        /// Check if given email address aready exists.
+        /// Check if given email address already exists.
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
