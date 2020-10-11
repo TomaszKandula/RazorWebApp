@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace SecureWebApp.Models.Database
+namespace SecureWebApp.Database
 {
     public partial class Cities
     {

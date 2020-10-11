@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
 using SecureWebApp.AppLogger;
-using SecureWebApp.Models.Database;
+using SecureWebApp.Database;
 
 namespace SecureWebApp
 {

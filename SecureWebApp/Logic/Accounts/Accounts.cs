@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Models.Json;
-using SecureWebApp.Models.Database;
+using SecureWebApp.Controllers.Models;
+using SecureWebApp.Database;
 
 namespace SecureWebApp.Logic.Accounts
 {

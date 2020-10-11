@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace SecureWebApp.Models.Json
+namespace SecureWebApp.Controllers.Models
 {
 
     public class UserLogin

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SecureWebApp.Models.Json;
+using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Logic.Accounts
 {

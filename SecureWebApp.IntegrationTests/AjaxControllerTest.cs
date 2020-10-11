@@ -4,7 +4,7 @@ using FluentAssertions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
-using SecureWebApp.Models.Json;
+using SecureWebApp.Controllers.Models;
 using SecureWebApp.IntegrationTests.Extractor;
 using SecureWebApp.IntegrationTests.Configuration;
 

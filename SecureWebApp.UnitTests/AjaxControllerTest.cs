@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SecureWebApp.Models.Json;
+using SecureWebApp.Controllers.Models;
 using SecureWebApp.UnitTests.Mocks;
 using SecureWebApp.Logic.Emails;
 using SecureWebApp.Logic.Accounts;

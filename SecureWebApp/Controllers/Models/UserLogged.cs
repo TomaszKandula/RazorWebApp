@@ -1,18 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SecureWebApp.Models.Json
+namespace SecureWebApp.Controllers.Models
 {
 
-    public class ReturnSessionState
+    public class UserLogged
     {
 
-        [JsonPropertyName("IsSessionAlive")]
-        public bool IsSessionAlive { get; set; }
+        [JsonPropertyName("IsLogged")]
+        public bool IsLogged { get; set; }
 
         [JsonPropertyName("Error")]
         public ErrorHandler Error { get; set; }
 
-        public ReturnSessionState()
+        public UserLogged()
         {
             Error = new ErrorHandler();
         }

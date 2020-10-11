@@ -1,7 +1,7 @@
-﻿namespace SecureWebApp.Models.Views
+﻿namespace SecureWebApp.Controllers.ViewModels
 {
 
-    public class CountryList
+    public class CityList
     {
         public int Id { get; set; }
         public string Name { get; set; }

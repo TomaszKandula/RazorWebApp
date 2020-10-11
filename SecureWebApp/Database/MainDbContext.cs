@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace SecureWebApp.Models.Database
+namespace SecureWebApp.Database
 {
 
     public class MainDbContext : DbContext

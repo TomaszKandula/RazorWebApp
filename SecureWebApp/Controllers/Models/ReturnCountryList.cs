@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using SecureWebApp.Models.Views;
+using SecureWebApp.Controllers.ViewModels;
 
-namespace SecureWebApp.Models.Json
+namespace SecureWebApp.Controllers.Models
 {
 
     public class ReturnCountryList

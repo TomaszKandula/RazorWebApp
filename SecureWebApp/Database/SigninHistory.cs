@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SecureWebApp.Models.Database
+namespace SecureWebApp.Database
 {
     public partial class SigninHistory
     {

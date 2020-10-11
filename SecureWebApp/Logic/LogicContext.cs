@@ -1,7 +1,7 @@
-﻿using SecureWebApp.Logic.Emails;
+﻿using SecureWebApp.Database;
+using SecureWebApp.Logic.Emails;
 using SecureWebApp.Logic.Accounts;
 using SecureWebApp.Logic.Repository;
-using SecureWebApp.Models.Database;
 
 namespace SecureWebApp.Logic
 {

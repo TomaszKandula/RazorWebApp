@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace SecureWebApp.Models.Json
+namespace SecureWebApp.Controllers.Models
 {
     
     public class EmailValidation

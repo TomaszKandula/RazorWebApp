@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using SecureWebApp.AppLogger;
+using SecureWebApp.Controllers.Models;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
-using SecureWebApp.Models.Json;
 
 namespace SecureWebApp.Controllers
 {
