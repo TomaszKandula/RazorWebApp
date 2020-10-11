@@ -78,7 +78,7 @@ namespace SecureWebApp.IntegrationTests
 
         [Theory]
         [InlineData(1)]
-        public async Task ReturnCityAsync(int AId) 
+        public async Task ReturnCityAsync(int ACountryId) 
         {
 
             // Arrange
@@ -86,7 +86,7 @@ namespace SecureWebApp.IntegrationTests
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
-            var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/cities/{AId}");
+            var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/cities/?countryid={ACountryId}");
 
             LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
             LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);

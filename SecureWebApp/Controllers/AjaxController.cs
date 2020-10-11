@@ -112,18 +112,19 @@ namespace SecureWebApp.Controllers
         /// <summary>
         /// Endpoint returning list of cities for given Country Id in JSON format.
         /// </summary>
-        /// <param name="AId"></param>
+        /// <param name="CountryId"></param>
         /// <returns></returns>
-        // GET api/v1/ajax/cities/{id}/
+        // GET api/v1/ajax/cities/?countryid={id}
         [ValidateAntiForgeryToken]
-        [HttpGet("cities/{id}")]
-        public async Task<IActionResult> ReturnCityAsync(int AId) 
+        [HttpGet("cities")]
+        // ReSharper disable once InconsistentNaming for query string
+        public async Task<IActionResult> ReturnCityAsync([FromQuery] int CountryId) 
         {
 
             var LResponse = new ReturnCityList();
             try 
             {
-                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(AId);
+                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(CountryId);
                 return StatusCode(200, LResponse);
             } 
             catch (Exception LException)
@@ -132,7 +133,7 @@ namespace SecureWebApp.Controllers
                 LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
                     ? LException.Message 
                     : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{AId} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
+                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{CountryId} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
 
