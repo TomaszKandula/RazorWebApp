@@ -31,10 +31,10 @@ namespace SecureWebApp.Controllers
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        // GET api/v1/ajax/validation/{emailaddress}/
+        // GET api/v1/ajax/validation/{aemailaddress}/
         [ValidateAntiForgeryToken]
-        [HttpGet("validation/{emailaddress}")]
-        public async Task<IActionResult> CheckEmailAsync(string AEmailAddress)
+        [HttpGet("validation/{aemailaddress}")]
+        public async Task<IActionResult> CheckEmailAsync([FromRoute] string AEmailAddress)
         {
 
             var LResponse = new EmailValidation();

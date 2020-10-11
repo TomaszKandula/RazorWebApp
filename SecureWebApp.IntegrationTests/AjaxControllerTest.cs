@@ -26,7 +26,7 @@ namespace SecureWebApp.IntegrationTests
         }
 
         [Theory]
-        [InlineData("tokan@dfds.com")]
+        [InlineData("tokan@wp.pl")]
         public async Task CheckEmailAsync(string AEmailAddress) 
         {
 
