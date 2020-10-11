@@ -9,7 +9,7 @@ namespace SecureWebApp.Logic.Accounts
     {
 
         /// <summary>
-        /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
+        /// Perform sign-up action for given PayLoad and Password Salt (recommended value is > 10).
         /// </summary>
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>

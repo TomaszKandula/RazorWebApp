@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Controllers.Models;
 using SecureWebApp.Database;
+using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Logic.Accounts
 {
@@ -19,7 +19,7 @@ namespace SecureWebApp.Logic.Accounts
         }
 
         /// <summary>
-        /// Perform sign-up action for given PayLoad and Password Salt (reccommended value is > 10).
+        /// Perform sign-up action for given PayLoad and Password Salt (recommended value is > 10).
         /// </summary>
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
