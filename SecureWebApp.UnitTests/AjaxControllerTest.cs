@@ -78,10 +78,10 @@ namespace SecureWebApp.UnitTests
 
         [Theory]
         [InlineData(1)]
-        public async Task ReturnCityList_Test(int ACityId)
+        public async Task ReturnCityList_Test(int ACountryId)
         {
-            var LResult = await FRepository.ReturnCityList(ACityId);
-            LResult.Any().Should().BeTrue();
+            var LResult = await FRepository.ReturnCityList(ACountryId);
+            LResult.Should().HaveCount(1);
         }
 
         [Fact]
