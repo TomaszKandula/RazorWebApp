@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SecureWebApp.Extensions.BCrypt
+namespace SecureWebApp.BCrypt
 {
 
     /// <summary>BCrypt implements OpenBSD-style Blowfish password hashing

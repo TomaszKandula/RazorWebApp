@@ -1,4 +1,4 @@
-﻿namespace SecureWebApp.Extensions.AppLogger
+﻿namespace SecureWebApp.AppLogger
 {
 
     /// <summary>
@@ -8,7 +8,7 @@
     {
 
         /// <summary>
-        /// Debug infomration to log storage with current datetime stamp.
+        /// Debug information to log storage with current datetime stamp.
         /// </summary>
         /// <param name="AMessage"></param>
         void LogDebug(string AMessage);
@@ -32,7 +32,7 @@
         void LogWarn(string AMessage);
 
         /// <summary>
-        /// Fatal error infomration to log storage with current datetime stamp.
+        /// Fatal error information to log storage with current datetime stamp.
         /// </summary>
         /// <param name="AMessage"></param>
         void LogFatality(string AMessage);

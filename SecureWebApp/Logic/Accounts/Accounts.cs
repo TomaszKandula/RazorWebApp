@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Models.Json;
 using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.BCrypt;
 
 namespace SecureWebApp.Logic.Accounts
 {
@@ -34,7 +33,7 @@ namespace SecureWebApp.Logic.Accounts
                 LastName    = APayLoad.LastName,
                 NickName    = APayLoad.NickName,
                 EmailAddr   = APayLoad.EmailAddress,
-                Password    = BCrypt.HashPassword(APayLoad.Password, BCrypt.GenerateSalt(APasswordSalt)),
+                Password    = BCrypt.BCrypt.HashPassword(APayLoad.Password, BCrypt.BCrypt.GenerateSalt(APasswordSalt)),
                 PhoneNum    = null,
                 CreatedAt   = DateTime.Now,
                 IsActivated = false,
@@ -68,7 +67,7 @@ namespace SecureWebApp.Logic.Accounts
                 return (Guid.Empty, false);
             }
 
-            var LCheckPassword = BCrypt.CheckPassword(APassword, LUsers.Password);
+            var LCheckPassword = BCrypt.BCrypt.CheckPassword(APassword, LUsers.Password);
             if (!LCheckPassword)
             {
                 return (Guid.Empty, true);

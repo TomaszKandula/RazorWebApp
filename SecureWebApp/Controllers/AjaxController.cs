@@ -3,10 +3,10 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using SecureWebApp.AppLogger;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Json;
-using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp.Controllers
 {

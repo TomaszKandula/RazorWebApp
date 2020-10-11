@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using SecureWebApp.AppLogger;
 using SecureWebApp.Helpers;
 using SecureWebApp.Models.Views;
 using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp.Pages
 {

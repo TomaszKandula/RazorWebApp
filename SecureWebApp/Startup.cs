@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
+using SecureWebApp.AppLogger;
 using SecureWebApp.Models.Database;
-using SecureWebApp.Extensions.AppLogger;
 
 namespace SecureWebApp
 {
@@ -47,7 +47,7 @@ namespace SecureWebApp
                 AOption.HeaderName = "AntiForgeryTokenField";
             });
 
-            AServices.AddSingleton<IAppLogger, AppLogger>();
+            AServices.AddSingleton<IAppLogger, AppLogger.AppLogger>();
             AServices.AddDbContext<MainDbContext>(AOptions => AOptions.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AAddOptions => AAddOptions.EnableRetryOnFailure()));
 
             AServices.AddScoped<ILogicContext, LogicContext>();

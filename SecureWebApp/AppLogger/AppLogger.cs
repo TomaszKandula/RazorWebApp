@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace SecureWebApp.Extensions.AppLogger
+namespace SecureWebApp.AppLogger
 {
 
     public sealed class AppLogger : IAppLogger
