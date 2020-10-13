@@ -43,10 +43,9 @@ namespace SecureWebApp.IntegrationTests
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LContent);
-
             // Assert
             LResponse.StatusCode.Should().Be(200);
+            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LContent);
             LDeserialized.IsEmailValid.Should().BeFalse();
 
         }
@@ -68,10 +67,9 @@ namespace SecureWebApp.IntegrationTests
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LContent);
-
             // Assert
             LResponse.StatusCode.Should().Be(200);
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LContent);
             LDeserialized.Countries.Should().HaveCount(249);
 
         }
@@ -94,10 +92,9 @@ namespace SecureWebApp.IntegrationTests
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LContent);
-
             // Assert
             LResponse.StatusCode.Should().Be(200);
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LContent);
             LDeserialized.Cities.Should().HaveCount(11);
 
         }
@@ -132,10 +129,9 @@ namespace SecureWebApp.IntegrationTests
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LContent);
-
             // Assert
             LResponse.StatusCode.Should().Be(200);
+            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LContent);
             LDeserialized.IsUserCreated.Should().BeFalse();
 
         }
@@ -165,10 +161,9 @@ namespace SecureWebApp.IntegrationTests
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
-            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LContent);
-
             // Assert
             LResponse.StatusCode.Should().Be(200);
+            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LContent);
             LDeserialized.IsLogged.Should().BeTrue();
 
         }
