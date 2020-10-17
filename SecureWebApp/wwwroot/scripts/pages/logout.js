@@ -14,15 +14,9 @@ export default class LogoutPage
 
     Initialize()
     {
-
-        if (this.LContainer === null)
-        {
-            return null;
-        }
-
+        if (this.LContainer === null) return null;
         this.Cookies = new Cookies();
         this.Cookies.EraseCookie("user_session");
-
     }
 
 }
