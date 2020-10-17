@@ -17,10 +17,7 @@ export default class IndexPage
     Initialize()
     {
 
-        if (this.Container === null)
-        {
-            return null;
-        }
+        if (this.Container === null) return null;
 
         this.BindDom();
         this.Cookies = new Cookies();
