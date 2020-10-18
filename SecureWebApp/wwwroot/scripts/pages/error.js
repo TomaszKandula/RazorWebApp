@@ -1,4 +1,4 @@
-﻿// View module to manipulate Virtual DOM
+// View module to manipulate Virtual DOM
 
 "use strict";
 
@@ -15,12 +15,7 @@ export default class ErrorPage
 
     Initialize()
     {
-
-        if (this.Container === null)
-        {
-            return null;
-        }
-
+        if (this.Container === null) return null;
     }
 
 }

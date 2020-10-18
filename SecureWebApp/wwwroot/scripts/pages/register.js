@@ -19,10 +19,7 @@ export default class RegisterPage
     Initialize()
     {
 
-        if (this.Container === null)
-        {
-            return null;
-        }
+        if (this.Container === null) return null;
 
         this.BindDom();
         this.AddEvents();
