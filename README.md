@@ -40,7 +40,11 @@ Connection string have to be setup in __secrets.json__ (SecureWebAapp project):
 }
 ```
 
-The database have only four tables, because this example have already setup database context, one may use SQL script to create tables and populate Cities and Countries from CSV files, all provided here: [Database Examples](https://github.com/TomaszKandula/SecureWebApp/tree/master/DatabaseExamples).
+The database have only four tables, because this example have already setup database context, one may use SQL script to create tables and populate Cities and Countries from CSV files, all provided here: [Database Examples](https://github.com/TomaszKandula/SecureWebApp/tree/master/DatabaseExamples). However, instead of executing SQL, one also may use __migrations__, in Package Manager Console type and execute command:
+
+`update-database`
+
+And EF Core will create database with all necessary tables. Then, we may populate the tables with the script (on localhost).
 
 ## Integration Tests
 
