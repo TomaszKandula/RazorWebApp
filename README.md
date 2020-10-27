@@ -25,6 +25,8 @@ The purpose of this demo application is to present an example of an application 
 
 Unit Tests and Integration Tests are provided using [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions).
 
+Back-end project is relatively small and therefore is not split into sub-projects.
+
 ## Setting-up the database
 
 Connection string have to be setup in __secrets.json__ (SecureWebAapp project):
