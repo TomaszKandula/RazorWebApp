@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SecureWebApp.Database;
+using SecureWebApp.Database.Models;
 
 namespace SecureWebApp.UnitTests.Mocks
 {
