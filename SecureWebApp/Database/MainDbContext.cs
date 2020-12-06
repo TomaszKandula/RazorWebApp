@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SecureWebApp.Database.Models;
 
 namespace SecureWebApp.Database
 {

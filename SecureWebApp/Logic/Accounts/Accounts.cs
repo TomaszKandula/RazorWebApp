@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Database;
+using SecureWebApp.Database.Models;
 using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Logic.Accounts

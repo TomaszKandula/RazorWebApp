@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SecureWebApp.Database
+namespace SecureWebApp.Database.Models
 {
     public class Cities
     {
