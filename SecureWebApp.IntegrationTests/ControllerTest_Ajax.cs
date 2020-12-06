@@ -11,23 +11,19 @@ using SecureWebApp.IntegrationTests.Configuration;
 namespace SecureWebApp.IntegrationTests
 {
 
-    public class AjaxControllerTest : IClassFixture<TestFixture<Startup>>
+    public class ControllerTest_Ajax : IClassFixture<TestFixture<Startup>>
     {
-
-        public class Startup 
-        {        
-        }
 
         private readonly HttpClient FHttpClient;
 
-        public AjaxControllerTest(TestFixture<SecureWebApp.Startup> ACustomFixture)
+        public ControllerTest_Ajax(TestFixture<SecureWebApp.Startup> ACustomFixture)
         {
             FHttpClient = ACustomFixture.Client;
         }
 
         [Theory]
         [InlineData("tokan@wp.pl")]
-        public async Task CheckEmailAsync(string AEmailAddress) 
+        public async Task Should_CheckEmail(string AEmailAddress) 
         {
 
             // Arrange
@@ -51,7 +47,7 @@ namespace SecureWebApp.IntegrationTests
         }
 
         [Fact]
-        public async Task ReturnCountryAsync() 
+        public async Task Should_ReturnCountry() 
         {
 
             // Arrange
@@ -76,7 +72,7 @@ namespace SecureWebApp.IntegrationTests
 
         [Theory]
         [InlineData(1)]
-        public async Task ReturnCityAsync(int ACountryId) 
+        public async Task Should_ReturnCity(int ACountryId) 
         {
 
             // Arrange
@@ -100,7 +96,7 @@ namespace SecureWebApp.IntegrationTests
         }
 
         [Fact]
-        public async Task CreateAccountAsync()
+        public async Task Should_CreateAccount()
         {
 
             // Arrange
@@ -137,7 +133,7 @@ namespace SecureWebApp.IntegrationTests
         }
 
         [Fact]
-        public async Task LogToAccountAsync()
+        public async Task Should_LogToAccount()
         {
 
             // Arrange
