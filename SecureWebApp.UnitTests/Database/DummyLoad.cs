@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using SecureWebApp.Database.Models;
 
-namespace SecureWebApp.UnitTests.Mocks
+namespace SecureWebApp.UnitTests.Database
 {
 
-    public static class DummyData
+    public static class DummyLoad
     {
 
         public static List<Countries> ReturnDummyCountries()

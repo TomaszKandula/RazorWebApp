@@ -6,38 +6,31 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SecureWebApp.Logic.Emails;
+using SecureWebApp.Database;
 using SecureWebApp.Logic.Accounts;
-using SecureWebApp.UnitTests.Mocks;
-using SecureWebApp.Logic.Repository;
 using SecureWebApp.Controllers.Models;
+using SecureWebApp.UnitTests.Database;
 
 namespace SecureWebApp.UnitTests
 {
 
-    public class Startup 
-    {   
-    }
-
-    public class AjaxControllerTest
+    public class LogicTest_Accounts
     {
 
         private readonly Mock<MainDbContext> FMockDbContext;
         private readonly IAccounts   FAccounts;
-        private readonly IEmails     FEmails;
-        private readonly IRepository FRepository;
 
-        public AjaxControllerTest()
+        public LogicTest_Accounts()
         {
 
             // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<MainDbContext>();
 
             // Upload pre-fixed dummy data
-            var LCountriesDbSet = DummyData.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
-            var LCitiesDbSet    = DummyData.ReturnDummyCities().AsQueryable().BuildMockDbSet();
-            var LUsersDbSet     = DummyData.ReturnDummyUsers().AsQueryable().BuildMockDbSet();
-            var LSigninHistory  = DummyData.ReturnSigninHistory().AsQueryable().BuildMockDbSet();
+            var LCountriesDbSet = DummyLoad.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
+            var LCitiesDbSet    = DummyLoad.ReturnDummyCities().AsQueryable().BuildMockDbSet();
+            var LUsersDbSet     = DummyLoad.ReturnDummyUsers().AsQueryable().BuildMockDbSet();
+            var LSigninHistory  = DummyLoad.ReturnSigninHistory().AsQueryable().BuildMockDbSet();
 
             // Populate database tables with dummy data
             FMockDbContext.Setup(AMainDbContext => AMainDbContext.Countries).Returns(LCountriesDbSet.Object);
@@ -47,53 +40,12 @@ namespace SecureWebApp.UnitTests
 
             // Create test instance with mocked dependencies
             FAccounts   = new Accounts(FMockDbContext.Object);
-            FEmails     = new Emails(FMockDbContext.Object);
-            FRepository = new Repository(FMockDbContext.Object);
 
-        }
-
-        [Theory]
-        [InlineData("bob.dylan@gmail.com")]
-        public void IsEmailAddressCorrect_Test(string AEmailAddress)
-        {
-            var LResult = FEmails.IsEmailAddressCorrect(AEmailAddress);
-            LResult.Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("bob.dylan@gmail.com")]
-        public async Task IsEmailAddressExist_Test(string AEmailAddress)
-        {
-            var LResult = await FEmails.IsEmailAddressExist(AEmailAddress);
-            LResult.Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData("tokan@dfds.com")]
-        public async Task IsEmailDomainExist(string AEmailAddress)
-        {
-            var LResult = await FEmails.IsEmailDomainExist(AEmailAddress);
-            LResult.Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(1)]
-        public async Task ReturnCityList_Test(int ACountryId)
-        {
-            var LResult = await FRepository.ReturnCityList(ACountryId);
-            LResult.Should().HaveCount(1);
-        }
-
-        [Fact]
-        public async Task ReturnCountryList_Test()
-        {
-            var LResult = await FRepository.ReturnCountryList();
-            LResult.Any().Should().BeTrue();
         }
 
         [Theory]
         [InlineData("f.mercury@gmail.com", "ThisIsMyPassword$2020")]
-        public async Task SignIn_Test(string AEmailAddr, string APassword)
+        public async Task Should_SignIn(string AEmailAddr, string APassword)
         {
 
             var LResult = await FAccounts.SignIn(AEmailAddr, APassword);
@@ -106,7 +58,7 @@ namespace SecureWebApp.UnitTests
 
         [Theory]
         [InlineData(2, 3, "ester.exposito@gmail.com")]
-        public async Task SignUp_Test(int ACountryId, int ACityId, string AEmailAddress)
+        public async Task Should_SignUp(int ACountryId, int ACityId, string AEmailAddress)
         {
 
             // Arrange
