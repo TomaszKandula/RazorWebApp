@@ -10,16 +10,13 @@ using SecureWebApp.UnitTests.Database;
 
 namespace SecureWebApp.UnitTests
 {
-
     public class LogicTest_Repository
     {
-
         private readonly Mock<MainDbContext> FMockDbContext;
         private readonly IRepository FRepository;
 
         public LogicTest_Repository()
         {
-
             // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<MainDbContext>();
 
@@ -37,7 +34,6 @@ namespace SecureWebApp.UnitTests
 
             // Create test instance with mocked dependencies
             FRepository = new Repository(FMockDbContext.Object);
-
         }
 
         [Theory]
@@ -54,7 +50,5 @@ namespace SecureWebApp.UnitTests
             var LResult = await FRepository.ReturnCountryList();
             LResult.Any().Should().BeTrue();
         }
-
     }
-
 }

@@ -8,10 +8,8 @@ using SecureWebApp.Helpers;
 
 namespace SecureWebApp.Pages
 {
-
     public class IndexModel : PageModel
     {
-
         private readonly IAppLogger FAppLogger;
         private readonly IAntiforgery FAntiforgery;
 
@@ -23,18 +21,13 @@ namespace SecureWebApp.Pages
 
         public IActionResult OnGet()
         {
-
             try 
             {
-
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-
                 var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
                 var LExpiresAt = HttpContext.Session.GetString(Constants.Sessions.KeyNames.ExpiresAt);
-
                 if (!string.IsNullOrEmpty(LSessionId)) 
-                {
-                    
+                {                   
                     var LCookieOptions = new CookieOptions
                     {
                         Path        = "/",
@@ -56,11 +49,9 @@ namespace SecureWebApp.Pages
                      */
 
                     HttpContext.Response.Cookies.Append("SessionId", LSessionId, LCookieOptions);
-
                 }
 
                 return Page();
-
             }
             catch (Exception LException) 
             {
@@ -70,8 +61,6 @@ namespace SecureWebApp.Pages
                 FAppLogger.LogFatality($"[IndexModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
-
         }
-
     }
 }

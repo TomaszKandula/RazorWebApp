@@ -10,16 +10,13 @@ using SecureWebApp.UnitTests.Database;
 
 namespace SecureWebApp.UnitTests
 {
-
     public class LogicTest_Emails
     {
-
         private readonly Mock<MainDbContext> FMockDbContext;
         private readonly IEmails FEmails;
 
         public LogicTest_Emails() 
         {
-
             // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<MainDbContext>();
 
@@ -37,7 +34,6 @@ namespace SecureWebApp.UnitTests
 
             // Create test instance with mocked dependencies
             FEmails = new Emails(FMockDbContext.Object);
-
         }
 
         [Theory]
@@ -63,7 +59,5 @@ namespace SecureWebApp.UnitTests
             var LResult = await FEmails.IsEmailDomainExist(AEmailAddress);
             LResult.Should().BeTrue();
         }
-
     }
-
 }

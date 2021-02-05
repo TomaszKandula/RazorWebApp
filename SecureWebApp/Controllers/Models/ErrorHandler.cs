@@ -4,7 +4,6 @@ namespace SecureWebApp.Controllers.Models
 {
     public class ErrorHandler
     {
-
         [JsonPropertyName("ErrorDesc")]
         public string ErrorDesc { get; set; }
 
@@ -16,7 +15,5 @@ namespace SecureWebApp.Controllers.Models
             ErrorDesc = "n/a";
             ErrorCode = "no_errors_found";
         }
-
     }
-
 }

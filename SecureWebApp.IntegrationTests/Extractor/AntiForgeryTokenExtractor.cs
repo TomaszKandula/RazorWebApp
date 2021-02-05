@@ -6,10 +6,8 @@ using Microsoft.Net.Http.Headers;
 
 namespace SecureWebApp.IntegrationTests.Extractor
 {
-
     public static class AntiForgeryTokenExtractor
     {
-
         public static string AntiForgeryFieldName { get; } = "AntiForgeryTokenField";
         public static string AntiForgeryCookieName { get; } = "AntiForgeryTokenCookie";
 
@@ -22,35 +20,27 @@ namespace SecureWebApp.IntegrationTests.Extractor
 
         private static string ExtractAntiForgeryCookieValueFrom(HttpResponseMessage AResponse)
         {
-
             var LAntiForgeryCookie = AResponse.Headers.GetValues("Set-Cookie").FirstOrDefault(AHeaders => AHeaders.Contains(AntiForgeryCookieName));
-
             if (LAntiForgeryCookie is null)
             {
                 throw new ArgumentException($"Cookie '{AntiForgeryCookieName}' not found in HTTP response", nameof(AResponse));
             }
 
             return SetCookieHeaderValue.Parse(LAntiForgeryCookie).Value.ToString();
-
         }
 
         private static string ExtractAntiForgeryToken(string AHtmlBody)
         {
-
             const string LDataTag = "data-xsrf=\"";
             const int LDataLen = 155;
 
             var LDataValue = AHtmlBody.Substring(AHtmlBody.IndexOf(LDataTag, StringComparison.Ordinal) + LDataTag.Length, LDataLen);
-
             if (!string.IsNullOrWhiteSpace(LDataValue) && !string.IsNullOrEmpty(LDataValue)) 
             {
                 return LDataValue;
             }
 
             throw new ArgumentException($"Anti forgery token '{AntiForgeryFieldName}' not found in HTML", nameof(AHtmlBody));
-
         }
-
     }
-
 }

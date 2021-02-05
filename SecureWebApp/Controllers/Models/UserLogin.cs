@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SecureWebApp.Controllers.Models
 {
-
     public class UserLogin
     {
-
         [JsonPropertyName("EmailAddr")]
         [Required]
         [StringLength(255)]
@@ -17,7 +15,5 @@ namespace SecureWebApp.Controllers.Models
         [Required]
         [StringLength(255)]
         public string Password { get; set; }
-
     }
-
 }

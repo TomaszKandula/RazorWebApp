@@ -7,10 +7,8 @@ using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Logic.Repository
 {
-
     public class Repository : IRepository
     {
-
         private readonly MainDbContext FMainDbContext;
 
         public Repository(MainDbContext AMainDbContext) 
@@ -24,7 +22,6 @@ namespace SecureWebApp.Logic.Repository
         /// <returns></returns>
         public async Task<List<CountryList>> ReturnCountryList()
         {
-
             var LCountries = await FMainDbContext.Countries
                 .AsNoTracking()
                 .Select(ACountries => new CountryList()
@@ -35,7 +32,6 @@ namespace SecureWebApp.Logic.Repository
                 .ToListAsync();
 
             return LCountries;
-
         }
 
         /// <summary>
@@ -45,7 +41,6 @@ namespace SecureWebApp.Logic.Repository
         /// <returns></returns>
         public async Task<List<CityList>> ReturnCityList(int AId)
         {
-
             var LCities = await FMainDbContext.Cities
                 .AsNoTracking()
                 .Where(ACities => ACities.CountryId == AId)
@@ -57,9 +52,6 @@ namespace SecureWebApp.Logic.Repository
                 .ToListAsync();
 
             return LCities;
-
         }
-
     }
-
 }

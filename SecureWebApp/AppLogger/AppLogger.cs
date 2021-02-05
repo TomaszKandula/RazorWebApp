@@ -2,10 +2,8 @@
 
 namespace SecureWebApp.AppLogger
 {
-
     public sealed class AppLogger : IAppLogger
     {
-
         public void LogDebug(string AMessage)
         {
             Log.Debug(AMessage);
@@ -30,7 +28,5 @@ namespace SecureWebApp.AppLogger
         {
             Log.Fatal(AMessage);
         }
-
     }
-
 }

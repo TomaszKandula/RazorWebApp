@@ -6,11 +6,9 @@ using SecureWebApp.AppLogger;
 
 namespace SecureWebApp.Pages
 {
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class ErrorModel : PageModel
     {
-
         private string RequestId { get; set; }
         private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
         private readonly IAppLogger FAppLogger;
@@ -22,12 +20,9 @@ namespace SecureWebApp.Pages
 
         public IActionResult OnGet()
         {
-
             try 
             {
-
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-
                 if (ShowRequestId)
                 {
                     ViewData["RequestId"] = RequestId;
@@ -39,7 +34,6 @@ namespace SecureWebApp.Pages
                 }
 
                 return Page();
-
             }
             catch (Exception LException)
             {
@@ -49,9 +43,6 @@ namespace SecureWebApp.Pages
                 FAppLogger.LogFatality($"[ErrorModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
-
         }
-
     }
-
 }

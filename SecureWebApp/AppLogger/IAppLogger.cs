@@ -1,12 +1,10 @@
 ﻿namespace SecureWebApp.AppLogger
 {
-
     /// <summary>
     /// Logger service that allows to store messages from application.
     /// </summary>
     public interface IAppLogger
     {
-
         /// <summary>
         /// Debug information to log storage with current datetime stamp.
         /// </summary>
@@ -36,7 +34,5 @@
         /// </summary>
         /// <param name="AMessage"></param>
         void LogFatality(string AMessage);
-
     }
-
 }

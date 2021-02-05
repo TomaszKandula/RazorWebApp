@@ -10,10 +10,8 @@ using SecureWebApp.IntegrationTests.Configuration;
 
 namespace SecureWebApp.IntegrationTests
 {
-
     public class ControllerTest_Ajax : IClassFixture<TestFixture<Startup>>
     {
-
         private readonly HttpClient FHttpClient;
 
         public ControllerTest_Ajax(TestFixture<SecureWebApp.Startup> ACustomFixture)
@@ -25,7 +23,6 @@ namespace SecureWebApp.IntegrationTests
         [InlineData("tokan@wp.pl")]
         public async Task Should_CheckEmail(string AEmailAddress) 
         {
-
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
@@ -43,13 +40,11 @@ namespace SecureWebApp.IntegrationTests
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LContent);
             LDeserialized.IsEmailValid.Should().BeFalse();
-
         }
 
         [Fact]
         public async Task Should_ReturnCountry() 
         {
-
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
@@ -67,14 +62,12 @@ namespace SecureWebApp.IntegrationTests
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LContent);
             LDeserialized.Countries.Should().HaveCount(249);
-
         }
 
         [Theory]
         [InlineData(1)]
         public async Task Should_ReturnCity(int ACountryId) 
         {
-
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
@@ -92,13 +85,11 @@ namespace SecureWebApp.IntegrationTests
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LContent);
             LDeserialized.Cities.Should().HaveCount(11);
-
         }
 
         [Fact]
         public async Task Should_CreateAccount()
         {
-
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
@@ -129,13 +120,11 @@ namespace SecureWebApp.IntegrationTests
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LContent);
             LDeserialized.IsUserCreated.Should().BeFalse();
-
         }
 
         [Fact]
         public async Task Should_LogToAccount()
         {
-
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/login");
             var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
@@ -161,9 +150,6 @@ namespace SecureWebApp.IntegrationTests
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LContent);
             LDeserialized.IsLogged.Should().BeTrue();
-
         }
-
     }
-
 }

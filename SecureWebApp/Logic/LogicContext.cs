@@ -5,14 +5,12 @@ using SecureWebApp.Logic.Repository;
 
 namespace SecureWebApp.Logic
 {
-
     public class LogicContext : ILogicContext
     {
-
         private readonly MainDbContext FMainDbContext;
 
-        private IAccounts   FAccounts;
-        private IEmails     FEmails;
+        private IAccounts FAccounts;
+        private IEmails FEmails;
         private IRepository FRepository;
 
         public LogicContext(MainDbContext AMainDbContext) 
@@ -34,7 +32,5 @@ namespace SecureWebApp.Logic
         {
             get { return FRepository ?? (FRepository = new Repository.Repository(FMainDbContext)); }
         }
-
     }
-
 }

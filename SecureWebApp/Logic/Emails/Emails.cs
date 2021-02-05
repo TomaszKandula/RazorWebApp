@@ -1,17 +1,15 @@
-﻿using System;
+﻿using DnsClient;
+using System;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using DnsClient;
 using SecureWebApp.Database;
 
 namespace SecureWebApp.Logic.Emails
 {
-
     public class Emails : IEmails
     {
-
         private readonly MainDbContext FMainDbContext;
 
         public Emails(MainDbContext AMainDbContext) 
@@ -46,7 +44,6 @@ namespace SecureWebApp.Logic.Emails
         /// <returns></returns>
         public async Task<bool> IsEmailAddressExist(string AEmailAddress)
         {
-
             var LEmailList = await FMainDbContext.Users
                 .AsNoTracking()
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddress)
@@ -54,7 +51,6 @@ namespace SecureWebApp.Logic.Emails
                 .ToListAsync();
 
             return LEmailList.Any();
-
         }
 
         /// <summary>
@@ -65,37 +61,31 @@ namespace SecureWebApp.Logic.Emails
         /// <returns></returns>
         public async Task<bool> IsEmailDomainExist(string AEmailAddress) 
         {
-
             try 
             {
-
                 var LLookupClient = new LookupClient();
 
                 var LGetEmailDomain = AEmailAddress.Split("@");
-                var LEmailDomain    = LGetEmailDomain[1];
+                var LEmailDomain = LGetEmailDomain[1];
 
-                var LCheckRecordA    = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
+                var LCheckRecordA = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
                 var LCheckRecordAaaa = await LLookupClient.QueryAsync(LEmailDomain, QueryType.AAAA).ConfigureAwait(false); 
-                var LCheckRecordMx   = await LLookupClient.QueryAsync(LEmailDomain, QueryType.MX).ConfigureAwait(false);
+                var LCheckRecordMx = await LLookupClient.QueryAsync(LEmailDomain, QueryType.MX).ConfigureAwait(false);
 
-                var LRecordA    = LCheckRecordA.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
+                var LRecordA = LCheckRecordA.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
                 var LRecordAaaa = LCheckRecordAaaa.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.AAAA);
-                var LRecordMx   = LCheckRecordMx.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
+                var LRecordMx = LCheckRecordMx.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
 
-                var LIsRecordA    = LRecordA.Any();
+                var LIsRecordA = LRecordA.Any();
                 var LIsRecordAaaa = LRecordAaaa.Any();
-                var LIsRecordMx   = LRecordMx.Any();
+                var LIsRecordMx = LRecordMx.Any();
 
-                return LIsRecordA || LIsRecordAaaa || LIsRecordMx;
-                
+                return LIsRecordA || LIsRecordAaaa || LIsRecordMx;               
             }
             catch (DnsResponseException)
             {
                 return false;
             }
-
         }
-
     }
-
 }
