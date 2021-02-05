@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SecureWebApp.Database.Models
+namespace SecureWebApp.Infrastructure.Domain.Entities
 {
-    public class Users
+    public class Users : Entity<int>
     {
-        public int Id { get; set; }
-
         public int CountryId { get; set; }
 
         public int CityId { get; set; }

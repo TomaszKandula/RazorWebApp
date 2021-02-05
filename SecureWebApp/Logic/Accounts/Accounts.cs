@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Database;
-using SecureWebApp.Database.Models;
 using SecureWebApp.Controllers.Models;
+using SecureWebApp.Infrastructure.Database;
+using SecureWebApp.Infrastructure.Domain.Entities;
 
 namespace SecureWebApp.Logic.Accounts
 {
@@ -24,7 +24,8 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APasswordSalt"></param>
         /// <returns></returns>
         public async Task<int> SignUp(UserCreate APayLoad, int APasswordSalt) 
-        {
+        { 
+       
             var LNewUser = new Users
             { 
                 FirstName   = APayLoad.FirstName,

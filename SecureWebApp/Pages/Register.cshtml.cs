@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Helpers;
-using SecureWebApp.Database;
 using SecureWebApp.AppLogger;
 using SecureWebApp.ViewModel;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.Pages
 {

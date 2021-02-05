@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace SecureWebApp.Migrations
+namespace SecureWebApp.Infrastructure.Database.Migrations
 {
     public partial class NewMigration : Migration
     {

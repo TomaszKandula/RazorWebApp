@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Database;
 using SecureWebApp.ViewModel;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.Logic.Repository
 {

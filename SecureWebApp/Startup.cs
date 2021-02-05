@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
 using SecureWebApp.Logic;
 using SecureWebApp.Helpers;
-using SecureWebApp.Database;
 using SecureWebApp.AppLogger;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SecureWebApp.Database.Models;
+using SecureWebApp.Infrastructure.Domain.Entities;
 
 namespace SecureWebApp.UnitTests.Database
 {
