@@ -2,10 +2,8 @@
 
 namespace SecureWebApp.Logic.Emails
 {
-
     public interface IEmails
     {
-
         /// <summary>
         /// Parse given email address using MailAddress class provided in NET Core.
         /// This is alternative approach to classic RegEx.
@@ -28,7 +26,5 @@ namespace SecureWebApp.Logic.Emails
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
         Task<bool> IsEmailDomainExist(string AEmailAddress);
-
     }
-
 }

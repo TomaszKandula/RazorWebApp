@@ -4,10 +4,8 @@ using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Logic.Accounts
 {
-
     public interface IAccounts
     {
-
         /// <summary>
         /// Perform sign-up action for given PayLoad and Password Salt (recommended value is > 10).
         /// </summary>
@@ -23,7 +21,5 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APassword"></param>
         /// <returns></returns>
         Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword);
-
     }
-
 }

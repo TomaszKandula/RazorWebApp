@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SecureWebApp.Controllers.Models
 {
-
     public class UserCreate
     {
-
         [JsonPropertyName("FirstName")]
         [Required]
         [StringLength(255)]
@@ -42,7 +40,5 @@ namespace SecureWebApp.Controllers.Models
         [Required]
         [Range(1, 1000000)]
         public int CityId { get; set; }
-
     }
-
 }

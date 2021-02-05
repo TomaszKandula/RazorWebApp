@@ -8,10 +8,8 @@ using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Logic.Accounts
 {
-
     public class Accounts : IAccounts
     {
-
         private readonly MainDbContext FMainDbContext;
 
         public Accounts(MainDbContext AMainDbContext) 
@@ -26,8 +24,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APasswordSalt"></param>
         /// <returns></returns>
         public async Task<int> SignUp(UserCreate APayLoad, int APasswordSalt) 
-        { 
-        
+        {
             var LNewUser = new Users
             { 
                 FirstName   = APayLoad.FirstName,
@@ -46,7 +43,6 @@ namespace SecureWebApp.Logic.Accounts
             await FMainDbContext.SaveChangesAsync();
 
             return LNewUser.Id;
-
         }
 
         /// <summary>
@@ -57,7 +53,6 @@ namespace SecureWebApp.Logic.Accounts
         /// <returns></returns>
         public async Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword)
         {
-
             var LUsers = (await FMainDbContext.Users
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddr)
                 .ToListAsync())
@@ -85,10 +80,6 @@ namespace SecureWebApp.Logic.Accounts
             await FMainDbContext.SaveChangesAsync();
 
             return (LSessionId, true);
-
         }
-
-
     }
-
 }

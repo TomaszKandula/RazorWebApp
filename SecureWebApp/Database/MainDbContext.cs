@@ -3,7 +3,6 @@ using SecureWebApp.Database.Models;
 
 namespace SecureWebApp.Database
 {
-
     public class MainDbContext : DbContext
     {
 
@@ -22,7 +21,6 @@ namespace SecureWebApp.Database
 
         protected override void OnModelCreating(ModelBuilder AModelBuilder)
         {
-
             AModelBuilder.Entity<Cities>(AEntity =>
             {
                 AEntity.Property(ACities => ACities.CityName)
@@ -107,9 +105,6 @@ namespace SecureWebApp.Database
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__CountryId__Users");
             });
-       
         }
-
     }
-
 }

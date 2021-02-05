@@ -10,13 +10,11 @@ using SecureWebApp.Controllers.Models;
 
 namespace SecureWebApp.Controllers
 {
-
     [Route("api/v1/[controller]")]
     [ApiController]
     [ResponseCache(CacheProfileName = "ResponseCache")]
     public class AjaxController : Controller
     {
-
         private readonly ILogicContext FLogicContext;
         private readonly IAppLogger FAppLogger;
 
@@ -36,11 +34,9 @@ namespace SecureWebApp.Controllers
         [HttpGet("validation/{aemailaddress}")]
         public async Task<IActionResult> CheckEmailAsync([FromRoute] string AEmailAddress)
         {
-
             var LResponse = new EmailValidation();
             try 
             {
-
                 if (!FLogicContext.Emails.IsEmailAddressCorrect(AEmailAddress)) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.EmailAddressMalformed.ErrorCode;
@@ -67,7 +63,6 @@ namespace SecureWebApp.Controllers
 
                 LResponse.IsEmailValid = true;
                 return StatusCode(200, LResponse);
-
             } 
             catch (Exception LException)
             {
@@ -78,7 +73,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"GET api/v1/ajax/validation/{AEmailAddress} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
         }
 
         /// <summary>
@@ -90,7 +84,6 @@ namespace SecureWebApp.Controllers
         [HttpGet("countries")]
         public async Task<IActionResult> ReturnCountryAsync()
         {
-
             var LResponse = new ReturnCountryList();
             try
             {
@@ -106,7 +99,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"GET api/v1/ajax/countries/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
         }
 
         /// <summary>
@@ -120,7 +112,6 @@ namespace SecureWebApp.Controllers
         // ReSharper disable once InconsistentNaming for query string
         public async Task<IActionResult> ReturnCityAsync([FromQuery] int CountryId) 
         {
-
             var LResponse = new ReturnCityList();
             try 
             {
@@ -136,7 +127,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"GET api/v1/ajax/cities/{CountryId} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
         }
 
         /// <summary>
@@ -149,11 +139,9 @@ namespace SecureWebApp.Controllers
         [HttpPost("users/signup")]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreate APayLoad) 
         {
-
             var LResponse = new UserCreated();
             try
             {
-
                 if (!ModelState.IsValid) 
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
@@ -176,7 +164,6 @@ namespace SecureWebApp.Controllers
                 
                 FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{APayLoad.EmailAddress}' has been successfully registered.");
                 return StatusCode(200, LResponse);
-
             }
             catch (Exception LException)
             {
@@ -187,7 +174,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"POST api/v1/ajax/users/signup/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
         }
 
         /// <summary>
@@ -200,11 +186,9 @@ namespace SecureWebApp.Controllers
         [HttpPost("users/signin")]
         public async Task<IActionResult> LogToAccountAsync([FromBody] UserLogin APayLoad) 
         {
-
             var LResponse = new UserLogged();
             try
             {
-
                 if (!ModelState.IsValid)
                 {
                     LResponse.Error.ErrorCode = Constants.Errors.InvalidPayLoad.ErrorCode;
@@ -238,7 +222,6 @@ namespace SecureWebApp.Controllers
 
                 LResponse.IsLogged  = true;
                 return StatusCode(200, LResponse);
-
             }
             catch (Exception LException)
             {
@@ -249,9 +232,6 @@ namespace SecureWebApp.Controllers
                 FAppLogger.LogFatality($"POST api/v1/ajax/users/signin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
                 return StatusCode(500, LResponse);
             }
-
-        }
-        
+        }      
     }
-
 }

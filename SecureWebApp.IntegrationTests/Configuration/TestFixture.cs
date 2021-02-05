@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 
 namespace SecureWebApp.IntegrationTests.Configuration
 {
-
     public sealed class TestFixture<TStartup> : IDisposable
     {
         private TestServer Server { get; }
@@ -27,54 +26,42 @@ namespace SecureWebApp.IntegrationTests.Configuration
 
         private static string GetProjectPath(string AProjectRelativePath, Assembly AStartupAssembly)
         {
-
             var LProjectName = AStartupAssembly.GetName().Name;
             var LApplicationBasePath = AppContext.BaseDirectory;
             var LDirectoryInfo = new DirectoryInfo(LApplicationBasePath);
 
             do
             {
-
                 LDirectoryInfo = LDirectoryInfo.Parent;
-
                 var LProjectDirectoryInfo = new DirectoryInfo(Path.Combine(LDirectoryInfo.FullName, AProjectRelativePath));
-
                 if (!LProjectDirectoryInfo.Exists) continue;
                 if (new FileInfo(Path.Combine(LProjectDirectoryInfo.FullName, LProjectName, $"{LProjectName}.csproj")).Exists)
                 {
                     return Path.Combine(LProjectDirectoryInfo.FullName, LProjectName);
                 }
-
             }
             while (LDirectoryInfo.Parent != null);
 
             throw new Exception($"Project root could not be located using the application root {LApplicationBasePath}.");
-
         }
 
         private static void InitializeServices(IServiceCollection AServices)
         {
-
             var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
-
             var LManager = new ApplicationPartManager
             {
-
                 ApplicationParts =
                 {
                     new AssemblyPart(LStartupAssembly)
                 },
-
                 FeatureProviders =
                 {
                     new ControllerFeatureProvider(),
                     new ViewComponentFeatureProvider()
                 }
-
             };
 
             AServices.AddSingleton(LManager);
-
         }
 
         public TestFixture() : this(Path.Combine(""))
@@ -83,7 +70,6 @@ namespace SecureWebApp.IntegrationTests.Configuration
 
         private TestFixture(string ARelativeTargetProjectParentDir)
         {
-
             var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
             var LContentRoot = GetProjectPath(ARelativeTargetProjectParentDir, LStartupAssembly);
 
@@ -107,9 +93,6 @@ namespace SecureWebApp.IntegrationTests.Configuration
             Client.BaseAddress = new Uri("http://localhost:5000");
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
         }
-
     }
-
 }

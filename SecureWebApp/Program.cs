@@ -7,7 +7,6 @@ using Serilog.Events;
 
 namespace SecureWebApp
 {
-
     public static class Program
     {
         private static IWebHostBuilder CreateWebHostBuilder(string[] AArgs) =>
@@ -15,7 +14,6 @@ namespace SecureWebApp
 
         public static int Main(string[] AArgs)
         {
-
             var LOgsPath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(LOgsPath))
             {
@@ -50,9 +48,6 @@ namespace SecureWebApp
             {
                 Log.CloseAndFlush();
             }
-
         }
-
     }
-
 }

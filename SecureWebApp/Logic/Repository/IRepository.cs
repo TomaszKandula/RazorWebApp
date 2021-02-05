@@ -4,10 +4,8 @@ using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Logic.Repository
 {
-
     public interface IRepository
     {
-
         /// <summary>
         /// Return list of all available countries.
         /// </summary>
@@ -20,7 +18,5 @@ namespace SecureWebApp.Logic.Repository
         /// <param name="AId"></param>
         /// <returns></returns>
         Task<List<CityList>> ReturnCityList(int AId);
-
     }
-
 }

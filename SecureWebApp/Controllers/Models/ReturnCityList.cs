@@ -4,10 +4,8 @@ using SecureWebApp.ViewModel;
 
 namespace SecureWebApp.Controllers.Models
 {
-
     public class ReturnCityList
     {
-
         [JsonPropertyName("Cities")]
         public List<CityList> Cities { get; set; }
 
@@ -18,7 +16,5 @@ namespace SecureWebApp.Controllers.Models
         {
             Error = new ErrorHandler();
         }
-
     }
-
 }
