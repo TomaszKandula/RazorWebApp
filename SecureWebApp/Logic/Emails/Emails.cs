@@ -4,14 +4,12 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DnsClient;
-using SecureWebApp.Database;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.Logic.Emails
 {
-
     public class Emails : IEmails
     {
-
         private readonly MainDbContext FMainDbContext;
 
         public Emails(MainDbContext AMainDbContext) 
@@ -46,7 +44,6 @@ namespace SecureWebApp.Logic.Emails
         /// <returns></returns>
         public async Task<bool> IsEmailAddressExist(string AEmailAddress)
         {
-
             var LEmailList = await FMainDbContext.Users
                 .AsNoTracking()
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddress)
@@ -54,7 +51,6 @@ namespace SecureWebApp.Logic.Emails
                 .ToListAsync();
 
             return LEmailList.Any();
-
         }
 
         /// <summary>
@@ -65,14 +61,12 @@ namespace SecureWebApp.Logic.Emails
         /// <returns></returns>
         public async Task<bool> IsEmailDomainExist(string AEmailAddress) 
         {
-
             try 
             {
-
                 var LLookupClient = new LookupClient();
 
                 var LGetEmailDomain = AEmailAddress.Split("@");
-                var LEmailDomain    = LGetEmailDomain[1];
+                var LEmailDomain = LGetEmailDomain[1];
 
                 var LCheckRecordA    = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
                 var LCheckRecordAaaa = await LLookupClient.QueryAsync(LEmailDomain, QueryType.AAAA).ConfigureAwait(false); 

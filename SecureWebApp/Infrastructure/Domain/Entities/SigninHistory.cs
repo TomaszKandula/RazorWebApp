@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace SecureWebApp.Database.Models
+namespace SecureWebApp.Infrastructure.Domain.Entities
 {
-    public class SigninHistory
+    public class SigninHistory : Entity<int>
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
+
         public DateTime LoggedAt { get; set; }
 
         public virtual Users User { get; set; }

@@ -6,10 +6,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SecureWebApp.Database;
 using SecureWebApp.Logic.Accounts;
 using SecureWebApp.Controllers.Models;
 using SecureWebApp.UnitTests.Database;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.UnitTests
 {

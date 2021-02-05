@@ -5,9 +5,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SecureWebApp.Database;
 
-namespace SecureWebApp.Migrations
+namespace SecureWebApp.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(MainDbContext))]
     [Migration("20201018113541_NewMigration")]

@@ -2,16 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Database;
-using SecureWebApp.Database.Models;
 using SecureWebApp.Controllers.Models;
+using SecureWebApp.Infrastructure.Database;
+using SecureWebApp.Infrastructure.Domain.Entities;
 
 namespace SecureWebApp.Logic.Accounts
 {
-
     public class Accounts : IAccounts
     {
-
         private readonly MainDbContext FMainDbContext;
 
         public Accounts(MainDbContext AMainDbContext) 
@@ -27,7 +25,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <returns></returns>
         public async Task<int> SignUp(UserCreate APayLoad, int APasswordSalt) 
         { 
-        
+       
             var LNewUser = new Users
             { 
                 FirstName   = APayLoad.FirstName,
@@ -46,7 +44,6 @@ namespace SecureWebApp.Logic.Accounts
             await FMainDbContext.SaveChangesAsync();
 
             return LNewUser.Id;
-
         }
 
         /// <summary>
@@ -57,7 +54,6 @@ namespace SecureWebApp.Logic.Accounts
         /// <returns></returns>
         public async Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword)
         {
-
             var LUsers = (await FMainDbContext.Users
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddr)
                 .ToListAsync())
@@ -85,10 +81,6 @@ namespace SecureWebApp.Logic.Accounts
             await FMainDbContext.SaveChangesAsync();
 
             return (LSessionId, true);
-
         }
-
-
     }
-
 }

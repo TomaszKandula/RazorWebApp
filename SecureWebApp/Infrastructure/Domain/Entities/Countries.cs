@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace SecureWebApp.Database.Models
+namespace SecureWebApp.Infrastructure.Domain.Entities
 {
-    public class Countries
+    public class Countries : Entity<int>
     {
-
-        public int Id { get; set; }
         public string CountryName { get; set; }
+
         public string CountryCode { get; set; }
 
         public virtual ICollection<Cities> Cities { get; set; } = new HashSet<Cities>();
+
         public virtual ICollection<Users> Users { get; set; } = new HashSet<Users>();
     }
 }

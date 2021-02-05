@@ -4,9 +4,9 @@ using FluentAssertions;
 using MockQueryable.Moq;
 using System.Linq;
 using System.Threading.Tasks;
-using SecureWebApp.Database;
 using SecureWebApp.Logic.Emails;
 using SecureWebApp.UnitTests.Database;
+using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.UnitTests
 {
