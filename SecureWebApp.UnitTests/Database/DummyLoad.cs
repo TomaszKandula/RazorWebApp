@@ -4,70 +4,55 @@ using SecureWebApp.Infrastructure.Domain.Entities;
 
 namespace SecureWebApp.UnitTests.Database
 {
-
     public static class DummyLoad
     {
-
         public static List<Countries> ReturnDummyCountries()
         {
-
             var LCountries = new List<Countries>()
             {
-
                 new Countries 
                 { 
                     CountryName = "Poland",
                     CountryCode = "POL"
                 },
-
                 new Countries
                 {
                     CountryName = "Spain",
                     CountryCode = "ESP"
                 }
-
             };
 
             return LCountries;
-
         }
 
         public static List<Cities> ReturnDummyCities() 
         {
-
             var LCitises = new List<Cities>() 
             {  
-
                 new Cities
                 { 
                     CityName = "Poznan",
                     CountryId = 1               
                 },
-
                 new Cities
                 {
                     CityName = "Barcelona",
                     CountryId = 2
                 },
-
                 new Cities
                 {
                     CityName = "Madrid",
                     CountryId = 2
                 }
-
             };
 
             return LCitises;
-
         }
 
         public static List<Users> ReturnDummyUsers() 
         {
-
             var LUsers = new List<Users>()
             {
-
                 new Users
                 {
                     FirstName   = "Bob",
@@ -81,7 +66,6 @@ namespace SecureWebApp.UnitTests.Database
                     CityId      = 1,
                     CountryId   = 1
                 },
-
                 new Users
                 {
                     FirstName   = "Freddie",
@@ -95,37 +79,28 @@ namespace SecureWebApp.UnitTests.Database
                     CityId      = 1,
                     CountryId   = 1
                 }
-
             };
 
             return LUsers;
-
         }
 
         public static List<SigninHistory> ReturnSigninHistory() 
         {
-
             var LSigninHistory = new List<SigninHistory>()
-            {
-                
+            {               
                 new SigninHistory
                 { 
                     UserId   = 1,
                     LoggedAt = DateTime.Parse("2020-07-30 15:30:00")
                 },
-
                 new SigninHistory
                 {
                     UserId   = 2,
                     LoggedAt = DateTime.Parse("2020-07-05 11:30:00")
                 }
-
             };
 
             return LSigninHistory;
-
         }
-
     }
-
 }

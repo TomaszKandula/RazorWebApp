@@ -14,10 +14,8 @@ using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp
 {
-
     public class Startup
     {
-
         private readonly IConfiguration FConfiguration;
 
         public Startup(IConfiguration AConfiguration) 
@@ -27,7 +25,6 @@ namespace SecureWebApp
 
         public void ConfigureServices(IServiceCollection AServices)
         {
-
             AServices.AddMvc(AOption => AOption.CacheProfiles
                 .Add("ResponseCache", new CacheProfile
                 {
@@ -49,19 +46,16 @@ namespace SecureWebApp
 
             AServices.AddSingleton<IAppLogger, AppLogger.AppLogger>();
             AServices.AddDbContext<MainDbContext>(AOptions => AOptions.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AAddOptions => AAddOptions.EnableRetryOnFailure()));
-
             AServices.AddScoped<ILogicContext, LogicContext>();
 
             AServices.AddResponseCompression(AOptions =>
             {
                 AOptions.Providers.Add<GzipCompressionProvider>();
             });
-
         }
 
         public void Configure(IApplicationBuilder AApplication, IWebHostEnvironment AEnvironment)
         {
-
             AApplication.UseResponseCompression();
 
             if (AEnvironment.IsDevelopment())
@@ -83,9 +77,6 @@ namespace SecureWebApp
                 AEndpoints.MapRazorPages();
                 AEndpoints.MapControllers();
             });
-
         }
-
     }
-
 }

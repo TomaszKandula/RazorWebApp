@@ -2,10 +2,8 @@
 
 namespace SecureWebApp.Controllers.Models
 {
-
     public class UserCreated
     {
-
         [JsonPropertyName("IsUserCreated")]
         public bool IsUserCreated { get; set; }
 
@@ -19,7 +17,5 @@ namespace SecureWebApp.Controllers.Models
         {
             Error = new ErrorHandler();
         }
-
     }
-
 }

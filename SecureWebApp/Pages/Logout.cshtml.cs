@@ -7,10 +7,8 @@ using SecureWebApp.AppLogger;
 
 namespace SecureWebApp.Pages
 {
-
     public class LogoutModel : PageModel
     {
-
         private readonly IAppLogger FAppLogger;
 
         public LogoutModel(IAppLogger AAppLogger)
@@ -20,12 +18,9 @@ namespace SecureWebApp.Pages
 
         public IActionResult OnGet()
         {
-
             try 
             {
-
                 var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
-
                 if (!string.IsNullOrEmpty(LSessionId))
                 {
                     HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, string.Empty);
@@ -38,7 +33,6 @@ namespace SecureWebApp.Pages
                 }
 
                 return Page();
-
             }
             catch (Exception LException)
             {
@@ -48,9 +42,6 @@ namespace SecureWebApp.Pages
                 FAppLogger.LogFatality($"[LogoutModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
-
         }
-
     }
-
 }

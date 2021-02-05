@@ -8,10 +8,8 @@ using SecureWebApp.AppLogger;
 
 namespace SecureWebApp.Pages
 {
-
     public class LoginModel : PageModel
     {
-
         private readonly IAppLogger FAppLogger;
         private readonly IAntiforgery FAntiforgery;
 
@@ -23,20 +21,16 @@ namespace SecureWebApp.Pages
 
         public IActionResult OnGet()
         {
-
             try 
             {
-
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
-
                 if (!string.IsNullOrEmpty(LLoggedUser)) 
                 {
                     return RedirectToPage("./Index");
                 }
 
                 return Page();
-
             }
             catch (Exception LException)
             {
@@ -46,9 +40,6 @@ namespace SecureWebApp.Pages
                 FAppLogger.LogFatality($"[LoginModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
-
         }
-
     }
-
 }

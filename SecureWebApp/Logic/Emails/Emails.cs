@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DnsClient;
+using System;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -68,28 +69,24 @@ namespace SecureWebApp.Logic.Emails
                 var LGetEmailDomain = AEmailAddress.Split("@");
                 var LEmailDomain = LGetEmailDomain[1];
 
-                var LCheckRecordA    = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
+                var LCheckRecordA = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
                 var LCheckRecordAaaa = await LLookupClient.QueryAsync(LEmailDomain, QueryType.AAAA).ConfigureAwait(false); 
-                var LCheckRecordMx   = await LLookupClient.QueryAsync(LEmailDomain, QueryType.MX).ConfigureAwait(false);
+                var LCheckRecordMx = await LLookupClient.QueryAsync(LEmailDomain, QueryType.MX).ConfigureAwait(false);
 
-                var LRecordA    = LCheckRecordA.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
+                var LRecordA = LCheckRecordA.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
                 var LRecordAaaa = LCheckRecordAaaa.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.AAAA);
-                var LRecordMx   = LCheckRecordMx.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
+                var LRecordMx = LCheckRecordMx.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
 
-                var LIsRecordA    = LRecordA.Any();
+                var LIsRecordA = LRecordA.Any();
                 var LIsRecordAaaa = LRecordAaaa.Any();
-                var LIsRecordMx   = LRecordMx.Any();
+                var LIsRecordMx = LRecordMx.Any();
 
-                return LIsRecordA || LIsRecordAaaa || LIsRecordMx;
-                
+                return LIsRecordA || LIsRecordAaaa || LIsRecordMx;               
             }
             catch (DnsResponseException)
             {
                 return false;
             }
-
         }
-
     }
-
 }

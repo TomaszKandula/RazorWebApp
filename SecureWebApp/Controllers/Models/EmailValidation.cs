@@ -1,11 +1,9 @@
 using System.Text.Json.Serialization;
 
 namespace SecureWebApp.Controllers.Models
-{
-    
+{   
     public class EmailValidation
     {
-
         [JsonPropertyName("IsEmailValid")]
         public bool IsEmailValid { get; set; }
 
@@ -16,7 +14,5 @@ namespace SecureWebApp.Controllers.Models
         {
             Error = new ErrorHandler();
         }
-
     }
-
 }

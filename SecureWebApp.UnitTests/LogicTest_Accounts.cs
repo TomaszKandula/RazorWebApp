@@ -13,16 +13,13 @@ using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.UnitTests
 {
-
     public class LogicTest_Accounts
     {
-
         private readonly Mock<MainDbContext> FMockDbContext;
         private readonly IAccounts   FAccounts;
 
         public LogicTest_Accounts()
         {
-
             // Create instances to mocked all dependencies           
             FMockDbContext = new Mock<MainDbContext>();
 
@@ -40,27 +37,23 @@ namespace SecureWebApp.UnitTests
 
             // Create test instance with mocked dependencies
             FAccounts   = new Accounts(FMockDbContext.Object);
-
         }
 
         [Theory]
         [InlineData("f.mercury@gmail.com", "ThisIsMyPassword$2020")]
         public async Task Should_SignIn(string AEmailAddr, string APassword)
         {
-
             var LResult = await FAccounts.SignIn(AEmailAddr, APassword);
             var LIsGuidEmpty = LResult.Item1 == Guid.Empty;
 
             LIsGuidEmpty.Should().BeFalse();
             LResult.Item2.Should().BeTrue();
-
         }
 
         [Theory]
         [InlineData(2, 3, "ester.exposito@gmail.com")]
         public async Task Should_SignUp(int ACountryId, int ACityId, string AEmailAddress)
         {
-
             // Arrange
             var LPayLoad = new UserCreate
             {
@@ -78,9 +71,6 @@ namespace SecureWebApp.UnitTests
 
             // Verify action
             FMockDbContext.Verify(AMainDbContext => AMainDbContext.SaveChangesAsync(CancellationToken.None), Times.Once);
-
         }
-
     }
-
 }

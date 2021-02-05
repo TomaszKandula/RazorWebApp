@@ -2,10 +2,8 @@
 
 namespace SecureWebApp.Controllers.Models
 {
-
     public class ReturnSessionState
     {
-
         [JsonPropertyName("IsSessionAlive")]
         public bool IsSessionAlive { get; set; }
 
@@ -16,7 +14,5 @@ namespace SecureWebApp.Controllers.Models
         {
             Error = new ErrorHandler();
         }
-
     }
-
 }

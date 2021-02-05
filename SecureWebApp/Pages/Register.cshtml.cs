@@ -14,30 +14,26 @@ using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.Pages
 {
-
     public class RegisterModel : PageModel
     {
-
-        private readonly IAppLogger    FAppLogger;
+        private readonly IAppLogger FAppLogger;
         private readonly MainDbContext FMainDbContext;
-        private readonly IAntiforgery  FAntiforgery;
+        private readonly IAntiforgery FAntiforgery;
 
         [BindProperty]
         public List<CountryList> CountryList { get; set; }
 
         public RegisterModel(IAppLogger AAppLogger, MainDbContext AMainDbContext, IAntiforgery AAntiforgery)
         {
-            FAppLogger     = AAppLogger;
+            FAppLogger = AAppLogger;
             FMainDbContext = AMainDbContext;
-            FAntiforgery   = AAntiforgery;
+            FAntiforgery = AAntiforgery;
         }
 
         public async Task<IActionResult> OnGet()
         {
-
             try
             {
-
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
                 var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
 
@@ -61,9 +57,7 @@ namespace SecureWebApp.Pages
                 }
 
                 ViewData["CountryList"] = LHtmlList;
-
-                return Page();
-            
+                return Page();           
             }
             catch (Exception LException) 
             {
@@ -73,9 +67,6 @@ namespace SecureWebApp.Pages
                 FAppLogger.LogFatality($"[RegisterModel.OnGet]: an error has been thrown: {LErrorDesc}.");
                 throw;
             }
-
         }
-
     }
-
 }

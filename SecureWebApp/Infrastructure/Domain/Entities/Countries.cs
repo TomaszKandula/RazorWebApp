@@ -6,6 +6,7 @@ namespace SecureWebApp.Infrastructure.Domain.Entities
     {
         public string CountryName { get; set; }
 
+
         public string CountryCode { get; set; }
 
         public virtual ICollection<Cities> Cities { get; set; } = new HashSet<Cities>();
