@@ -46,7 +46,7 @@ Migrate the database by executing following command:
 
 `Update-Database -StartupProject SecureWebApp -Project SecureWebApp -Context MainDbContext`
 
-EF Core will create database with all necessary tables. Then, to populate Cities and Countries tables with large dataset, use separate [SQL script](https://github.com/TomaszKandula/SecureWebApp/blob/master/CsvData/ImportCsvToDatabase.sql) to import it from local file to your local database.
+EF Core will create database with all necessary tables. Then, to populate Cities and Countries tables with large dataset, use separate [SQL script](https://github.com/TomaszKandula/RazorWebApp/blob/master/CsvData/ImportCsvToDatabase.sql) to import it from local file to your local database.
 
 ## Integration Tests
 
