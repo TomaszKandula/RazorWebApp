@@ -18,7 +18,7 @@ The idea behind this Razor Pages application is to build small web application u
 1. Vanilla JavaScript with AJAX.
 1. WebPack module bundler.
 
-User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean it and easy to maintain, such approach produces large overhead and it is not recommended for large production applications.
+User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean it and easy to maintain, such approach produces large overhead and it is not recommended for production.
 
 ### Back-end
 
