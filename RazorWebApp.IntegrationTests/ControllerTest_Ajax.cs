@@ -4,6 +4,7 @@ using FluentAssertions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
+using RazorWebApp.TestData;
 using RazorWebApp.Shared.Dto;
 using RazorWebApp.IntegrationTests.Extractor;
 using RazorWebApp.IntegrationTests.Configuration;
@@ -37,9 +38,7 @@ namespace RazorWebApp.IntegrationTests
             var LContent = await LResponse.Content.ReadAsStringAsync();
 
             // Assert
-            LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<EmailValidationDto>(LContent);
-            LDeserialized.IsEmailValid.Should().BeFalse();
+            LResponse.StatusCode.Should().Be(204);
         }
 
         [Fact]
@@ -102,28 +101,24 @@ namespace RazorWebApp.IntegrationTests
 
             var LPayLoad = new UserCreateDto()
             {
-                FirstName    = "John",
-                LastName     = "Deer",
-                NickName     = "Deer",
-                EmailAddress = "johnny.d@gmail.com",
-                Password     = "johnny123456789",
+                FirstName    = DataProvider.GetRandomString(),
+                LastName     = DataProvider.GetRandomString(),
+                NickName     = DataProvider.GetRandomString(),
+                EmailAddress = DataProvider.GetRandomEmail(),
+                Password     = DataProvider.GetRandomString(),
                 CityId       = 187,
                 CountryId    = 47
             };
 
             LNewRequest.Content = new StringContent(JsonConvert.SerializeObject(LPayLoad), System.Text.Encoding.Default, "application/json");
-
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
-            var LContent = await LResponse.Content.ReadAsStringAsync();
 
             // Assert
-            LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<UserCreatedDto>(LContent);
-            LDeserialized.IsUserCreated.Should().BeFalse();
+            LResponse.StatusCode.Should().Be(204);
         }
 
         [Fact]
-        public async Task Should_LogToAccount()
+        public async Task Should_FailLogToAccount()
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/login");
@@ -137,19 +132,15 @@ namespace RazorWebApp.IntegrationTests
 
             var LPayLoad = new UserLoginDto()
             {
-                EmailAddr = "tokan@dfds.com",
-                Password  = "Timex#099#"
+                EmailAddr = DataProvider.GetRandomEmail(),
+                Password  = DataProvider.GetRandomString()
             };
 
             LNewRequest.Content = new StringContent(JsonConvert.SerializeObject(LPayLoad), System.Text.Encoding.Default, "application/json");
-
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
-            var LContent = await LResponse.Content.ReadAsStringAsync();
 
             // Assert
-            LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<UserLoggedDto>(LContent);
-            LDeserialized.IsLogged.Should().BeTrue();
+            LResponse.StatusCode.Should().Be(400);
         }
     }
 }
