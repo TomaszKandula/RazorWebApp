@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using SecureWebApp.Shared.Dto;
 
@@ -12,7 +13,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
         /// <returns></returns>
-        Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt);
+        Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt, CancellationToken ACancellationToken = default);
 
         /// <summary>
         /// Perform sign-in action and log it to the history table.
@@ -20,6 +21,6 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
         /// <returns></returns>
-        Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword);
+        Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default);
     }
 }

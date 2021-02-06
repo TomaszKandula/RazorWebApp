@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using SecureWebApp.Logic;
 using SecureWebApp.Logger;
 using SecureWebApp.Shared;
+using SecureWebApp.Exceptions;
 using SecureWebApp.Shared.Dto;
 using SecureWebApp.Shared.Resources;
 
@@ -35,44 +36,47 @@ namespace SecureWebApp.Controllers
         [HttpGet("validation/{aemailaddress}")]
         public async Task<IActionResult> CheckEmailAsync([FromRoute] string AEmailAddress)
         {
-            var LResponse = new EmailValidationDto();
             try 
             {
                 if (!FLogicContext.Emails.IsEmailAddressCorrect(AEmailAddress)) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.EMAIL_ADDRESS_MALFORMED);
-                    LResponse.Error.ErrorDesc = ErrorCodes.EMAIL_ADDRESS_MALFORMED;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogWarn(ErrorCodes.EMAIL_ADDRESS_MALFORMED);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.EMAIL_ADDRESS_MALFORMED),
+                        ErrorDesc = ErrorCodes.EMAIL_ADDRESS_MALFORMED
+                    });
                 }
                
                 if (await FLogicContext.Emails.IsEmailAddressExist(AEmailAddress)) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.EMAIL_ALREADY_EXISTS);
-                    LResponse.Error.ErrorDesc = ErrorCodes.EMAIL_ALREADY_EXISTS;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogWarn(ErrorCodes.EMAIL_ALREADY_EXISTS);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.EMAIL_ALREADY_EXISTS),
+                        ErrorDesc = ErrorCodes.EMAIL_ALREADY_EXISTS
+                    });
                 }
 
                 if (!await FLogicContext.Emails.IsEmailDomainExist(AEmailAddress)) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS);
-                    LResponse.Error.ErrorDesc = ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS;
-                    FAppLogger.LogWarn($"GET api/v1/ajax/validation/{AEmailAddress}. {LResponse.Error.ErrorDesc}.");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogWarn(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS);
+                    return StatusCode(400, new ErrorHandlerDto() 
+                    {
+                        ErrorCode = nameof(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS),
+                        ErrorDesc = ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS
+                    });
                 }
 
-                LResponse.IsEmailValid = true;
-                return StatusCode(200, LResponse);
+                return StatusCode(200, new EmailValidationDto() 
+                { 
+                    IsEmailValid = true 
+                });
             } 
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                LResponse.Error.ErrorCode = LException.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/validation/{AEmailAddress} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(AException));
             }
         }
 
@@ -85,20 +89,17 @@ namespace SecureWebApp.Controllers
         [HttpGet("countries")]
         public async Task<IActionResult> ReturnCountryAsync()
         {
-            var LResponse = new ReturnCountryListDto();
             try
             {
-                LResponse.Countries = await FLogicContext.Repository.ReturnCountryList();
-                return StatusCode(200, LResponse);
+                return StatusCode(200, new ReturnCountryListDto 
+                { 
+                    Countries = await FLogicContext.Repository.ReturnCountryList() 
+                });
             }
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                LResponse.Error.ErrorCode = LException.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/countries/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(AException));
             }
         }
 
@@ -113,20 +114,17 @@ namespace SecureWebApp.Controllers
         // ReSharper disable once InconsistentNaming for query string
         public async Task<IActionResult> ReturnCityAsync([FromQuery] int CountryId) 
         {
-            var LResponse = new ReturnCityListDto();
             try 
             {
-                LResponse.Cities = await FLogicContext.Repository.ReturnCityList(CountryId);
-                return StatusCode(200, LResponse);
+                return StatusCode(200, new ReturnCityListDto 
+                { 
+                    Cities = await FLogicContext.Repository.ReturnCityList(CountryId) 
+                });
             } 
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                LResponse.Error.ErrorCode = LException.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"GET api/v1/ajax/cities/{CountryId} | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(AException));
             }
         }
 
@@ -140,40 +138,39 @@ namespace SecureWebApp.Controllers
         [HttpPost("users/signup")]
         public async Task<IActionResult> CreateAccountAsync([FromBody] UserCreateDto APayLoad) 
         {
-            var LResponse = new UserCreatedDto();
             try
             {
                 if (!ModelState.IsValid) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.INVALID_PAYLOAD);
-                    LResponse.Error.ErrorDesc = ErrorCodes.INVALID_PAYLOAD;
-                    FAppLogger.LogError($"POST api/v1/ajax/users/signup/. {LResponse.Error.ErrorDesc}.");
-                    LResponse.IsUserCreated = false;
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogError(ErrorCodes.INVALID_PAYLOAD);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.INVALID_PAYLOAD),
+                        ErrorDesc = ErrorCodes.INVALID_PAYLOAD
+                    });
                 }
 
                 if (await FLogicContext.Emails.IsEmailAddressExist(APayLoad.EmailAddress))
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.EMAIL_ALREADY_EXISTS);
-                    LResponse.Error.ErrorDesc = ErrorCodes.EMAIL_ALREADY_EXISTS;
-                    FAppLogger.LogWarn($"POST api/v1/ajax/users/signup/. {LResponse.Error.ErrorDesc}");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogWarn(ErrorCodes.EMAIL_ALREADY_EXISTS);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.EMAIL_ALREADY_EXISTS),
+                        ErrorDesc = ErrorCodes.EMAIL_ALREADY_EXISTS
+                    });
                 }
-
-                LResponse.UserId = await FLogicContext.Accounts.SignUp(APayLoad, 12);
-                LResponse.IsUserCreated = true;
-                
-                FAppLogger.LogInfo($"POST api/v1/ajax/users/signup/ | New user '{APayLoad.EmailAddress}' has been successfully registered.");
-                return StatusCode(200, LResponse);
+               
+                FAppLogger.LogInfo($"New user '{APayLoad.EmailAddress}' has been successfully registered.");               
+                return StatusCode(200, new UserCreatedDto 
+                {
+                    UserId = await FLogicContext.Accounts.SignUp(APayLoad, 12),
+                    IsUserCreated = true
+                });
             }
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                LResponse.Error.ErrorCode = LException.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/users/signup/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(AException));
             }
         }
 
@@ -187,51 +184,55 @@ namespace SecureWebApp.Controllers
         [HttpPost("users/signin")]
         public async Task<IActionResult> LogToAccountAsync([FromBody] UserLoginDto APayLoad) 
         {
-            var LResponse = new UserLoggedDto();
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.INVALID_PAYLOAD);
-                    LResponse.Error.ErrorDesc = ErrorCodes.INVALID_PAYLOAD;
-                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
-                    LResponse.IsLogged = false;
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogError(ErrorCodes.INVALID_PAYLOAD);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.INVALID_PAYLOAD),
+                        ErrorDesc = ErrorCodes.INVALID_PAYLOAD
+                    });
                 }
 
                 var (LSessionId, LIsSignedIn) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
 
                 if (LSessionId == Guid.Empty && LIsSignedIn) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.INVALID_CREDENTIALS);
-                    LResponse.Error.ErrorDesc = ErrorCodes.INVALID_CREDENTIALS;
-                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogError(ErrorCodes.INVALID_CREDENTIALS);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.INVALID_CREDENTIALS),
+                        ErrorDesc = ErrorCodes.INVALID_CREDENTIALS
+                    });
                 }
 
                 if (!LIsSignedIn) 
                 {
-                    LResponse.Error.ErrorCode = nameof(ErrorCodes.ACCOUNT_NOT_ACTIVATED);
-                    LResponse.Error.ErrorDesc = ErrorCodes.ACCOUNT_NOT_ACTIVATED;
-                    FAppLogger.LogError($"POST api/v1/ajax/users/signin/. {LResponse.Error.ErrorDesc}.");
-                    return StatusCode(400, LResponse);
+                    FAppLogger.LogError(ErrorCodes.ACCOUNT_NOT_ACTIVATED);
+                    return StatusCode(400, new ErrorHandlerDto 
+                    {
+                        ErrorCode = nameof(ErrorCodes.ACCOUNT_NOT_ACTIVATED),
+                        ErrorDesc = ErrorCodes.ACCOUNT_NOT_ACTIVATED
+                    });
                 }
 
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, LSessionId.ToString());
                 HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, APayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now.AddMinutes(Constants.Sessions.IdleTimeout).ToString(CultureInfo.InvariantCulture));
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now
+                    .AddMinutes(Constants.Sessions.IdleTimeout)
+                    .ToString(CultureInfo.InvariantCulture));
 
-                LResponse.IsLogged  = true;
-                return StatusCode(200, LResponse);
+                return StatusCode(200, new UserLoggedDto 
+                { 
+                    IsLogged = true 
+                });
             }
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                LResponse.Error.ErrorCode = LException.HResult.ToString();
-                LResponse.Error.ErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"POST api/v1/ajax/users/signin/ | Error has been raised while processing request. Message: {LResponse.Error.ErrorDesc}.");
-                return StatusCode(500, LResponse);
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(AException));
             }
         }      
     }

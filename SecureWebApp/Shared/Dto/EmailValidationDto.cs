@@ -6,8 +6,5 @@ namespace SecureWebApp.Shared.Dto
     {
         [JsonPropertyName("IsEmailValid")]
         public bool IsEmailValid { get; set; }
-
-        [JsonPropertyName("Error")]
-        public ErrorHandlerDto Error { get; set; } = new ErrorHandlerDto();
     }
 }
