@@ -11,7 +11,7 @@ export default class RestClient
 
     Execute(AMethod, AUrl, APayLoad, ACallback)
     {
-        let LRequest = new XMLHttpRequest();
+        const LRequest = new XMLHttpRequest();
         try
         {
             LRequest.open(AMethod, AUrl, true);
@@ -20,14 +20,7 @@ export default class RestClient
 
             LRequest.onload = function ()
             {
-                if (this.status >= 200 && this.status < 400)
-                {
-                    ACallback(this.response, this.status);
-                }
-                else
-                {
-                    ACallback(null, this.status);
-                }
+                ACallback(this.response, this.status);
             };
 
             LRequest.onerror = function ()
@@ -35,21 +28,19 @@ export default class RestClient
                 ACallback(null, this.status);
             };
 
-            let LMethod = AMethod.toUpperCase();
+            const LMethod = AMethod.toUpperCase();
 
             if (LMethod === "GET" || LMethod === "DELETE")
             {
                 LRequest.send();
             }
-
-            if (LMethod === "PUT" || LMethod === "POST" || LMethod === "PATCH")
+            else if (LMethod === "PUT" || LMethod === "POST" || LMethod === "PATCH")
             {
                 LRequest.send(APayLoad);
             }
         }
         catch (Error)
         {
-            alert(`An error occured during execution: ${Error.message}`);
             console.error(`[RestClient].[Execute]: An error has been thrown: ${Error.message}`);
         }
     }

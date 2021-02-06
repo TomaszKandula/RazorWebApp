@@ -33,12 +33,12 @@ export default class LoginPage
 
     Render_Buttons()
     {
-        let MoveToRegisterPage = function () 
+        const MoveToRegisterPage = function () 
         { 
             window.location.replace(`${window.location.origin}/register`) 
         };
         
-        let MoveToLoginPage = function () 
+        const MoveToLoginPage = function () 
         { 
             window.location.replace(`${window.location.origin}/login`) 
         };
@@ -163,52 +163,37 @@ export default class LoginPage
         this.DisableFields(false);
         this.SigninHandle.classList.remove("is-loading");
         this.SigninButton.disabled = false;
-
-        if (StatusCode === 200)
+        if (StatusCode === 204)
         {
-            try
-            {
-                let ParsedResponse = JSON.parse(Response);
-                if (ParsedResponse.IsLogged)
-                {
-                    /* 
-                     * We set cookie that tells our UI that user has been logged, and some
-                     * parts of the UI may be changed on that occasion. This does not have 
-                     * to be protected as it does not affect signin or session itself.
-                     * This is UI related cookie only.
-                     */
-                    this.Cookies.SetCookie("user_session", "alive", 0.11, "Strict", null);
+            /* 
+            * We set cookie to tell our UI that user has been logged, so specific
+            * parts of the UI may be updated. This does not have to be protected 
+            * as it does not affect signin or session itself. This is UI related 
+            * cookie only because we do not have state management in this example.
+            */
+            this.Cookies.SetCookie("user_session", "alive", 0.11, "Strict", null);
 
-                    /* 
-                     * This is demo application and we only redirect to the main page.
-                     * However, in real application, one may want to redirect user to another page. 
-                     * Please also note: the page that user is redirected to must add HttpOnly cookie
-                     * to the response header. 
-                     */
-                    window.location.replace(`${window.location.origin}/index`);
-                }
-                else
-                {
-                    this.Dialog.SetMessageType("AlertError");
-                    this.Dialog.SetTitle("Login to an account");
-                    this.Dialog.SetContent(`Cannot login to the account. ${ParsedResponse.Error.ErrorDesc}`);
-                    this.Dialog.Show();
-                }
-            }
-            catch (Error)
-            {
-                this.Dialog.SetMessageType("AlertError");
-                this.Dialog.SetTitle("Login to an account");
-                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
-                this.Dialog.Show();
-                console.error(`[LoginPage].[Signin_Callback]: An error has been thrown: ${Error.message}`);
-            }
+            /* 
+             * This is demo application and we only redirect to the main page.
+             * However, in real application, one may want to redirect user to another page.
+             * Please note: HttpOnly cookie must be present in the response header.
+             */
+            window.location.replace(`${window.location.origin}/index`);
+        }
+        else if (StatusCode === 400)
+        {
+            const ParsedResponse = JSON.parse(Response);
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Login to an account");
+            this.Dialog.SetContent(`${ParsedResponse.ErrorDesc}.`);
+            this.Dialog.Show();
         }
         else
         {
+            const ParsedResponse = JSON.parse(Response);
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Login to an account");
-            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}. Description: ${ParsedResponse.ErrorDesc}.`);
             this.Dialog.Show();
         }
     }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Logger;
 using SecureWebApp.Shared;
+using SecureWebApp.Exceptions;
 
 namespace SecureWebApp.Pages
 {
@@ -34,12 +35,9 @@ namespace SecureWebApp.Pages
 
                 return Page();
             }
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"[LogoutModel.OnGet]: an error has been thrown: {LErrorDesc}.");
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
                 throw;
             }
         }

@@ -20,16 +20,16 @@ export default class Cookies
                 LDate.getTime() + (ADays * 24 * 60 * 60 * 1000)
             );
 
-            let LSecure = !this.Helpers.IsEmpty(ASecure) ? `; ${ASecure}` : "";
-            let LNewCookie = `${ACookieName}=${AValue}; expires=${LDate.toUTCString()}; path=/; SameSite=${ASameSite} ${LSecure}`;
+            const LSecure = !this.Helpers.IsEmpty(ASecure) ? `; ${ASecure}` : "";
+            const LNewCookie = `${ACookieName}=${AValue}; expires=${LDate.toUTCString()}; path=/; SameSite=${ASameSite} ${LSecure}`;
             document.cookie = LNewCookie;
         }
     }
 
     GetCookie(ACookieName)
     {
-        let LCookieName = `${ACookieName}=`;
-        let LCookieArray = document.cookie.split(";");
+        const LCookieName = `${ACookieName}=`;
+        const LCookieArray = document.cookie.split(";");
 
         for (let Index = 0; Index < LCookieArray.length; Index++)
         {

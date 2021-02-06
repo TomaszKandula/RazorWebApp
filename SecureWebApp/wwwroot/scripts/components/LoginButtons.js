@@ -6,7 +6,7 @@ export default class LoginButtons
     constructor(AButtonHandle, ACombination, ASignupAction, ASigninAction, ALogoutAction)
     {
         this.LButtonHandle = AButtonHandle;
-        this.LCombination  = ACombination;
+        this.LCombination = ACombination;
         this.LSignupAction = ASignupAction;
         this.LSigninAction = ASigninAction;
         this.LLogoutAction = ALogoutAction;

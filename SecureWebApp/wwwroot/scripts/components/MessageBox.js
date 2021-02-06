@@ -7,8 +7,8 @@ export default class MessageBox
     {
         this.LModalHandle = AModalHandle;
         let LMessageType = "AlertInfo";
-        let LCaption     = "Title";
-        let LContent     = "<p>No content</p>";
+        let LCaption = "Title";
+        let LContent = "<p>No content</p>";
 
         this.SetMessageType = function (AMessageType)
         {

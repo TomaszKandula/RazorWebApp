@@ -126,6 +126,9 @@
   <data name="EMAIL_ALREADY_EXISTS" xml:space="preserve">
     <value>This email address already exists</value>
   </data>
+  <data name="EMAIL_DOES_NOT_EXIST" xml:space="preserve">
+    <value>This email address does not exist</value>
+  </data>
   <data name="EMAIL_DOMAIN_NOT_EXISTS" xml:space="preserve">
     <value>The email domain is not exist</value>
   </data>

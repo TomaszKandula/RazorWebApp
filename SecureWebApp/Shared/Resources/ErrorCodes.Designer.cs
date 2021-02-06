@@ -88,6 +88,15 @@ namespace SecureWebApp.Shared.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This email address does not exist.
+        /// </summary>
+        public static string EMAIL_DOES_NOT_EXIST {
+            get {
+                return ResourceManager.GetString("EMAIL_DOES_NOT_EXIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The email domain is not exist.
         /// </summary>
         public static string EMAIL_DOMAIN_NOT_EXISTS {

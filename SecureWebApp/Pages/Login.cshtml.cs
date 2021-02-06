@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SecureWebApp.Shared;
 using SecureWebApp.Logger;
+using SecureWebApp.Exceptions;
 
 namespace SecureWebApp.Pages
 {
@@ -32,12 +33,9 @@ namespace SecureWebApp.Pages
 
                 return Page();
             }
-            catch (Exception LException)
+            catch (Exception AException)
             {
-                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"[LoginModel.OnGet]: an error has been thrown: {LErrorDesc}.");
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
                 throw;
             }
         }

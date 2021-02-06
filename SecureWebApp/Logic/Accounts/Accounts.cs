@@ -56,35 +56,39 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
         /// <returns></returns>
-        public async Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default)
+        public async Task<(Guid SessionId, bool IsSignedIn, bool IsExisting)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default)
         {
-            var LUsers = (await FMainDbContext.Users
+            var LUsers = await FMainDbContext.Users
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddr)
-                .ToListAsync())
-                .Single();
-            
-            if (!LUsers.IsActivated)
+                .ToListAsync(ACancellationToken);
+
+            if (!LUsers.Any())
             {
-                return (Guid.Empty, false);
+                return (Guid.Empty, false, false);
             }
 
-            var LCheckPassword = BCrypt.BCrypt.CheckPassword(APassword, LUsers.Password);
+            if (!LUsers.Single().IsActivated) 
+            {
+                return (Guid.Empty, false, true);
+            }
+
+            var LCheckPassword = BCrypt.BCrypt.CheckPassword(APassword, LUsers.Single().Password);
             if (!LCheckPassword)
             {
-                return (Guid.Empty, true);
+                return (Guid.Empty, true, true);
             }
 
             var LSessionId = Guid.NewGuid();
             var LLogHistory = new SigninHistory()
             {
-                UserId = LUsers.Id,
+                UserId = LUsers.Single().Id,
                 LoggedAt = DateTime.Now,
             };
 
             await FMainDbContext.SigninHistory.AddAsync(LLogHistory);
             await FMainDbContext.SaveChangesAsync(ACancellationToken);
 
-            return (LSessionId, true);
+            return (LSessionId, true, true);
         }
     }
 }

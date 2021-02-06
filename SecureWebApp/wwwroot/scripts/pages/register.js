@@ -1,5 +1,4 @@
 ﻿// View module to manipulate Virtual DOM
-
 "use strict";
 
 import Helpers from "../functions/helpers";
@@ -35,12 +34,12 @@ export default class RegisterPage
 
     Render_Buttons()
     {
-        let MoveToRegisterPage = function () 
+        const MoveToRegisterPage = function () 
         { 
             window.location.replace(`${window.location.origin}/register`) 
         };
 
-        let MoveToLoginPage = function () 
+        const MoveToLoginPage = function () 
         { 
             window.location.replace(`${window.location.origin}/login`) 
         };
@@ -220,26 +219,25 @@ export default class RegisterPage
     {
         if (this.Helpers.IsEmpty(Event.target.value))
         {
-            this.OK_Nickname.style.visibility  = "hidden";
+            this.OK_Nickname.style.visibility = "hidden";
             this.ERR_Nickname.style.visibility = "visible";
-            this.Info_Nickname.style.display   = "inline-block";
+            this.Info_Nickname.style.display = "inline-block";
             this.IsValidNickname = false;
             return void 0;
         }
 
-        this.OK_Nickname.style.visibility  = "visible";
+        this.OK_Nickname.style.visibility = "visible";
         this.ERR_Nickname.style.visibility = "hidden";
-        this.Info_Nickname.style.display   = "none";
+        this.Info_Nickname.style.display = "none";
         this.IsValidNickname = true;
     }
 
     Input_EmailAddress(Event)
     {
-
         let Url = encodeURI(`${window.location.origin}/api/v1/ajax/validation/${Event.target.value}/`);
 
-        this.OK_EmailAddress.style.display   = "visibility";
-        this.ERR_EmailAddress.style.display  = "visibility";
+        this.OK_EmailAddress.style.display = "visibility";
+        this.ERR_EmailAddress.style.display = "visibility";
         this.Info_EmailAddress.style.display = "visibility";
 
         Handle_EmailAddress.classList.add("is-loading");
@@ -250,10 +248,10 @@ export default class RegisterPage
             return void 0;
         }
 
-        this.OK_EmailAddress.style.visibility  = "hidden";
+        this.OK_EmailAddress.style.visibility = "hidden";
         this.ERR_EmailAddress.style.visibility = "hidden";
         this.Info_EmailAddress.style.display = "inline-block";
-        this.Info_EmailAddress.innerHTML     = "Valid email address is mandatory.";
+        this.Info_EmailAddress.innerHTML = "Valid email address is mandatory.";
         this.Handle_EmailAddress.classList.remove("is-loading");
         this.IsValidEmailAddress = false;
     }
@@ -261,50 +259,30 @@ export default class RegisterPage
     CheckEmailAddress_Callback(Response, StatusCode)
     {
         Handle_EmailAddress.classList.remove("is-loading");
-        if (StatusCode === 200)
+        if (StatusCode === 204)
         {
-            try
-            {
-                let ParsedResponse = JSON.parse(Response);
-                if (ParsedResponse.IsEmailValid)
-                {
-                    this.OK_EmailAddress.style.visibility = "visible";
-                    this.ERR_EmailAddress.style.visibility = "hidden";
-                    this.Info_EmailAddress.style.display = "none";
-                    this.Info_EmailAddress.innerHTML = "";
-                    this.IsValidEmailAddress = true;
-                }
-                else
-                {
-                    this.OK_EmailAddress.style.visibility = "hidden";
-                    this.ERR_EmailAddress.style.visibility = "visible";
-                    this.Info_EmailAddress.style.display = "inline-block";
-                    this.Info_EmailAddress.innerHTML = ParsedResponse.Error.ErrorDesc;
-                    this.IsValidEmailAddress = false;
-                }
-            }
-            catch (Error)
-            {
-                this.Dialog.SetMessageType("AlertError");
-                this.Dialog.SetTitle("Email Address Check");
-                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
-                this.Dialog.Show();
-                console.error(`[RegisterPage].[CheckEmailAddress_Callback]: An error has been thrown: ${Error.message}`);
-            }
+            this.OK_EmailAddress.style.visibility = "visible";
+            this.ERR_EmailAddress.style.visibility = "hidden";
+            this.Info_EmailAddress.style.display = "none";
+            this.Info_EmailAddress.innerHTML = "";
+            this.IsValidEmailAddress = true;
         }
-        else
+        else if (StatusCode === 400)
         {
+            const ParsedResponse = JSON.parse(Response);
             this.OK_EmailAddress.style.visibility = "hidden";
             this.ERR_EmailAddress.style.visibility = "hidden";
             this.Info_EmailAddress.style.display = "inline-block";
-            this.Info_EmailAddress.innerHTML = "An error has occured during the processing";
-
-            this.Dialog.SetMessageType("AlertError");
-            this.Dialog.SetTitle("Email Address Check");
-            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
-            this.Dialog.Show();
-
+            this.Info_EmailAddress.innerHTML = `${ParsedResponse.ErrorDesc}.`;
             this.IsValidEmailAddress = false;
+        }
+        else
+        {
+            const ParsedResponse = JSON.parse(Response);
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("Login to an account");
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}. Description: ${ParsedResponse.ErrorDesc}.`);
+            this.Dialog.Show();
         }
     }
 
@@ -335,42 +313,30 @@ export default class RegisterPage
     GetCountryList_Callback(Response, StatusCode)
     {
         this.Handle_CityList.classList.remove("is-loading");
-
+        const ParsedResponse = JSON.parse(Response);
         if (StatusCode == 200)
         {
-            try
+            this.Helpers.ClearSelectElement(this.CityListSelect);
+
+            for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
             {
-                let ParsedResponse = JSON.parse(Response);
-                this.Helpers.ClearSelectElement(this.CityListSelect);
+                const City = ParsedResponse.Cities[Index];
+                const Option = document.createElement("option");
 
-                for (let Index = 0; Index < ParsedResponse.Cities.length; Index++)
-                {
-                    let City = ParsedResponse.Cities[Index];
-                    let Option = document.createElement("option");
-
-                    Option.value = City.id;
-                    Option.innerHTML = City.name;
-                    this.CityListSelect.appendChild(Option);
-                }
-
-                this.CityListSelect.removeAttribute("disabled");
-                this.CityListSelect.selectedIndex = 0;
-                this.IsValidCountryList = true;
+                Option.value = City.id;
+                Option.innerHTML = City.name;
+                this.CityListSelect.appendChild(Option);
             }
-            catch (Error)
-            {
-                this.Dialog.SetMessageType("AlertError");
-                this.Dialog.SetTitle("Get Country List");
-                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
-                this.Dialog.Show();
-                console.error(`[RegisterPage].[GetCountryList_Callback]: An error has been thrown: ${Error.message}`);
-            }
+
+            this.CityListSelect.removeAttribute("disabled");
+            this.CityListSelect.selectedIndex = 0;
+            this.IsValidCountryList = true;
         }
         else
         {
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Email Address Check");
-            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}. Description: ${ParsedResponse.ErrorDesc}.`);
             this.Dialog.Show();
             this.IsValidCountryList = false;
         }
@@ -384,9 +350,9 @@ export default class RegisterPage
 
     async Link_Terms(Event)  
     {
-        let Url = encodeURI(`${window.location.origin}/modals/terms.html`);
-        let Response = await fetch(Url);
-        let Content = await Response.text();
+        const Url = encodeURI(`${window.location.origin}/modals/terms.html`);
+        const Response = await fetch(Url);
+        const Content = await Response.text();
 
         if (Response.ok)
         {
@@ -405,9 +371,9 @@ export default class RegisterPage
 
     async Link_Privacy(Event)
     {
-        let Url = encodeURI(`${window.location.origin}/modals/privacy.html`);
-        let Response = await fetch(Url);
-        let Content = await Response.text();
+        const Url = encodeURI(`${window.location.origin}/modals/privacy.html`);
+        const Response = await fetch(Url);
+        const Content = await Response.text();
 
         if (Response.ok)
         {
@@ -463,43 +429,29 @@ export default class RegisterPage
         this.DisableFields(false);
         this.CreateAccountButton.disabled = false;
         this.CreateAccountHandle.classList.remove("is-loading");
-
-        if (StatusCode === 200)
+        if (StatusCode === 204)
         {
-            try
-            {
-                let ParsedResponse = JSON.parse(Response);
-                if (ParsedResponse.IsUserCreated)
-                {
-                    /* This is demo application and we only display message to the user.
-                     * However, in production, one may want to redirect user to another page. */
-                    this.Dialog.SetMessageType("AlertSuccess");
-                    this.Dialog.SetTitle("An account has been created");
-                    this.Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");
-                    this.Dialog.Show();
-                }
-                else
-                {
-                    this.Dialog.SetMessageType("AlertError");
-                    this.Dialog.SetTitle("An account cannot be created");
-                    this.Dialog.SetContent(`The account could not be created. Please contact IT support if problem persists. Description: ${ParsedResponse.Error.ErrorDesc}`);
-                    this.Dialog.Show();
-                }
-            }
-            catch (Error)
-            {
-                this.Dialog.SetMessageType("AlertError");
-                this.Dialog.SetTitle("Create Account");
-                this.Dialog.SetContent(`An error occured during parsing JSON, error: ${Error.message}`);
-                this.Dialog.Show();
-                console.error(`[RegisterPage].[CreateAccount_Callback]: An error has been thrown: ${Error.message}`);
-            }
+            /* This is demo application and we only display message to the user.
+             * However, in production, one may want to redirect user to another page. */
+            this.Dialog.SetMessageType("AlertSuccess");
+            this.Dialog.SetTitle("An account has been created");
+            this.Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");
+            this.Dialog.Show();
+        }
+        else if (StatusCode === 400)
+        {
+            const ParsedResponse = JSON.parse(Response);
+            this.Dialog.SetMessageType("AlertError");
+            this.Dialog.SetTitle("An account cannot be created");
+            this.Dialog.SetContent(`The account could not be created. Please contact IT support if problem persists. Description: ${ParsedResponse.ErrorDesc}`);
+            this.Dialog.Show();
         }
         else
         {
+            const ParsedResponse = JSON.parse(Response);
             this.Dialog.SetMessageType("AlertError");
             this.Dialog.SetTitle("Create Account");
-            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}`);
+            this.Dialog.SetContent(`An error has occured during the processing. Returned status code: ${StatusCode}. Description: ${ParsedResponse.ErrorDesc}.`);
             this.Dialog.Show();
         }
     }

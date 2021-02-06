@@ -26,7 +26,7 @@ export default class Helpers
 
     HasSpecialChar(AText)
     {
-        let LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
+        const LFormat = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
         if (!LFormat.test(AText)) return false;
         return true;
     }
@@ -58,7 +58,7 @@ export default class Helpers
 
     ValidateEmail(AEmail)
     {
-        let LRegex = /\S+@\S+\.\S+/
+        const LRegex = /\S+@\S+\.\S+/
         return LRegex.test(AEmail);
     }
 
