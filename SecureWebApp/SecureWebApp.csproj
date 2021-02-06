@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Database\Seeders\" />
     <Folder Include="Logic\Accounts\" />
     <Folder Include="Logic\Emails\" />
     <Folder Include="Logic\Repository\" />
