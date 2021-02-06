@@ -1,4 +1,4 @@
-# RazorWebApp
+# Razor WebApp
 
 Opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
