@@ -1,12 +1,10 @@
 ﻿// View module to manipulate Virtual DOM
-
 "use strict";
 
 import Cookies from "../functions/cookies";
 
 export default class LogoutPage
 {
-
     constructor(AContainer)
     {
         this.LContainer = AContainer;
@@ -18,5 +16,4 @@ export default class LogoutPage
         this.Cookies = new Cookies();
         this.Cookies.EraseCookie("user_session");
     }
-
 }

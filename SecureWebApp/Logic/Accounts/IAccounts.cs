@@ -21,6 +21,6 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
         /// <returns></returns>
-        Task<(Guid SessionId, bool IsSignedIn)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default);
+        Task<(Guid SessionId, bool IsSignedIn, bool IsExisting)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default);
     }
 }

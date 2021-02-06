@@ -11,6 +11,7 @@ using SecureWebApp.Shared;
 using SecureWebApp.Logger;
 using SecureWebApp.ViewModel;
 using SecureWebApp.Infrastructure.Database;
+using SecureWebApp.Exceptions;
 
 namespace SecureWebApp.Pages
 {
@@ -59,12 +60,9 @@ namespace SecureWebApp.Pages
                 ViewData["CountryList"] = LHtmlList;
                 return Page();           
             }
-            catch (Exception LException) 
+            catch (Exception AException) 
             {
-                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"[RegisterModel.OnGet]: an error has been thrown: {LErrorDesc}.");
+                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
                 throw;
             }
         }

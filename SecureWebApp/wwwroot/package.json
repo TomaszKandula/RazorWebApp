@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "bundle.js",
-  "scripts": 
-  {
+  "scripts": {
     "config": "webpack --config webpack.config.js",
     "watch": "webpack --watch",
     "build": "webpack --config webpack.config.prod.js"
@@ -12,28 +11,25 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": 
-  {
-    "bulma": "^0.7.2",
+  "devDependencies": {
     "css-loader": "^2.1.1",
     "file-loader": "^3.0.1",
     "html-webpack-plugin": "^3.2.0",
     "html-webpack-template": "^6.2.0",
-    "node-sass": "^4.14.1",
     "sass-loader": "^7.3.1",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12"
   },
-  "dependencies": 
-  {
-    "bulma": "^0.9.0",
+  "dependencies": {
+    "bulma": "^0.9.2",
     "kind-of": "^6.0.3",
     "lodash": "^4.17.19",
     "minimist": "^1.2.5",
     "mixin-deep": "^2.0.1",
-    "npm": "^6.14.6",
+    "node-sass": "^4.14.1",
+    "npm": "^7.5.2",
     "set-value": "^3.0.2"
   }
 }

@@ -1,15 +1,12 @@
 ﻿// LoginButtons component
-
 "use strict";
-
 
 export default class LoginButtons
 {
-
     constructor(AButtonHandle, ACombination, ASignupAction, ASigninAction, ALogoutAction)
     {
         this.LButtonHandle = AButtonHandle;
-        this.LCombination  = ACombination;
+        this.LCombination = ACombination;
         this.LSignupAction = ASignupAction;
         this.LSigninAction = ASigninAction;
         this.LLogoutAction = ALogoutAction;
@@ -17,7 +14,6 @@ export default class LoginButtons
 
     Show()
     {
-
         this.Render();
         this.BindDom();
         this.AddEvents();
@@ -39,7 +35,6 @@ export default class LoginButtons
             this.Handle_Logout.classList.add("fade-in-animate");
             this.Handle_Logout.classList.remove("set-invisible"); 
         }
-
     }
 
     BindDom()
@@ -77,23 +72,16 @@ export default class LoginButtons
 
     Render()
     {
-
         switch (this.LCombination)
         {
-
             case "Signup_Login":
                 this.Render_Signup_Login();
                 break;
-
             case "Logout":
                 this.Render_Logout();
                 break;
-
             default:
                 this.Render_Signup_Login();
-
         }
-
     }
-
 }

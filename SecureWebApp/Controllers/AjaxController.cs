@@ -68,10 +68,7 @@ namespace SecureWebApp.Controllers
                     });
                 }
 
-                return StatusCode(200, new EmailValidationDto() 
-                { 
-                    IsEmailValid = true 
-                });
+                return StatusCode(204);
             } 
             catch (Exception AException)
             {
@@ -159,13 +156,20 @@ namespace SecureWebApp.Controllers
                         ErrorDesc = ErrorCodes.EMAIL_ALREADY_EXISTS
                     });
                 }
-               
-                FAppLogger.LogInfo($"New user '{APayLoad.EmailAddress}' has been successfully registered.");               
-                return StatusCode(200, new UserCreatedDto 
+
+                var LUserId = await FLogicContext.Accounts.SignUp(APayLoad, 12);
+                if (LUserId == 0) 
                 {
-                    UserId = await FLogicContext.Accounts.SignUp(APayLoad, 12),
-                    IsUserCreated = true
-                });
+                    FAppLogger.LogWarn(ErrorCodes.UNEXPECTED_ERROR);
+                    return StatusCode(400, new ErrorHandlerDto
+                    {
+                        ErrorCode = nameof(ErrorCodes.UNEXPECTED_ERROR),
+                        ErrorDesc = ErrorCodes.UNEXPECTED_ERROR
+                    });
+                }
+
+                FAppLogger.LogInfo($"New user '{APayLoad.EmailAddress}' has been successfully registered.");               
+                return StatusCode(204);
             }
             catch (Exception AException)
             {
@@ -196,7 +200,17 @@ namespace SecureWebApp.Controllers
                     });
                 }
 
-                var (LSessionId, LIsSignedIn) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
+                var (LSessionId, LIsSignedIn, IsExisting) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
+
+                if (!IsExisting)
+                {
+                    FAppLogger.LogError(ErrorCodes.EMAIL_DOES_NOT_EXIST);
+                    return StatusCode(400, new ErrorHandlerDto
+                    {
+                        ErrorCode = nameof(ErrorCodes.EMAIL_DOES_NOT_EXIST),
+                        ErrorDesc = ErrorCodes.EMAIL_DOES_NOT_EXIST
+                    });
+                }
 
                 if (LSessionId == Guid.Empty && LIsSignedIn) 
                 {
@@ -224,10 +238,7 @@ namespace SecureWebApp.Controllers
                     .AddMinutes(Constants.Sessions.IdleTimeout)
                     .ToString(CultureInfo.InvariantCulture));
 
-                return StatusCode(200, new UserLoggedDto 
-                { 
-                    IsLogged = true 
-                });
+                return StatusCode(204);
             }
             catch (Exception AException)
             {
