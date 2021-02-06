@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
-namespace SecureWebApp.Controllers.Models
+namespace SecureWebApp.Shared.Dto
 {
-    public class UserLogin
+    public class UserLoginDto
     {
         [JsonPropertyName("EmailAddr")]
         [Required]

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SecureWebApp.AppLogger;
+using SecureWebApp.Logger;
 
 namespace SecureWebApp.Pages
 {

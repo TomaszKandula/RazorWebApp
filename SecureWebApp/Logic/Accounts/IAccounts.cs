@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SecureWebApp.Controllers.Models;
+using SecureWebApp.Shared.Dto;
 
 namespace SecureWebApp.Logic.Accounts
 {
@@ -12,7 +12,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
         /// <returns></returns>
-        Task<int> SignUp(UserCreate APayLoad, int APasswordSalt);
+        Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt);
 
         /// <summary>
         /// Perform sign-in action and log it to the history table.
