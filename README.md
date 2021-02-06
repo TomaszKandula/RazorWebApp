@@ -1,12 +1,12 @@
 # Razor WebApp
 
-Opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
+Test Razor Pages application being an opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
-The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should also:
+The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should:
 
-1. Validate user input on the front-end (own code or validate.js) and on the back-end (currently via model valiation).
+1. Validate user input: front-end via own code or validate.js (preferable); back-end via model valiation or FluentValidation (preferable).
 1. Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token. 
-1. Instead of ADO.NET with custom SQL string, uses OR/M (Entity Framework Core) and LINQ.
+1. Use OR/M (Entity Framework Core) and LINQ instead of ADO.NET with custom SQL strings.
 1. Protect user password by hashing and salting with [BCrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/). Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
 
 ## Tech-stack
@@ -17,6 +17,8 @@ The idea behind this Razor Pages application is to build small web application u
 1. Bulma divider 0.2.0 via CDN.
 1. Vanilla JavaScript with AJAX.
 1. WebPack module bundler.
+
+User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean it and easy to maintain, such approach produces large overhead and it is not recommended for large production applications.
 
 ### Back-end
 
