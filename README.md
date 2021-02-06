@@ -29,24 +29,22 @@ Back-end project is relatively small and therefore is not split into sub-project
 
 ## Setting-up the database
 
-Connection string have to be setup in __secrets.json__ (SecureWebAapp project):
+Setup the connection string:
 
 ```
 {
-
   "ConnectionStrings": 
   {
     "DbConnect": "<your_connection_string_goes_here>"
   }
-
 }
 ```
 
-The database have only four tables, because this example have already setup database context, one may use SQL script to create tables and populate Cities and Countries from CSV files, all provided here: [Database Examples](https://github.com/TomaszKandula/SecureWebApp/tree/master/DatabaseExamples). However, instead of executing SQL, one also may use __migrations__, in Package Manager Console type and execute command:
+Migrate the database by executing following command:
 
-`update-database`
+`Update-Database -StartupProject SecureWebApp -Project SecureWebApp -Context MainDbContext`
 
-And EF Core will create database with all necessary tables. Then, we may populate the tables with the script (on localhost).
+EF Core will create database with all necessary tables. Then, to populate Cities and Countries tables with large dataset, use separate [SQL script](https://github.com/TomaszKandula/SecureWebApp/blob/master/CsvData/ImportCsvToDatabase.sql) to import it from local file to your local database.
 
 ## Integration Tests
 
