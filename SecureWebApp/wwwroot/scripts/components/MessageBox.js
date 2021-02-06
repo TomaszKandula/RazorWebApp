@@ -1,16 +1,11 @@
 ﻿// MessageBox component
-
 "use strict";
-
 
 export default class MessageBox
 {
-
     constructor(AModalHandle)
     {
-
         this.LModalHandle = AModalHandle;
-
         let LMessageType = "AlertInfo";
         let LCaption     = "Title";
         let LContent     = "<p>No content</p>";
@@ -44,7 +39,6 @@ export default class MessageBox
         {
             return LContent;
         }
-
     }
 
     Show()
@@ -62,7 +56,10 @@ export default class MessageBox
 
     AddEvents()
     {
-        this.Button_CloseModal.addEventListener("click", () => { this.LModalHandle.classList.remove("is-active"); });
+        this.Button_CloseModal.addEventListener("click", () => 
+        { 
+            this.LModalHandle.classList.remove("is-active"); 
+        });
     }
 
     RenderAlert(AFlag)
@@ -99,35 +96,25 @@ export default class MessageBox
 
     Render()
     {
-
         switch (this.GetMessageType())
         {
-
             case "AlertInfo":
                 this.RenderAlert("is-info");
                 break;
-
             case "AlertSuccess":
                 this.RenderAlert("is-success");
                 break;
-
             case "AlertWarning":
                 this.RenderAlert("is-warning");
                 break;
-
             case "AlertError":
                 this.RenderAlert("is-danger");
                 break;
-
             case "Dialog":
                 this.RenderDialog();
                 break;
-
             default:
                 this.RenderDialog();
-
         }
-
     }
-
 }
