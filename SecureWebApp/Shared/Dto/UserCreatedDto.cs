@@ -9,8 +9,5 @@ namespace SecureWebApp.Shared.Dto
 
         [JsonPropertyName("UserId")]
         public int UserId { get; set; }
-
-        [JsonPropertyName("Error")]
-        public ErrorHandlerDto Error { get; set; } = new ErrorHandlerDto();
     }
 }

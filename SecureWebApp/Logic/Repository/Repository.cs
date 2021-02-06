@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace SecureWebApp.Logic.Repository
         /// Return list of all available countries.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<CountryList>> ReturnCountryList()
+        public async Task<List<CountryList>> ReturnCountryList(CancellationToken ACancellationToken = default)
         {
             var LCountries = await FMainDbContext.Countries
                 .AsNoTracking()
@@ -29,7 +30,7 @@ namespace SecureWebApp.Logic.Repository
                     Id = ACountries.Id,
                     Name = ACountries.CountryName
                 })
-                .ToListAsync();
+                .ToListAsync(ACancellationToken);
 
             return LCountries;
         }
@@ -39,7 +40,7 @@ namespace SecureWebApp.Logic.Repository
         /// </summary>
         /// <param name="AId"></param>
         /// <returns></returns>
-        public async Task<List<CityList>> ReturnCityList(int AId)
+        public async Task<List<CityList>> ReturnCityList(int AId, CancellationToken ACancellationToken = default)
         {
             var LCities = await FMainDbContext.Cities
                 .AsNoTracking()
@@ -49,7 +50,7 @@ namespace SecureWebApp.Logic.Repository
                     Id = ACities.Id,
                     Name = ACities.CityName
                 })
-                .ToListAsync();
+                .ToListAsync(ACancellationToken);
 
             return LCities;
         }

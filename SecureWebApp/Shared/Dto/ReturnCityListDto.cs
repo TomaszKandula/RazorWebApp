@@ -8,8 +8,5 @@ namespace SecureWebApp.Shared.Dto
     {
         [JsonPropertyName("Cities")]
         public List<CityList> Cities { get; set; }
-
-        [JsonPropertyName("Error")]
-        public ErrorHandlerDto Error { get; set; } = new ErrorHandlerDto();
     }
 }

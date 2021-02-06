@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace SecureWebApp.Logic.Emails
 {
@@ -17,7 +18,7 @@ namespace SecureWebApp.Logic.Emails
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        Task<bool> IsEmailAddressExist(string AEmailAddress);
+        Task<bool> IsEmailAddressExist(string AEmailAddress, CancellationToken ACancellationToken = default);
 
         /// <summary>
         /// Check if given address email have valid domain.
@@ -25,6 +26,6 @@ namespace SecureWebApp.Logic.Emails
         /// <seealso href="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        Task<bool> IsEmailDomainExist(string AEmailAddress);
+        Task<bool> IsEmailDomainExist(string AEmailAddress, CancellationToken ACancellationToken = default);
     }
 }

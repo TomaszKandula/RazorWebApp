@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Net.Mail;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SecureWebApp.Infrastructure.Database;
@@ -42,13 +43,13 @@ namespace SecureWebApp.Logic.Emails
         /// </summary>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        public async Task<bool> IsEmailAddressExist(string AEmailAddress)
+        public async Task<bool> IsEmailAddressExist(string AEmailAddress, CancellationToken ACancellationToken = default)
         {
             var LEmailList = await FMainDbContext.Users
                 .AsNoTracking()
                 .Where(AUsers => AUsers.EmailAddr == AEmailAddress)
                 .Select(AUsers => AUsers.EmailAddr)
-                .ToListAsync();
+                .ToListAsync(ACancellationToken);
 
             return LEmailList.Any();
         }
@@ -59,22 +60,34 @@ namespace SecureWebApp.Logic.Emails
         /// <seealso href="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
         /// <returns></returns>
-        public async Task<bool> IsEmailDomainExist(string AEmailAddress) 
+        public async Task<bool> IsEmailDomainExist(string AEmailAddress, CancellationToken ACancellationToken = default) 
         {
             try 
             {
                 var LLookupClient = new LookupClient();
-
                 var LGetEmailDomain = AEmailAddress.Split("@");
                 var LEmailDomain = LGetEmailDomain[1];
 
-                var LCheckRecordA = await LLookupClient.QueryAsync(LEmailDomain, QueryType.A).ConfigureAwait(false); 
-                var LCheckRecordAaaa = await LLookupClient.QueryAsync(LEmailDomain, QueryType.AAAA).ConfigureAwait(false); 
-                var LCheckRecordMx = await LLookupClient.QueryAsync(LEmailDomain, QueryType.MX).ConfigureAwait(false);
+                var LCheckRecordA = await LLookupClient
+                    .QueryAsync(LEmailDomain, QueryType.A, QueryClass.IN, ACancellationToken)
+                    .ConfigureAwait(false); 
 
-                var LRecordA = LCheckRecordA.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
-                var LRecordAaaa = LCheckRecordAaaa.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.AAAA);
-                var LRecordMx = LCheckRecordMx.Answers.Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
+                var LCheckRecordAaaa = await LLookupClient
+                    .QueryAsync(LEmailDomain, QueryType.AAAA, QueryClass.IN, ACancellationToken)
+                    .ConfigureAwait(false); 
+
+                var LCheckRecordMx = await LLookupClient
+                    .QueryAsync(LEmailDomain, QueryType.MX, QueryClass.IN, ACancellationToken)
+                    .ConfigureAwait(false);
+
+                var LRecordA = LCheckRecordA.Answers
+                    .Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.A);
+
+                var LRecordAaaa = LCheckRecordAaaa.Answers
+                    .Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.AAAA);
+
+                var LRecordMx = LCheckRecordMx.Answers
+                    .Where(ARecord => ARecord.RecordType == DnsClient.Protocol.ResourceRecordType.MX);
 
                 var LIsRecordA = LRecordA.Any();
                 var LIsRecordAaaa = LRecordAaaa.Any();
