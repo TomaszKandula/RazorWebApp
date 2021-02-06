@@ -2,19 +2,14 @@
 using System.Text.Json.Serialization;
 using SecureWebApp.ViewModel;
 
-namespace SecureWebApp.Controllers.Models
+namespace SecureWebApp.Shared.Dto
 {
-    public class ReturnCityList
+    public class ReturnCityListDto
     {
         [JsonPropertyName("Cities")]
         public List<CityList> Cities { get; set; }
 
         [JsonPropertyName("Error")]
-        public ErrorHandler Error { get; set; }
-
-        public ReturnCityList()
-        {
-            Error = new ErrorHandler();
-        }
+        public ErrorHandlerDto Error { get; set; } = new ErrorHandlerDto();
     }
 }

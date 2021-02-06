@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using DnsClient;
 using SecureWebApp.Infrastructure.Database;
 
 namespace SecureWebApp.Logic.Emails

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using SecureWebApp.Controllers.Models;
+using SecureWebApp.Shared.Dto;
 using SecureWebApp.Infrastructure.Database;
 using SecureWebApp.Infrastructure.Domain.Entities;
 
@@ -23,7 +23,7 @@ namespace SecureWebApp.Logic.Accounts
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
         /// <returns></returns>
-        public async Task<int> SignUp(UserCreate APayLoad, int APasswordSalt) 
+        public async Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt) 
         { 
        
             var LNewUser = new Users

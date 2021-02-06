@@ -1,4 +1,4 @@
-﻿namespace SecureWebApp.AppLogger
+﻿namespace SecureWebApp.Logger
 {
     /// <summary>
     /// Logger service that allows to store messages from application.

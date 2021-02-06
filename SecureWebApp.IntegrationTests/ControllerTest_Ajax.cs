@@ -4,7 +4,7 @@ using FluentAssertions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Net.Http.Headers;
-using SecureWebApp.Controllers.Models;
+using SecureWebApp.Shared.Dto;
 using SecureWebApp.IntegrationTests.Extractor;
 using SecureWebApp.IntegrationTests.Configuration;
 
@@ -38,7 +38,7 @@ namespace SecureWebApp.IntegrationTests
 
             // Assert
             LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<EmailValidation>(LContent);
+            var LDeserialized = JsonConvert.DeserializeObject<EmailValidationDto>(LContent);
             LDeserialized.IsEmailValid.Should().BeFalse();
         }
 
@@ -60,7 +60,7 @@ namespace SecureWebApp.IntegrationTests
 
             // Assert
             LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryList>(LContent);
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryListDto>(LContent);
             LDeserialized.Countries.Should().HaveCount(249);
         }
 
@@ -83,7 +83,7 @@ namespace SecureWebApp.IntegrationTests
 
             // Assert
             LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityList>(LContent);
+            var LDeserialized = JsonConvert.DeserializeObject<ReturnCityListDto>(LContent);
             LDeserialized.Cities.Should().HaveCount(11);
         }
 
@@ -100,7 +100,7 @@ namespace SecureWebApp.IntegrationTests
             LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
             LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
-            var LPayLoad = new UserCreate()
+            var LPayLoad = new UserCreateDto()
             {
                 FirstName    = "John",
                 LastName     = "Deer",
@@ -118,7 +118,7 @@ namespace SecureWebApp.IntegrationTests
 
             // Assert
             LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<UserCreated>(LContent);
+            var LDeserialized = JsonConvert.DeserializeObject<UserCreatedDto>(LContent);
             LDeserialized.IsUserCreated.Should().BeFalse();
         }
 
@@ -135,7 +135,7 @@ namespace SecureWebApp.IntegrationTests
             LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
             LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
 
-            var LPayLoad = new UserLogin()
+            var LPayLoad = new UserLoginDto()
             {
                 EmailAddr = "tokan@dfds.com",
                 Password  = "Timex#099#"
@@ -148,7 +148,7 @@ namespace SecureWebApp.IntegrationTests
 
             // Assert
             LResponse.StatusCode.Should().Be(200);
-            var LDeserialized = JsonConvert.DeserializeObject<UserLogged>(LContent);
+            var LDeserialized = JsonConvert.DeserializeObject<UserLoggedDto>(LContent);
             LDeserialized.IsLogged.Should().BeTrue();
         }
     }

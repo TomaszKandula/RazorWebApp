@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SecureWebApp.Helpers;
-using SecureWebApp.AppLogger;
+using SecureWebApp.Shared;
+using SecureWebApp.Logger;
 
 namespace SecureWebApp.Pages
 {

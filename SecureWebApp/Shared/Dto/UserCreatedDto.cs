@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SecureWebApp.Controllers.Models
+namespace SecureWebApp.Shared.Dto
 {
-    public class UserCreated
+    public class UserCreatedDto
     {
         [JsonPropertyName("IsUserCreated")]
         public bool IsUserCreated { get; set; }
@@ -11,11 +11,6 @@ namespace SecureWebApp.Controllers.Models
         public int UserId { get; set; }
 
         [JsonPropertyName("Error")]
-        public ErrorHandler Error { get; set; }
-
-        public UserCreated()
-        {
-            Error = new ErrorHandler();
-        }
+        public ErrorHandlerDto Error { get; set; } = new ErrorHandlerDto();
     }
 }

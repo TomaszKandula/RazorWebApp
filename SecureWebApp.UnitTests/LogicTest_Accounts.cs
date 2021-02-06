@@ -6,8 +6,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SecureWebApp.Shared.Dto;
 using SecureWebApp.Logic.Accounts;
-using SecureWebApp.Controllers.Models;
 using SecureWebApp.UnitTests.Database;
 using SecureWebApp.Infrastructure.Database;
 
@@ -55,7 +55,7 @@ namespace SecureWebApp.UnitTests
         public async Task Should_SignUp(int ACountryId, int ACityId, string AEmailAddress)
         {
             // Arrange
-            var LPayLoad = new UserCreate
+            var LPayLoad = new UserCreateDto
             {
                 FirstName    = "Ester",
                 LastName     = "Expósito",

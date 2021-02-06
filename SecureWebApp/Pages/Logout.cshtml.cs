@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SecureWebApp.Helpers;
-using SecureWebApp.AppLogger;
+using SecureWebApp.Logger;
+using SecureWebApp.Shared;
 
 namespace SecureWebApp.Pages
 {
