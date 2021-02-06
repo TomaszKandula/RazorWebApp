@@ -1,13 +1,13 @@
-# SecureWebApp
+# RazorWebApp
 
 Opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
-The purpose of this demo application is to present an example of an application that is in compliance with some security best practices describded in the article. Therefore:
+The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should also:
 
-1. User input is validated on the front-end and on the back-end.
-1. We mostly use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token. 
-1. Instead of ADO.NET with custom SQL string, we use OR/M (Entity Framework Core) and LINQ.
-1. User password is hashed and salted with [BCrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/). Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
+1. Validate user input on the front-end (own code or validate.js) and on the back-end (currently via model valiation).
+1. Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token. 
+1. Instead of ADO.NET with custom SQL string, uses OR/M (Entity Framework Core) and LINQ.
+1. Protect user password by hashing and salting with [BCrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/). Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
 
 ## Tech-stack
 
@@ -25,7 +25,7 @@ The purpose of this demo application is to present an example of an application 
 
 Unit Tests and Integration Tests are provided using [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions).
 
-Back-end project is relatively small and therefore is not split into sub-projects.
+Back-end project is relatively small and therefore it is not split into sub-projects/services.
 
 ## Setting-up the database
 
