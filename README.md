@@ -5,7 +5,8 @@ Test Razor Pages application being an opposite of the [Unsecure WebApp](https://
 The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should:
 
 1. Validate user input: front-end via own code or validate.js (preferable); back-end via model valiation or FluentValidation (preferable).
-1. Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token. 
+1. Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token.
+1. Provide tests for Razor Pages with Anti-Forgery Token.
 1. Use OR/M (Entity Framework Core) and LINQ instead of ADO.NET with custom SQL strings.
 1. Protect user password by hashing and salting with [BCrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/). Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
 
@@ -18,7 +19,7 @@ The idea behind this Razor Pages application is to build small web application u
 1. Vanilla JavaScript with AJAX.
 1. WebPack module bundler.
 
-User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean it and easy to maintain, such approach produces large overhead and it is not recommended for production.
+User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean, it may not be easy to maintain, such approach usually leads to large overhead and it is not recommended for broader usage.
 
 ### Back-end
 
