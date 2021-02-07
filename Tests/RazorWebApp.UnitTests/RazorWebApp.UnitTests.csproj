@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RazorWebApp\RazorWebApp.csproj" />
+    <ProjectReference Include="..\..\RazorWebApp\RazorWebApp.csproj" />
   </ItemGroup>
 
 </Project>
