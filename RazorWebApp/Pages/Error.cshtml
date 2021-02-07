@@ -1,35 +1,22 @@
-﻿@page
+@page
 @model ErrorModel
-
     <section id="ErrorPage">
-
         <div class="container mt-6 mb-6">
-
             <div class="columns is-mobile mt-6 mb-6">
-
                 <div class="column is-8 is-offset-2 box">
-                        
                     <div class="column is-8 is-offset-2">
-
                         <div class="container mt-4">
                             <h1 class="title">Error</h1>
                             <h2 class="subtitle">An error occurred while processing your request.</h2>
                         </div>
-
                         <div class="content mt-6 mb-6">
                             <strong>Request ID:</strong> <code>@ViewData["RequestId"]</code>
                         </div>
-
                         <div class="content mt-6 mb-6">
                             Please contact IT support.
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </section>
