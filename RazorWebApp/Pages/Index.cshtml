@@ -1,78 +1,66 @@
-﻿@page
+@page
 @model IndexModel
-
     <section id="IndexPage" data-xsrf="@ViewData["XCSRF"]">
-
         <div id="Handle_Modal" class="modal"></div>
-
         <section class="hero is-medium is-info">
-
             <div class="hero-body">
-
                 <div class="container">
-
                     <h1 class="title">
                         Example application in NET Core 3.1.
                     </h1>
-
                     <h2 class="subtitle">
-                        Secure WebApp
+                        Razor WebApp
                     </h2>
-
                 </div>
-
             </div>
-
         </section>
-
         <section class="section">
-
             <div class="container mt-3 mb-3">
-
                 <h1 class="title">The purpose</h1>
-
                 <h2 class="subtitle">
                     Why this has been created in first place?
                 </h2>
-
                 <p>
-                    This web application has been built as an example of an application that is in compliance with some security best practices describded in the following article 
-                    <a href="https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc" target="_blank">SQL Injection</a> posted on <a href="https://medium.com/" target="_blank">Medium.com</a>. Therefore:
+                    Test Razor Pages application being an opposite of the Unsecure WebApp that has been written for the sole purpose of the article titled SQL 
+                    Injection being an extension of another article I said goodbye to Stored Procedures.
                 </p>
-
+                <p>
+                    The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side 
+                    interactions (it uses classes and components). It should:
+                </p>
                 <div class="content">
                     <ol>
                         <li>
-                            User input is validated on the front-end and on the back-end.
+                            Validate user input: front-end via own code or validate.js (preferable); back-end via model valiation or FluentValidation (preferable).
                         </li>
                         <li>
-                            Instead of ADO.NET with custom SQL string, we use OR/M (Entity Framework Core).
+                            Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token.
                         </li>
                         <li>
-                            User password is hashed and salted with <a href="https://auth0.com/blog/hashing-in-action-understanding-bcrypt/" target="_blank">BCrypt</a>.
-                            Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA).
-                            Using BCrypt (or SCrypt) is much preferable.
+                            Provide tests for Razor Pages with Anti-Forgery Token.
+                        </li>
+                        <li>
+                            Use OR/M (Entity Framework Core) and LINQ instead of ADO.NET with custom SQL strings.
+                        </li>
+                        <li>
+                            Protect user password by hashing and salting with BCrypt. Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
                         </li>
                     </ol>
                 </div>
-
                 <p>
                     Currently, this example application focuses more on the back-end than on the front-end. The selected CSS framework have no jQuery/JavaScript code, so the custom JavaScript logic has been written. 
                     It is fairly simple front-end (multipages, no SPA) with only few components, it uses Anti-Forgery Token along with Session Id (both HTTP only).
                 </p>
-
+                <p>
+                    As stated, user interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean, it may not be easy to maintain, such approach usually leads to large overhead and it is not recommended for broader usage.
+                </p>              
             </div>
-
             <div class="is-divider"></div>
-
             <div class="container mt-3 mb-3">
-
                 <h1 class="title">The example</h1>
-
                 <h2 class="subtitle">
                     How does it work?
                 </h2>
-
                 <div class="mb-3">
                     There are five web pages, among them most important are <strong>Register page</strong> (allows to create new user account) and <strong>Login page</strong> (allows to login to the given account).
                     Once the account is created we display modal window with the confirmation. However, if the user is logged, then we setup a 15 minutes session and redirect back to this page.
@@ -84,19 +72,13 @@
                 <div class="mb-3">
                     Never the less, this demo application maybe extended later on.
                 </div>
-
             </div>
-
             <div class="is-divider"></div>
-
             <div class="container mt-3 mb-3">
-
                 <h1 class="title">The technology</h1>
-
                 <h2 class="subtitle">
                     What has been used?
                 </h2>
-
                 <p>
                     Front-end:
                 </p>
@@ -116,7 +98,6 @@
                         </li>
                     </ol>
                 </div>
-
                 <p>
                     Back-end:
                 </p>
@@ -133,9 +114,6 @@
                         </li>
                     </ol>
                 </div>
-
             </div>
-
         </section>
-
     </section>
