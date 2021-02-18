@@ -9,7 +9,7 @@ BEGIN TRY
         BULK INSERT 
             Countries
         FROM 
-            'C:\Tmp\Countries.csv'
+            '/Countries.csv'
         WITH
         (
             FIRSTROW = 2,
@@ -21,7 +21,7 @@ BEGIN TRY
         BULK INSERT 
             Cities
         FROM 
-            'C:\Tmp\Cities.csv'
+            '/Cities.csv'
         WITH
         (
             FIRSTROW = 2,
