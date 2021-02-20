@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using RazorWebApp.ViewModel;
+using RazorWebApp.Models;
 using RazorWebApp.Infrastructure.Database;
 
 namespace RazorWebApp.Logic.Repository

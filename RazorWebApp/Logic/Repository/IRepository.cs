@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using RazorWebApp.ViewModel;
+using RazorWebApp.Models;
 
 namespace RazorWebApp.Logic.Repository
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using RazorWebApp.ViewModel;
+using RazorWebApp.Models;
 
 namespace RazorWebApp.Shared.Dto
 {
