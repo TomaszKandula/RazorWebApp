@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorWebApp.Shared;
 using RazorWebApp.Logger;
-using RazorWebApp.ViewModel;
+using RazorWebApp.Models;
 using RazorWebApp.Infrastructure.Database;
 using RazorWebApp.Exceptions;
 

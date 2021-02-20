@@ -1,4 +1,4 @@
-﻿namespace RazorWebApp.ViewModel
+﻿namespace RazorWebApp.Models
 {
     public class CountryList
     {
