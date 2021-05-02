@@ -21,17 +21,18 @@
                     Why this has been created in first place?
                 </h2>
                 <p>
-                    Test Razor Pages application being an opposite of the Unsecure WebApp that has been written for the sole purpose of the article titled SQL 
-                    Injection being an extension of another article I said goodbye to Stored Procedures.
+                    Razor WebApp is an opposite of the <a href='https://github.com/TomaszKandula/UnsecureWebApp' target='_blank'>Unsecure WebApp</a> 
+                    that has been written for the sole purpose of the article titled <a href='https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc'>SQL Injection</a> 
+                    being an extension of another article <a href='https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486'>I said goodbye to Stored Procedures</a>.
                 </p>
                 <p>
-                    The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side 
-                    interactions (it uses classes and components). It should:
+                    The idea behind this Razor Pages application is to build a small web application using server-side rendering and plain JavaScript 
+                    for client-side interactions (it uses classes and components). It should:
                 </p>
                 <div class="content">
                     <ol>
                         <li>
-                            Validate user input: front-end via own code or validate.js (preferable); back-end via model valiation or FluentValidation (preferable).
+                            Validate user input: front-end via own code or validate.js (preferable); back-end via model validation or FluentValidation (preferable).
                         </li>
                         <li>
                             Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token.
@@ -43,16 +44,17 @@
                             Use OR/M (Entity Framework Core) and LINQ instead of ADO.NET with custom SQL strings.
                         </li>
                         <li>
-                            Protect user password by hashing and salting with BCrypt. Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
+                            Protect user password by hashing and salting with <a href='https://auth0.com/blog/hashing-in-action-understanding-bcrypt/'>BCrypt</a>. 
+                            Please note that we do not use SHA2_512 and GUID for hashing and salting on the server-side via SQL stored procedures 
+                            (this would be the alternative approach, most likely implemented by DBA). Using BCrypt (or SCrypt) is much preferable.
                         </li>
                     </ol>
                 </div>
                 <p>
-                    Currently, this example application focuses more on the back-end than on the front-end. The selected CSS framework have no jQuery/JavaScript code, so the custom JavaScript logic has been written. 
-                    It is fairly simple front-end (multipages, no SPA) with only few components, it uses Anti-Forgery Token along with Session Id (both HTTP only).
-                </p>
-                <p>
-                    As stated, user interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean, it may not be easy to maintain, such approach usually leads to large overhead and it is not recommended for broader usage.
+                    User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules. 
+                    Each Razor Pages has its own dedicated JavaScript class that adds events, performs binding and render buttons component, and message box 
+                    component (it returns HTML for given handle). While this is relatively clean, it may not be easy to maintain; such an approach usually 
+                    leads to significant overhead, and it is not recommended for broader usage.
                 </p>              
             </div>
             <div class="is-divider"></div>
