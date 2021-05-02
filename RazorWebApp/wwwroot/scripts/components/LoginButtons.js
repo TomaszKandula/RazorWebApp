@@ -51,7 +51,7 @@ export default class LoginButtons
         if (this.Handle_Logout) this.Handle_Logout.addEventListener("click", () => { this.LLogoutAction(); });
     }
 
-    Render_Signup_Login()
+    RenderSignupLogin()
     {
         return this.LButtonHandle.innerHTML = 
             `<div id="Handle_Signup" class="button is-info set-invisible">
@@ -62,7 +62,7 @@ export default class LoginButtons
             </div>`;
     }
 
-    Render_Logout()
+    RenderLogout()
     {
         return this.LButtonHandle.innerHTML =
             `<div id="Handle_Logout" class="button is-light set-invisible">
@@ -75,13 +75,13 @@ export default class LoginButtons
         switch (this.LCombination)
         {
             case "Signup_Login":
-                this.Render_Signup_Login();
+                this.RenderSignupLogin();
                 break;
             case "Logout":
-                this.Render_Logout();
+                this.RenderLogout();
                 break;
             default:
-                this.Render_Signup_Login();
+                this.RenderSignupLogin();
         }
     }
 }
