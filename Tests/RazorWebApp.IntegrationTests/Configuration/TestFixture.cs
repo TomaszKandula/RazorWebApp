@@ -16,56 +16,17 @@ namespace RazorWebApp.IntegrationTests.Configuration
     public sealed class TestFixture<TStartup> : IDisposable
     {
         private TestServer Server { get; }
+        
         public HttpClient Client { get; }
 
+        public string BaseAddress { get; set; } = "http://localhost:5000";
+
+        public TestFixture() : this(Path.Combine("")) { }
+        
         public void Dispose()
         {
             Client.Dispose();
             Server.Dispose();
-        }
-
-        private static string GetProjectPath(string AProjectRelativePath, Assembly AStartupAssembly)
-        {
-            var LProjectName = AStartupAssembly.GetName().Name;
-            var LApplicationBasePath = AppContext.BaseDirectory;
-            var LDirectoryInfo = new DirectoryInfo(LApplicationBasePath);
-
-            do
-            {
-                LDirectoryInfo = LDirectoryInfo.Parent;
-                var LProjectDirectoryInfo = new DirectoryInfo(Path.Combine(LDirectoryInfo.FullName, AProjectRelativePath));
-                if (!LProjectDirectoryInfo.Exists) continue;
-                if (new FileInfo(Path.Combine(LProjectDirectoryInfo.FullName, LProjectName, $"{LProjectName}.csproj")).Exists)
-                {
-                    return Path.Combine(LProjectDirectoryInfo.FullName, LProjectName);
-                }
-            }
-            while (LDirectoryInfo.Parent != null);
-
-            throw new Exception($"Project root could not be located using the application root {LApplicationBasePath}.");
-        }
-
-        private static void InitializeServices(IServiceCollection AServices)
-        {
-            var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
-            var LManager = new ApplicationPartManager
-            {
-                ApplicationParts =
-                {
-                    new AssemblyPart(LStartupAssembly)
-                },
-                FeatureProviders =
-                {
-                    new ControllerFeatureProvider(),
-                    new ViewComponentFeatureProvider()
-                }
-            };
-
-            AServices.AddSingleton(LManager);
-        }
-
-        public TestFixture() : this(Path.Combine(""))
-        {
         }
 
         private TestFixture(string ARelativeTargetProjectParentDir)
@@ -90,9 +51,47 @@ namespace RazorWebApp.IntegrationTests.Configuration
             // Add configuration for client
             Client = Server.CreateClient();
             Client.Timeout = TimeSpan.FromSeconds(600);
-            Client.BaseAddress = new Uri("http://localhost:5000");
+            Client.BaseAddress = new Uri(BaseAddress);
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+        
+        private static void InitializeServices(IServiceCollection AServices)
+        {
+            var LStartupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
+            var LManager = new ApplicationPartManager
+            {
+                ApplicationParts =
+                {
+                    new AssemblyPart(LStartupAssembly)
+                },
+                FeatureProviders =
+                {
+                    new ControllerFeatureProvider(),
+                    new ViewComponentFeatureProvider()
+                }
+            };
+
+            AServices.AddSingleton(LManager);
+        }
+        
+        private static string GetProjectPath(string AProjectRelativePath, Assembly AStartupAssembly)
+        {
+            var LProjectName = AStartupAssembly.GetName().Name;
+            var LApplicationBasePath = AppContext.BaseDirectory;
+            var LDirectoryInfo = new DirectoryInfo(LApplicationBasePath);
+
+            do
+            {
+                LDirectoryInfo = LDirectoryInfo.Parent;
+                var LProjectDirectoryInfo = new DirectoryInfo(Path.Combine(LDirectoryInfo?.FullName ?? string.Empty, AProjectRelativePath));
+                if (!LProjectDirectoryInfo.Exists) continue;
+                if (new FileInfo(Path.Combine(LProjectDirectoryInfo.FullName, LProjectName ?? string.Empty, $"{LProjectName}.csproj")).Exists)
+                    return Path.Combine(LProjectDirectoryInfo.FullName, LProjectName ?? string.Empty);
+            }
+            while (LDirectoryInfo?.Parent != null);
+
+            throw new Exception($"Project root could not be located using the application root {LApplicationBasePath}.");
         }
     }
 }

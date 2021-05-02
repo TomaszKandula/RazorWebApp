@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorWebApp.Logger;
+using RazorWebApp.Exceptions;
 
 namespace RazorWebApp.Pages
 {
@@ -10,13 +11,13 @@ namespace RazorWebApp.Pages
     public class ErrorModel : PageModel
     {
         private string RequestId { get; set; }
+        
         private bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        
         private readonly IAppLogger FAppLogger;
 
         public ErrorModel(IAppLogger AAppLogger)
-        {
-            FAppLogger = AAppLogger;
-        }
+            => FAppLogger = AAppLogger;
 
         public IActionResult OnGet()
         {
@@ -37,10 +38,7 @@ namespace RazorWebApp.Pages
             }
             catch (Exception LException)
             {
-                var LErrorDesc = string.IsNullOrEmpty(LException.InnerException?.Message) 
-                    ? LException.Message 
-                    : $"{LException.Message} ({ LException.InnerException.Message}).";
-                FAppLogger.LogFatality($"[ErrorModel.OnGet]: an error has been thrown: {LErrorDesc}.");
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
                 throw;
             }
         }

@@ -13,20 +13,18 @@ namespace RazorWebApp.Pages
         private readonly IAppLogger FAppLogger;
 
         public LogoutModel(IAppLogger AAppLogger)
-        {
-            FAppLogger = AAppLogger;
-        }
+            => FAppLogger = AAppLogger;
 
         public IActionResult OnGet()
         {
             try 
             {
-                var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SessionId);
+                var LSessionId = HttpContext.Session.GetString(Constants.Sessions.KeyNames.SESSION_ID);
                 if (!string.IsNullOrEmpty(LSessionId))
                 {
-                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, string.Empty);
-                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, string.Empty);
-                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, string.Empty);
+                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.SESSION_ID, string.Empty);
+                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.EMAIL_ADDRESS, string.Empty);
+                    HttpContext.Session.SetString(Constants.Sessions.KeyNames.EXPIRES_AT, string.Empty);
                 }
                 else 
                 {
@@ -35,9 +33,9 @@ namespace RazorWebApp.Pages
 
                 return Page();
             }
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
                 throw;
             }
         }

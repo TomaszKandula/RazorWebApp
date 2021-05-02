@@ -16,9 +16,7 @@ namespace RazorWebApp
         {
             var LOgsPath = AppDomain.CurrentDomain.BaseDirectory + "\\Logs";
             if (!Directory.Exists(LOgsPath))
-            {
                 Directory.CreateDirectory(LOgsPath);
-            }
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -41,7 +39,7 @@ namespace RazorWebApp
             }
             catch (Exception LException)
             {
-                Log.Fatal(LException, "WebHost has been terminated unexpectedly.");
+                Log.Fatal(LException, "WebHost has been terminated unexpectedly");
                 return 1;
             }
             finally
