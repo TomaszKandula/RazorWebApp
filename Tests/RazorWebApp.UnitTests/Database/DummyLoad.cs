@@ -6,9 +6,9 @@ namespace RazorWebApp.UnitTests.Database
 {
     public static class DummyLoad
     {
-        public static List<Countries> ReturnDummyCountries()
+        public static IEnumerable<Countries> ReturnDummyCountries()
         {
-            var LCountries = new List<Countries>()
+            var LCountryList = new List<Countries>
             {
                 new Countries 
                 { 
@@ -22,12 +22,12 @@ namespace RazorWebApp.UnitTests.Database
                 }
             };
 
-            return LCountries;
+            return LCountryList;
         }
 
-        public static List<Cities> ReturnDummyCities() 
+        public static IEnumerable<Cities> ReturnDummyCities() 
         {
-            var LCitises = new List<Cities>() 
+            var LCityList = new List<Cities>
             {  
                 new Cities
                 { 
@@ -46,12 +46,12 @@ namespace RazorWebApp.UnitTests.Database
                 }
             };
 
-            return LCitises;
+            return LCityList;
         }
 
-        public static List<Users> ReturnDummyUsers() 
+        public static IEnumerable<Users> ReturnDummyUsers() 
         {
-            var LUsers = new List<Users>()
+            var LUsersList = new List<Users>
             {
                 new Users
                 {
@@ -81,12 +81,12 @@ namespace RazorWebApp.UnitTests.Database
                 }
             };
 
-            return LUsers;
+            return LUsersList;
         }
 
-        public static List<SigninHistory> ReturnSigninHistory() 
+        public static IEnumerable<SigninHistory> ReturnSigninHistory() 
         {
-            var LSigninHistory = new List<SigninHistory>()
+            var LSigninHistory = new List<SigninHistory>
             {               
                 new SigninHistory
                 { 
