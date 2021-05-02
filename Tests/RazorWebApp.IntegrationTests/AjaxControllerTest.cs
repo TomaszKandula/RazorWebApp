@@ -11,14 +11,12 @@ using RazorWebApp.IntegrationTests.Configuration;
 
 namespace RazorWebApp.IntegrationTests
 {
-    public class ControllerTest_Ajax : IClassFixture<TestFixture<Startup>>
+    public class AjaxControllerTest : IClassFixture<TestFixture<Startup>>
     {
         private readonly HttpClient FHttpClient;
 
-        public ControllerTest_Ajax(TestFixture<Startup> ACustomFixture)
-        {
-            FHttpClient = ACustomFixture.Client;
-        }
+        public AjaxControllerTest(TestFixture<Startup> ACustomFixture)
+            => FHttpClient = ACustomFixture.Client;
 
         [Theory]
         [InlineData("tokan@wp.pl")]
@@ -26,16 +24,14 @@ namespace RazorWebApp.IntegrationTests
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
-            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+            var (LFieldValue, LCookieValue) = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
             var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/validation/{AEmailAddress}");
 
-            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
-            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
-
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.ANTI_FORGERY_COOKIE_NAME, LCookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.ANTI_FORGERY_FIELD_NAME, LFieldValue);
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
-            var LContent = await LResponse.Content.ReadAsStringAsync();
 
             // Assert
             LResponse.StatusCode.Should().Be(204);
@@ -46,13 +42,13 @@ namespace RazorWebApp.IntegrationTests
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
-            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+            var (LFieldValue, LCookieValue) = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
             var LNewRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/ajax/countries");
 
-            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
-            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.ANTI_FORGERY_COOKIE_NAME, LCookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.ANTI_FORGERY_FIELD_NAME, LFieldValue);
 
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
@@ -60,6 +56,7 @@ namespace RazorWebApp.IntegrationTests
             // Assert
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<ReturnCountryListDto>(LContent);
+            LDeserialized.Should().NotBeNull();
             LDeserialized.Countries.Should().HaveCount(249);
         }
 
@@ -69,13 +66,13 @@ namespace RazorWebApp.IntegrationTests
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
-            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+            var (LFieldValue, LCookieValue) = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
             var LNewRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/ajax/cities/?countryid={ACountryId}");
 
-            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
-            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.ANTI_FORGERY_COOKIE_NAME, LCookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.ANTI_FORGERY_FIELD_NAME, LFieldValue);
 
             var LResponse = await FHttpClient.SendAsync(LNewRequest);
             var LContent = await LResponse.Content.ReadAsStringAsync();
@@ -83,6 +80,7 @@ namespace RazorWebApp.IntegrationTests
             // Assert
             LResponse.StatusCode.Should().Be(200);
             var LDeserialized = JsonConvert.DeserializeObject<ReturnCityListDto>(LContent);
+            LDeserialized.Should().NotBeNull();
             LDeserialized.Cities.Should().HaveCount(11);
         }
 
@@ -91,23 +89,23 @@ namespace RazorWebApp.IntegrationTests
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/register");
-            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+            var (LFieldValue, LCookieValue) = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
             var LNewRequest = new HttpRequestMessage(HttpMethod.Post, "/api/v1/ajax/users/signup/");
 
-            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
-            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.ANTI_FORGERY_COOKIE_NAME, LCookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.ANTI_FORGERY_FIELD_NAME, LFieldValue);
 
-            var LPayLoad = new UserCreateDto()
+            var LPayLoad = new UserCreateDto
             {
-                FirstName    = DataProvider.GetRandomString(),
-                LastName     = DataProvider.GetRandomString(),
-                NickName     = DataProvider.GetRandomString(),
+                FirstName = DataProvider.GetRandomString(),
+                LastName = DataProvider.GetRandomString(),
+                NickName = DataProvider.GetRandomString(),
                 EmailAddress = DataProvider.GetRandomEmail(),
-                Password     = DataProvider.GetRandomString(),
-                CityId       = 187,
-                CountryId    = 47
+                Password = DataProvider.GetRandomString(),
+                CityId = 187,
+                CountryId = 47
             };
 
             LNewRequest.Content = new StringContent(JsonConvert.SerializeObject(LPayLoad), System.Text.Encoding.Default, "application/json");
@@ -122,15 +120,15 @@ namespace RazorWebApp.IntegrationTests
         {
             // Arrange
             var LRegisterPageResponse = await FHttpClient.GetAsync("/login");
-            var LAntiForgeryValues = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
+            var (LFieldValue, LCookieValue) = await AntiForgeryTokenExtractor.ExtractAntiForgeryValues(LRegisterPageResponse);
 
             // Act
             var LNewRequest = new HttpRequestMessage(HttpMethod.Post, "/api/v1/ajax/users/signin/");
 
-            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.AntiForgeryCookieName, LAntiForgeryValues.CookieValue).ToString());
-            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.AntiForgeryFieldName, LAntiForgeryValues.FieldValue);
+            LNewRequest.Headers.Add("Cookie", new CookieHeaderValue(AntiForgeryTokenExtractor.ANTI_FORGERY_COOKIE_NAME, LCookieValue).ToString());
+            LNewRequest.Headers.TryAddWithoutValidation(AntiForgeryTokenExtractor.ANTI_FORGERY_FIELD_NAME, LFieldValue);
 
-            var LPayLoad = new UserLoginDto()
+            var LPayLoad = new UserLoginDto
             {
                 EmailAddr = DataProvider.GetRandomEmail(),
                 Password  = DataProvider.GetRandomString()
