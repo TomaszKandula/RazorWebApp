@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logic\Accounts\" />
-    <Folder Include="Logic\Emails\" />
-    <Folder Include="Logic\Repository\" />
+    <Folder Include="LogicContext\Accounts\" />
+    <Folder Include="LogicContext\Emails\" />
+    <Folder Include="LogicContext\Repository\" />
   </ItemGroup>
 
   <ItemGroup>

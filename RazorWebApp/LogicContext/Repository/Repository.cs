@@ -6,20 +6,19 @@ using Microsoft.EntityFrameworkCore;
 using RazorWebApp.Models;
 using RazorWebApp.Infrastructure.Database;
 
-namespace RazorWebApp.Logic.Repository
+namespace RazorWebApp.LogicContext.Repository
 {
     public class Repository : IRepository
     {
         private readonly MainDbContext FMainDbContext;
 
         public Repository(MainDbContext AMainDbContext) 
-        {
-            FMainDbContext = AMainDbContext;
-        }
+            => FMainDbContext = AMainDbContext;
 
         /// <summary>
         /// Return list of all available countries.
         /// </summary>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<List<CountryList>> ReturnCountryList(CancellationToken ACancellationToken = default)
         {
@@ -39,6 +38,7 @@ namespace RazorWebApp.Logic.Repository
         /// Return list of cities for given Country Id.
         /// </summary>
         /// <param name="AId"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<List<CityList>> ReturnCityList(int AId, CancellationToken ACancellationToken = default)
         {

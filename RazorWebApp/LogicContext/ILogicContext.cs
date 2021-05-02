@@ -1,8 +1,8 @@
-﻿using RazorWebApp.Logic.Emails;
-using RazorWebApp.Logic.Accounts;
-using RazorWebApp.Logic.Repository;
+﻿using RazorWebApp.LogicContext.Emails;
+using RazorWebApp.LogicContext.Accounts;
+using RazorWebApp.LogicContext.Repository;
 
-namespace RazorWebApp.Logic
+namespace RazorWebApp.LogicContext
 {
     public interface ILogicContext
     {

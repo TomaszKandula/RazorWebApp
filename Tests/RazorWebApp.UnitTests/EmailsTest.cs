@@ -4,21 +4,20 @@ using FluentAssertions;
 using MockQueryable.Moq;
 using System.Linq;
 using System.Threading.Tasks;
-using RazorWebApp.Logic.Emails;
 using RazorWebApp.UnitTests.Database;
+using RazorWebApp.LogicContext.Emails;
 using RazorWebApp.Infrastructure.Database;
 
 namespace RazorWebApp.UnitTests
 {
-    public class LogicTest_Emails
+    public class EmailsTest
     {
-        private readonly Mock<MainDbContext> FMockDbContext;
         private readonly IEmails FEmails;
 
-        public LogicTest_Emails() 
+        public EmailsTest() 
         {
             // Create instances to mocked all dependencies           
-            FMockDbContext = new Mock<MainDbContext>();
+            var LMockDbContext = new Mock<MainDbContext>();
 
             // Upload pre-fixed dummy data
             var LCountriesDbSet = DummyLoad.ReturnDummyCountries().AsQueryable().BuildMockDbSet();
@@ -27,13 +26,13 @@ namespace RazorWebApp.UnitTests
             var LSigninHistory = DummyLoad.ReturnSigninHistory().AsQueryable().BuildMockDbSet();
 
             // Populate database tables with dummy data
-            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Countries).Returns(LCountriesDbSet.Object);
-            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Cities).Returns(LCitiesDbSet.Object);
-            FMockDbContext.Setup(AMainDbContext => AMainDbContext.Users).Returns(LUsersDbSet.Object);
-            FMockDbContext.Setup(AMainDbContext => AMainDbContext.SigninHistory).Returns(LSigninHistory.Object);
+            LMockDbContext.Setup(AMainDbContext => AMainDbContext.Countries).Returns(LCountriesDbSet.Object);
+            LMockDbContext.Setup(AMainDbContext => AMainDbContext.Cities).Returns(LCitiesDbSet.Object);
+            LMockDbContext.Setup(AMainDbContext => AMainDbContext.Users).Returns(LUsersDbSet.Object);
+            LMockDbContext.Setup(AMainDbContext => AMainDbContext.SigninHistory).Returns(LSigninHistory.Object);
 
             // Create test instance with mocked dependencies
-            FEmails = new Emails(FMockDbContext.Object);
+            FEmails = new Emails(LMockDbContext.Object);
         }
 
         [Theory]
@@ -46,7 +45,7 @@ namespace RazorWebApp.UnitTests
 
         [Theory]
         [InlineData("bob.dylan@gmail.com")]
-        public async Task Should_ChcekEmailAddress(string AEmailAddress)
+        public async Task Should_CheckEmailAddress(string AEmailAddress)
         {
             var LResult = await FEmails.IsEmailAddressExist(AEmailAddress);
             LResult.Should().BeTrue();

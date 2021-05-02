@@ -7,22 +7,21 @@ using RazorWebApp.Shared.Dto;
 using RazorWebApp.Infrastructure.Database;
 using RazorWebApp.Infrastructure.Domain.Entities;
 
-namespace RazorWebApp.Logic.Accounts
+namespace RazorWebApp.LogicContext.Accounts
 {
     public class Accounts : IAccounts
     {
         private readonly MainDbContext FMainDbContext;
 
         public Accounts(MainDbContext AMainDbContext) 
-        {
-            FMainDbContext = AMainDbContext;
-        }
+            => FMainDbContext = AMainDbContext;
 
         /// <summary>
         /// Perform sign-up action for given PayLoad and Password Salt (recommended value is > 10).
         /// </summary>
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt, CancellationToken ACancellationToken = default) 
         {
@@ -32,19 +31,19 @@ namespace RazorWebApp.Logic.Accounts
             
             var LNewUser = new Users
             { 
-                FirstName   = APayLoad.FirstName,
-                LastName    = APayLoad.LastName,
-                NickName    = APayLoad.NickName,
-                EmailAddr   = APayLoad.EmailAddress,
-                Password    = LHashedPassword,
-                PhoneNum    = null,
-                CreatedAt   = DateTime.Now,
+                FirstName = APayLoad.FirstName,
+                LastName = APayLoad.LastName,
+                NickName = APayLoad.NickName,
+                EmailAddr = APayLoad.EmailAddress,
+                Password = LHashedPassword,
+                PhoneNum = null,
+                CreatedAt = DateTime.Now,
                 IsActivated = false,
-                CountryId   = APayLoad.CountryId,
-                CityId      = APayLoad.CityId
+                CountryId = APayLoad.CountryId,
+                CityId = APayLoad.CityId
             };
 
-            await FMainDbContext.Users.AddAsync(LNewUser);
+            await FMainDbContext.Users.AddAsync(LNewUser, ACancellationToken);
             await FMainDbContext.SaveChangesAsync(ACancellationToken);
 
             return LNewUser.Id;
@@ -55,6 +54,7 @@ namespace RazorWebApp.Logic.Accounts
         /// </summary>
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<(Guid SessionId, bool IsSignedIn, bool IsExisting)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default)
         {
@@ -63,29 +63,23 @@ namespace RazorWebApp.Logic.Accounts
                 .ToListAsync(ACancellationToken);
 
             if (!LUsers.Any())
-            {
                 return (Guid.Empty, false, false);
-            }
 
             if (!LUsers.Single().IsActivated) 
-            {
                 return (Guid.Empty, false, true);
-            }
 
             var LCheckPassword = BCrypt.BCrypt.CheckPassword(APassword, LUsers.Single().Password);
             if (!LCheckPassword)
-            {
                 return (Guid.Empty, true, true);
-            }
 
             var LSessionId = Guid.NewGuid();
-            var LLogHistory = new SigninHistory()
+            var LLogHistory = new SigninHistory
             {
                 UserId = LUsers.Single().Id,
                 LoggedAt = DateTime.Now,
             };
 
-            await FMainDbContext.SigninHistory.AddAsync(LLogHistory);
+            await FMainDbContext.SigninHistory.AddAsync(LLogHistory, ACancellationToken);
             await FMainDbContext.SaveChangesAsync(ACancellationToken);
 
             return (LSessionId, true, true);

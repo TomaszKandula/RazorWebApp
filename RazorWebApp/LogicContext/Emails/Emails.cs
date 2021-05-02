@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RazorWebApp.Infrastructure.Database;
 
-namespace RazorWebApp.Logic.Emails
+namespace RazorWebApp.LogicContext.Emails
 {
     public class Emails : IEmails
     {
         private readonly MainDbContext FMainDbContext;
 
         public Emails(MainDbContext AMainDbContext) 
-        {
-            FMainDbContext = AMainDbContext;
-        }
+            => FMainDbContext = AMainDbContext;
 
         /// <summary>
         /// Parse given email address using MailAddress class provided in NET Core.
@@ -42,6 +40,7 @@ namespace RazorWebApp.Logic.Emails
         /// Check if given email address already exists.
         /// </summary>
         /// <param name="AEmailAddress"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<bool> IsEmailAddressExist(string AEmailAddress, CancellationToken ACancellationToken = default)
         {
@@ -59,6 +58,7 @@ namespace RazorWebApp.Logic.Emails
         /// </summary>
         /// <seealso href="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         public async Task<bool> IsEmailDomainExist(string AEmailAddress, CancellationToken ACancellationToken = default) 
         {

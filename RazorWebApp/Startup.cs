@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.ResponseCompression;
-using RazorWebApp.Logic;
 using RazorWebApp.Logger;
 using RazorWebApp.Shared;
+using RazorWebApp.LogicContext;
 using RazorWebApp.Infrastructure.Database;
 
 namespace RazorWebApp
@@ -19,13 +19,12 @@ namespace RazorWebApp
         private readonly IConfiguration FConfiguration;
 
         public Startup(IConfiguration AConfiguration) 
-        {
-            FConfiguration = AConfiguration;
-        }
+            =>FConfiguration = AConfiguration;
 
         public void ConfigureServices(IServiceCollection AServices)
         {
-            AServices.AddMvc(AOption => AOption.CacheProfiles
+            AServices
+                .AddMvc(AOption => AOption.CacheProfiles
                 .Add("ResponseCache", new CacheProfile
                 {
                     Duration = 5,
@@ -33,11 +32,16 @@ namespace RazorWebApp
                     NoStore = false
                 }));
 
-            AServices.AddMvc(AOption => AOption.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            AServices
+                .AddMvc(AOption => AOption.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            
             AServices.AddRazorPages().AddRazorRuntimeCompilation();
             AServices.AddControllers();
 
-            AServices.AddSession(AOptions => AOptions.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IdleTimeout));
+            AServices.AddSession(AOptions 
+                => AOptions.IdleTimeout = TimeSpan.FromMinutes(Constants.Sessions.IDLE_TIMEOUT));
+
             AServices.AddAntiforgery(AOption =>
             {
                 AOption.Cookie.Name = "AntiForgeryTokenCookie";
@@ -45,13 +49,17 @@ namespace RazorWebApp
             });
 
             AServices.AddSingleton<IAppLogger, AppLogger>();
-            AServices.AddDbContext<MainDbContext>(AOptions => AOptions.UseSqlServer(FConfiguration.GetConnectionString("DbConnect"), AAddOptions => AAddOptions.EnableRetryOnFailure()));
-            AServices.AddScoped<ILogicContext, LogicContext>();
+            
+            AServices
+                .AddDbContext<MainDbContext>(AOptions => AOptions
+                .UseSqlServer(FConfiguration
+                    .GetConnectionString("DbConnect"), AAddOptions => AAddOptions
+                    .EnableRetryOnFailure()));
+            
+            AServices.AddScoped<ILogicContext, LogicContext.LogicContext>();
 
-            AServices.AddResponseCompression(AOptions =>
-            {
-                AOptions.Providers.Add<GzipCompressionProvider>();
-            });
+            AServices.AddResponseCompression(AOptions 
+                => AOptions.Providers.Add<GzipCompressionProvider>());
         }
 
         public void Configure(IApplicationBuilder AApplication, IWebHostEnvironment AEnvironment)

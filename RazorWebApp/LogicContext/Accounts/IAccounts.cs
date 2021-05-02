@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RazorWebApp.Shared.Dto;
 
-namespace RazorWebApp.Logic.Accounts
+namespace RazorWebApp.LogicContext.Accounts
 {
     public interface IAccounts
     {
@@ -12,6 +12,7 @@ namespace RazorWebApp.Logic.Accounts
         /// </summary>
         /// <param name="APayLoad"></param>
         /// <param name="APasswordSalt"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         Task<int> SignUp(UserCreateDto APayLoad, int APasswordSalt, CancellationToken ACancellationToken = default);
 
@@ -20,6 +21,7 @@ namespace RazorWebApp.Logic.Accounts
         /// </summary>
         /// <param name="AEmailAddr"></param>
         /// <param name="APassword"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         Task<(Guid SessionId, bool IsSignedIn, bool IsExisting)> SignIn(string AEmailAddr, string APassword, CancellationToken ACancellationToken = default);
     }

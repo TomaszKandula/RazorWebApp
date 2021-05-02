@@ -3,11 +3,11 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using RazorWebApp.Logic;
 using RazorWebApp.Logger;
 using RazorWebApp.Shared;
 using RazorWebApp.Exceptions;
 using RazorWebApp.Shared.Dto;
+using RazorWebApp.LogicContext;
 using RazorWebApp.Shared.Resources;
 
 namespace RazorWebApp.Controllers
@@ -18,6 +18,7 @@ namespace RazorWebApp.Controllers
     public class AjaxController : Controller
     {
         private readonly ILogicContext FLogicContext;
+        
         private readonly IAppLogger FAppLogger;
 
         public AjaxController(ILogicContext ALogicContext, IAppLogger AAppLogger) 
@@ -58,22 +59,20 @@ namespace RazorWebApp.Controllers
                     });
                 }
 
-                if (!await FLogicContext.Emails.IsEmailDomainExist(AEmailAddress)) 
+                if (await FLogicContext.Emails.IsEmailDomainExist(AEmailAddress)) 
+                    return StatusCode(204);
+                
+                FAppLogger.LogWarn(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS);
+                return StatusCode(400, new ErrorHandlerDto 
                 {
-                    FAppLogger.LogWarn(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS);
-                    return StatusCode(400, new ErrorHandlerDto() 
-                    {
-                        ErrorCode = nameof(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS),
-                        ErrorDesc = ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS
-                    });
-                }
-
-                return StatusCode(204);
+                    ErrorCode = nameof(ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS),
+                    ErrorDesc = ErrorCodes.EMAIL_DOMAIN_NOT_EXISTS
+                });
             } 
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
-                return StatusCode(500, ControllerException.Handle(AException));
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(LException));
             }
         }
 
@@ -93,10 +92,10 @@ namespace RazorWebApp.Controllers
                     Countries = await FLogicContext.Repository.ReturnCountryList() 
                 });
             }
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
-                return StatusCode(500, ControllerException.Handle(AException));
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(LException));
             }
         }
 
@@ -118,10 +117,10 @@ namespace RazorWebApp.Controllers
                     Cities = await FLogicContext.Repository.ReturnCityList(CountryId) 
                 });
             } 
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
-                return StatusCode(500, ControllerException.Handle(AException));
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(LException));
             }
         }
 
@@ -171,15 +170,15 @@ namespace RazorWebApp.Controllers
                 FAppLogger.LogInfo($"New user '{APayLoad.EmailAddress}' has been successfully registered.");               
                 return StatusCode(204);
             }
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
-                return StatusCode(500, ControllerException.Handle(AException));
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(LException));
             }
         }
 
         /// <summary>
-        /// Endpoint allowing singin to the website.
+        /// Endpoint allowing sign-in to the website.
         /// </summary>
         /// <param name="APayLoad"></param>
         /// <returns></returns>
@@ -200,9 +199,9 @@ namespace RazorWebApp.Controllers
                     });
                 }
 
-                var (LSessionId, LIsSignedIn, IsExisting) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
+                var (LSessionId, LIsSignedIn, LIsExisting) = await FLogicContext.Accounts.SignIn(APayLoad.EmailAddr, APayLoad.Password);
 
-                if (!IsExisting)
+                if (!LIsExisting)
                 {
                     FAppLogger.LogError(ErrorCodes.EMAIL_DOES_NOT_EXIST);
                     return StatusCode(400, new ErrorHandlerDto
@@ -232,18 +231,18 @@ namespace RazorWebApp.Controllers
                     });
                 }
 
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SessionId, LSessionId.ToString());
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EmailAddr, APayLoad.EmailAddr);
-                HttpContext.Session.SetString(Constants.Sessions.KeyNames.ExpiresAt, DateTime.Now
-                    .AddMinutes(Constants.Sessions.IdleTimeout)
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.SESSION_ID, LSessionId.ToString());
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EMAIL_ADDRESS, APayLoad.EmailAddr);
+                HttpContext.Session.SetString(Constants.Sessions.KeyNames.EXPIRES_AT, DateTime.Now
+                    .AddMinutes(Constants.Sessions.IDLE_TIMEOUT)
                     .ToString(CultureInfo.InvariantCulture));
 
                 return StatusCode(204);
             }
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
-                return StatusCode(500, ControllerException.Handle(AException));
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
+                return StatusCode(500, ControllerException.Handle(LException));
             }
         }      
     }
