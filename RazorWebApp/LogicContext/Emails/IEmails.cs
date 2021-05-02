@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace RazorWebApp.Logic.Emails
+namespace RazorWebApp.LogicContext.Emails
 {
     public interface IEmails
     {
@@ -17,6 +17,7 @@ namespace RazorWebApp.Logic.Emails
         /// Check if given email address ready exists.
         /// </summary>
         /// <param name="AEmailAddress"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         Task<bool> IsEmailAddressExist(string AEmailAddress, CancellationToken ACancellationToken = default);
 
@@ -25,6 +26,7 @@ namespace RazorWebApp.Logic.Emails
         /// </summary>
         /// <seealso href="https://dnsclient.michaco.net"/>
         /// <param name="AEmailAddress"></param>
+        /// <param name="ACancellationToken"></param>
         /// <returns></returns>
         Task<bool> IsEmailDomainExist(string AEmailAddress, CancellationToken ACancellationToken = default);
     }
