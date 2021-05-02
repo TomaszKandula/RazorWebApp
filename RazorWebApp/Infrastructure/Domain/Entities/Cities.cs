@@ -6,7 +6,6 @@ namespace RazorWebApp.Infrastructure.Domain.Entities
     {
         public int CountryId { get; set; }
 
-
         public string CityName { get; set; }
 
         public virtual Countries Country { get; set; }

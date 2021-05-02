@@ -10,13 +10,13 @@
         public static class Sessions 
         {
             /* Use this value to determine user session timeout */
-            public const int IdleTimeout = 15;
+            public const int IDLE_TIMEOUT = 15;
 
             internal static class KeyNames 
             {
-                public const string SessionId = "SessionId";
-                public const string EmailAddr = "EmailAddr";
-                public const string ExpiresAt = "ExpiresAt";
+                public const string SESSION_ID = "SessionId";
+                public const string EMAIL_ADDRESS = "EmailAddr";
+                public const string EXPIRES_AT = "ExpiresAt";
             }
         }       
     }

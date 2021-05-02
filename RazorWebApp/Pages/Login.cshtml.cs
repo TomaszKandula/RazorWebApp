@@ -12,6 +12,7 @@ namespace RazorWebApp.Pages
     public class LoginModel : PageModel
     {
         private readonly IAppLogger FAppLogger;
+        
         private readonly IAntiforgery FAntiforgery;
 
         public LoginModel(IAppLogger AAppLogger, IAntiforgery AAntiforgery)
@@ -25,7 +26,7 @@ namespace RazorWebApp.Pages
             try 
             {
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
+                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EMAIL_ADDRESS);
                 if (!string.IsNullOrEmpty(LLoggedUser)) 
                 {
                     return RedirectToPage("./Index");
@@ -33,9 +34,9 @@ namespace RazorWebApp.Pages
 
                 return Page();
             }
-            catch (Exception AException)
+            catch (Exception LException)
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
                 throw;
             }
         }

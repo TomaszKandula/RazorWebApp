@@ -10,15 +10,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorWebApp.Shared;
 using RazorWebApp.Logger;
 using RazorWebApp.Models;
-using RazorWebApp.Infrastructure.Database;
 using RazorWebApp.Exceptions;
+using RazorWebApp.Infrastructure.Database;
 
 namespace RazorWebApp.Pages
 {
     public class RegisterModel : PageModel
     {
         private readonly IAppLogger FAppLogger;
+        
         private readonly MainDbContext FMainDbContext;
+
         private readonly IAntiforgery FAntiforgery;
 
         [BindProperty]
@@ -36,33 +38,30 @@ namespace RazorWebApp.Pages
             try
             {
                 ViewData["XCSRF"] = FAntiforgery.GetAndStoreTokens(HttpContext).RequestToken;
-                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EmailAddr);
+                var LLoggedUser = HttpContext.Session.GetString(Constants.Sessions.KeyNames.EMAIL_ADDRESS);
 
                 if (!string.IsNullOrEmpty(LLoggedUser))
-                {
                     return RedirectToPage("./Index");
-                }
 
-                CountryList = await FMainDbContext.Countries.Select(ACountries => new CountryList() 
-                { 
-                    Id   = ACountries.Id, 
-                    Name = ACountries.CountryName 
-                })
-                .AsNoTracking()
-                .ToListAsync();
+                CountryList = await FMainDbContext.Countries
+                    .AsNoTracking()
+                    .Select(ACountries => new CountryList
+                    { 
+                        Id   = ACountries.Id, 
+                        Name = ACountries.CountryName 
+                    })
+                    .ToListAsync();
 
-                var LHtmlList = "";
-                foreach (var LCountry in CountryList)
-                {
-                    LHtmlList += $"<option value = '{LCountry.Id}'>{LCountry.Name}</option>";
-                }
+                var LHtmlList = CountryList
+                    .Aggregate("", (ACurrent, ACountry) 
+                        => ACurrent + $"<option value = '{ACountry.Id}'>{ACountry.Name}</option>");
 
                 ViewData["CountryList"] = LHtmlList;
                 return Page();           
             }
-            catch (Exception AException) 
+            catch (Exception LException) 
             {
-                FAppLogger.LogFatality(ControllerException.Handle(AException).ErrorDesc);
+                FAppLogger.LogFatality(ControllerException.Handle(LException).ErrorDesc);
                 throw;
             }
         }
