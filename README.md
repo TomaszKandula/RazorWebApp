@@ -2,9 +2,9 @@
 
 Test Razor Pages application being an opposite of the [Unsecure WebApp](https://github.com/TomaszKandula/UnsecureWebApp) that has been written for the sole purpose of the article titled [SQL Injection](https://medium.com/&#64;tomasz.kandula/sql-injection-1bde8bb76ebc) being an extension of another article [I said goodbye to Stored Procedures](https://medium.com/swlh/i-said-goodbye-to-stored-procedures-539d56350486).
 
-The idea behind this Razor Pages application is to build small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should:
+The idea behind this Razor Pages application is to build a small web application using server-side rendering and plain JavaScript for client-side interactions (it uses classes and components). It should:
 
-1. Validate user input: front-end via own code or validate.js (preferable); back-end via model valiation or FluentValidation (preferable).
+1. Validate user input: front-end via own code or validate.js (preferable); back-end via model validation or FluentValidation (preferable).
 1. Use AJAX to perform asynchronous calls to Web API, secured by Anti-Forgery Token.
 1. Provide tests for Razor Pages with Anti-Forgery Token.
 1. Use OR/M (Entity Framework Core) and LINQ instead of ADO.NET with custom SQL strings.
@@ -19,7 +19,7 @@ The idea behind this Razor Pages application is to build small web application u
 1. Vanilla JavaScript with AJAX.
 1. WebPack module bundler.
 
-User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules and each Razor Pages have its own dedicated JavaScript class that add events, perform binding and render buttons component and message box component (it returns HTML for given handle). While this is quite clean, it may not be easy to maintain, such approach usually leads to large overhead and it is not recommended for broader usage.
+User interaction is coded with plain JavaScript, no third party libraries/frameworks used. Code is organized into modules. Each Razor Pages has its own dedicated JavaScript class that adds events, performs binding and render buttons component, and message box component (it returns HTML for given handle). While this is relatively clean, it may not be easy to maintain; such an approach usually leads to significant overhead, and it is not recommended for broader usage.
 
 ### Back-end
 
@@ -28,7 +28,7 @@ User interaction is coded with plain JavaScript, no third party libraries/framew
 
 Unit Tests and Integration Tests are provided using [XUnit](https://github.com/xunit/xunit) and [FluentAssertions](https://github.com/fluentassertions/fluentassertions).
 
-Back-end project is relatively small and therefore it is not split into sub-projects/services.
+The back-end project is relatively small, and therefore it is not split into sub-projects/services.
 
 ## Setting-up the database
 
@@ -43,17 +43,25 @@ Setup the connection string:
 }
 ```
 
-Migrate the database by executing following command:
+Migrate the database by executing the following command:
 
 `Update-Database -StartupProject SecureWebApp -Project SecureWebApp -Context MainDbContext`
 
-EF Core will create database with all necessary tables. Then, to populate Cities and Countries tables with large dataset, use separate [SQL script](https://github.com/TomaszKandula/RazorWebApp/blob/master/CsvData/ImportCsvToDatabase.sql) to import it from local file to your local database.
+Alternatively, in PowerShell: `dotnet ef database update`.
+
+EF Core will create a database with all necessary tables. Then, to populate Cities and Countries tables with a large dataset, use separate [SQL script](https://github.com/TomaszKandula/RazorWebApp/blob/master/CsvData/ImportCsvToDatabase.sql) to import it from local file to your local database.
+
+Note: if you are running an instance of the SQL Express inside the Docker, you must copy CSV files into Docker first. To achieve that:
+1. Check container Ids with the following command: `docker container ls`. Pick the one belonging to your SQL image.
+1. Execute twice for different files:
+- `docker cp /<disk>/RazorWebApp/CsvData/Csv/Cities.csv e1aa71a0cd6b:/Cities.csv`
+- `docker cp /<disk>/RazorWebApp/CsvData/Csv/Countries.csv e1aa71a0cd6b:/Countries.csv`
 
 ## Integration Tests
 
-Focuses on testing HTTP responses (uses Anti-Forgery Token), dependencies and theirs configuration.
+Focuses on testing HTTP responses (uses Anti-Forgery Token), dependencies, and configuration.
 
-Note: due to the fact that we use Razor Pages, before running test, we will require to:
+Note: because we use Razor Pages, before running the test, we will require to:
 
 1. Place `xunit.runner.json` with `{"shadowCopy": false}` in `bin\debug\<TargetFramework>\` folder.
 1. Add to the project file (already commited in this repo):
@@ -73,4 +81,4 @@ More details: [Integration tests with ASP.NET Core causes missing references fro
 
 ## Unit Tests
 
-Covers all the logic used in AJAX controller (note that endpoints does not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked. For mocking [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used. 
+Covers all the logic used in the AJAX controller (note that endpoints do not provide any business logic, they are only responsible for handling requests, validation etc.). All dependencies are mocked for mocking [Moq](https://github.com/moq/moq4) and [MockQueryable.Moq](https://github.com/romantitov/MockQueryable) have been used.
