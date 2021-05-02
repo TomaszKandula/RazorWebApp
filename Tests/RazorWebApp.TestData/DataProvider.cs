@@ -7,7 +7,7 @@ namespace RazorWebApp.TestData
 {   
     public static class DataProvider
     {
-        private static Random FRandom = new Random();
+        private static readonly Random FRandom = new Random();
 
         public static int GetRandomInt(int AMin = 0, int AMax = 12)
             => FRandom.Next(AMin, AMax + 1);
