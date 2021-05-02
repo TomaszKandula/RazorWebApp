@@ -34,7 +34,7 @@ The back-end project is relatively small, and therefore it is not split into sub
 
 Ensure you have package manager installed (npm for `Node.js`). Then, compile front-end scripts located at `.../wwwroot/scripts/`, please open a terminal, and run `npm install` command to download `node_modules`. After that:
 - for development execute: `npm run watch`, 
-- for production, execute: `npm build`.
+- for production, execute: `npm run build`.
 
 ## Setting-up the database
 
