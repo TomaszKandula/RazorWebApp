@@ -23,15 +23,15 @@ export default class LoginPage
         this.AddEvents();
         this.InitErrorCheck();
 
-        this.Dialog  = new MessageBox(this.ModalWindowHandle);
-        this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Dialog = new MessageBox(this.ModalWindowHandle);
+        this.Ajax = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Cookies = new Cookies();
         this.Helpers = new Helpers();
 
-        this.Render_Buttons();
+        this.RenderButtons();
     }
 
-    Render_Buttons()
+    RenderButtons()
     {
         const MoveToRegisterPage = function () 
         { 
@@ -62,9 +62,9 @@ export default class LoginPage
 
     AddEvents()
     {
-        this.SigninButton.addEventListener("click", (Event) => { this.Button_Signin(Event); });
-        this.EmailAddrInput.addEventListener("change", (Event) => { this.Input_EmailAddress(Event); });
-        this.PasswordInput.addEventListener("change", (Event) => { this.Input_Password(Event); });
+        this.SigninButton.addEventListener("click", (Event) => { this.ButtonSignin(Event); });
+        this.EmailAddrInput.addEventListener("change", (Event) => { this.InputEmailAddress(Event); });
+        this.PasswordInput.addEventListener("change", (Event) => { this.InputPassword(Event); });
     }
 
     InitErrorCheck()
@@ -75,7 +75,9 @@ export default class LoginPage
 
     IsDataValid()
     {
-        if (!this.IsValidEmailAddr || !this.IsValidPassword) return false;
+        if (!this.IsValidEmailAddr || !this.IsValidPassword) 
+            return false;
+        
         return true;
     }
 
@@ -97,7 +99,7 @@ export default class LoginPage
         this.ERR_Password.style.visibility = "hidden";
     }
 
-    Input_EmailAddress(Event)
+    InputEmailAddress(Event)
     {
         this.OK_EmailAddress.style.display = "visibility";
         this.ERR_EmailAddress.style.display = "visibility";
@@ -115,7 +117,7 @@ export default class LoginPage
         this.IsValidEmailAddr = false;
     }
 
-    Input_Password(Event)
+    InputPassword(Event)
     {
         if (this.Helpers.IsEmpty(Event.target.value))
         {
@@ -130,7 +132,7 @@ export default class LoginPage
         this.IsValidPassword = true;
     }
 
-    Button_Signin(Event)
+    ButtonSignin(Event)
     {
         if (!this.IsDataValid())
         {
@@ -153,12 +155,12 @@ export default class LoginPage
         this.SigninButton.disabled = true;
 
         let Url = encodeURI(`${window.location.origin}/api/v1/ajax/users/signin/`);
-        this.Ajax.Execute("POST", Url, SerializedPayLoad, this.Signin_Callback.bind(this));
+        this.Ajax.Execute("POST", Url, SerializedPayLoad, this.SigninCallback.bind(this));
 
         return true;
     }
 
-    async Signin_Callback(Response, StatusCode)
+    async SigninCallback(Response, StatusCode)
     {
         this.DisableFields(false);
         this.SigninHandle.classList.remove("is-loading");
@@ -166,16 +168,16 @@ export default class LoginPage
         if (StatusCode === 204)
         {
             /* 
-            * We set cookie to tell our UI that user has been logged, so specific
-            * parts of the UI may be updated. This does not have to be protected 
-            * as it does not affect signin or session itself. This is UI related 
-            * cookie only because we do not have state management in this example.
+            * We set a cookie to tell our UI that the user has been logged, 
+            * so specific parts of the UI may be updated. This cookie does not have to be
+            * protected as it does not affect sign in or the session itself. 
+            * It is UI related cookie only because we do not have state management in this example.
             */
             this.Cookies.SetCookie("user_session", "alive", 0.11, "Strict", null);
 
             /* 
-             * This is demo application and we only redirect to the main page.
-             * However, in real application, one may want to redirect user to another page.
+             * It is a demo application and we only redirect to the main page.
+             * However, in an actual application, one may want to redirect the user to another page.
              * Please note: HttpOnly cookie must be present in the response header.
              */
             window.location.replace(`${window.location.origin}/index`);

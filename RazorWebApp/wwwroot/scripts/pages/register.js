@@ -16,7 +16,8 @@ export default class RegisterPage
 
     Initialize()
     {
-        if (this.Container === null) return null;
+        if (this.Container === null) 
+            return null;
 
         this.BindDom();
         this.AddEvents();
@@ -25,14 +26,14 @@ export default class RegisterPage
         this.CountryListSelect.selectedIndex = 0;
         this.CityListSelect.disabled = true;
 
-        this.Dialog  = new MessageBox(this.ModalWindowHandle);
-        this.Ajax    = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
+        this.Dialog = new MessageBox(this.ModalWindowHandle);
+        this.Ajax = new RestClient(this.Container.dataset.xsrf, "application/json; charset=UTF-8");
         this.Helpers = new Helpers();
 
-        this.Render_Buttons();
+        this.RenderButtons();
     }
 
-    Render_Buttons()
+    RenderButtons()
     {
         const MoveToRegisterPage = function () 
         { 
@@ -93,16 +94,16 @@ export default class RegisterPage
 
     AddEvents()
     {
-        this.FirstNameInput.addEventListener("change", (Event) => { this.Input_FirstName(Event); });
-        this.LastNameInput.addEventListener("change", (Event) => { this.Input_LastName(Event); });
-        this.NicknameInput.addEventListener("change", (Event) => { this.Input_Nickname(Event); });
-        this.PasswordInput.addEventListener("change", (Event) => { this.Input_Password(Event) });
-        this.CountryListSelect.addEventListener("change", (Event) => { this.Select_CountryList(Event); });
-        this.CityListSelect.addEventListener("change", (Event) => { this.Select_CityList(Event); });
-        this.CreateAccountButton.addEventListener("click", (Event) => { this.Button_CreateAccount(Event); });
-        this.EmailAddrInput.onkeyup = (Event) => { this.Input_EmailAddress(Event); };
-        this.TermsLink.addEventListener("click", (Event) => { this.Link_Terms(Event) });
-        this.PrivacyLink.addEventListener("click", (Event) => { this.Link_Privacy(Event) });
+        this.FirstNameInput.addEventListener("change", (Event) => { this.InputFirstName(Event); });
+        this.LastNameInput.addEventListener("change", (Event) => { this.InputLastName(Event); });
+        this.NicknameInput.addEventListener("change", (Event) => { this.InputNickname(Event); });
+        this.PasswordInput.addEventListener("change", (Event) => { this.InputPassword(Event) });
+        this.CountryListSelect.addEventListener("change", (Event) => { this.SelectCountryList(Event); });
+        this.CityListSelect.addEventListener("change", (Event) => { this.SelectCityList(Event); });
+        this.CreateAccountButton.addEventListener("click", (Event) => { this.ButtonCreateAccount(Event); });
+        this.EmailAddrInput.onkeyup = (Event) => { this.InputEmailAddress(Event); };
+        this.TermsLink.addEventListener("click", (Event) => { this.LinkTerms(Event) });
+        this.PrivacyLink.addEventListener("click", (Event) => { this.LinkPrivacy(Event) });
     }
 
     InitErrorCheck()
@@ -181,7 +182,7 @@ export default class RegisterPage
         this.Info_Password.style.visibility = "hidden";
     }
 
-    Input_FirstName(Event)
+    InputFirstName(Event)
     {
         if (this.Helpers.IsEmpty(Event.target.value))
         {
@@ -198,7 +199,7 @@ export default class RegisterPage
         this.IsValidFirstName = true;
     }
 
-    Input_LastName(Event)
+    InputLastName(Event)
     {
         if (this.Helpers.IsEmpty(Event.target.value))
         {
@@ -215,7 +216,7 @@ export default class RegisterPage
         this.IsValidLastName = true;
     }
 
-    Input_Nickname(Event)
+    InputNickname(Event)
     {
         if (this.Helpers.IsEmpty(Event.target.value))
         {
@@ -232,7 +233,7 @@ export default class RegisterPage
         this.IsValidNickname = true;
     }
 
-    Input_EmailAddress(Event)
+    InputEmailAddress(Event)
     {
         let Url = encodeURI(`${window.location.origin}/api/v1/ajax/validation/${Event.target.value}/`);
 
@@ -244,7 +245,7 @@ export default class RegisterPage
 
         if (!this.Helpers.IsEmpty(Event.target.value) && this.Helpers.ValidateEmail(Event.target.value))
         {
-            this.Ajax.Execute("GET", Url, null, this.CheckEmailAddress_Callback.bind(this));
+            this.Ajax.Execute("GET", Url, null, this.CheckEmailAddressCallback.bind(this));
             return void 0;
         }
 
@@ -256,7 +257,7 @@ export default class RegisterPage
         this.IsValidEmailAddress = false;
     }
 
-    CheckEmailAddress_Callback(Response, StatusCode)
+    CheckEmailAddressCallback(Response, StatusCode)
     {
         Handle_EmailAddress.classList.remove("is-loading");
         if (StatusCode === 204)
@@ -286,7 +287,7 @@ export default class RegisterPage
         }
     }
 
-    Input_Password(Event)
+    InputPassword(Event)
     {
         if (!this.Helpers.ValidatePassword(Event.target.value))
         {
@@ -303,14 +304,14 @@ export default class RegisterPage
         this.IsValidPassword = true;
     }
 
-    Select_CountryList(Event)
+    SelectCountryList(Event)
     {
         let Url = encodeURI(`${window.location.origin}/api/v1/ajax/cities/?countryid=${Event.target.value}`);
         this.Handle_CityList.classList.add("is-loading");
-        this.Ajax.Execute("GET", Url, null, this.GetCountryList_Callback.bind(this));
+        this.Ajax.Execute("GET", Url, null, this.GetCountryListCallback.bind(this));
     }
 
-    GetCountryList_Callback(Response, StatusCode)
+    GetCountryListCallback(Response, StatusCode)
     {
         this.Handle_CityList.classList.remove("is-loading");
         const ParsedResponse = JSON.parse(Response);
@@ -342,13 +343,13 @@ export default class RegisterPage
         }
     }
 
-    Select_CityList(Event)
+    SelectCityList(Event)
     {
         if (Event.target.value === "") this.IsValidCityList = false;
             else this.IsValidCityList = true;
     }
 
-    async Link_Terms(Event)  
+    async LinkTerms(Event)  
     {
         const Url = encodeURI(`${window.location.origin}/modals/terms.html`);
         const Response = await fetch(Url);
@@ -369,7 +370,7 @@ export default class RegisterPage
         this.Dialog.Show();
     }
 
-    async Link_Privacy(Event)
+    async LinkPrivacy(Event)
     {
         const Url = encodeURI(`${window.location.origin}/modals/privacy.html`);
         const Response = await fetch(Url);
@@ -390,7 +391,7 @@ export default class RegisterPage
         this.Dialog.Show();
     }
 
-    async Button_CreateAccount(Event)
+    async ButtonCreateAccount(Event)
     {
         if (!this.IsDataValid())
         {
@@ -403,13 +404,13 @@ export default class RegisterPage
 
         let SerializedPayLoad = JSON.stringify(
         {
-            FirstName:    this.FirstNameInput.value,
-            LastName:     this.LastNameInput.value,
-            NickName:     this.NicknameInput.value,
+            FirstName: this.FirstNameInput.value,
+            LastName: this.LastNameInput.value,
+            NickName: this.NicknameInput.value,
             EmailAddress: this.EmailAddrInput.value,
-            Password:     this.PasswordInput.value,
-            CountryId:    Number(this.CountryListSelect.value),
-            CityId:       Number(this.CityListSelect.value)
+            Password: this.PasswordInput.value,
+            CountryId: Number(this.CountryListSelect.value),
+            CityId: Number(this.CityListSelect.value)
         });
 
         this.ClearFields();
@@ -419,20 +420,20 @@ export default class RegisterPage
         this.CreateAccountButton.disabled = true;
 
         let Url = encodeURI(`${window.location.origin}/api/v1/ajax/users/signup/`);
-        this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccount_Callback.bind(this));
+        this.Ajax.Execute("POST", Url, SerializedPayLoad, this.CreateAccountCallback.bind(this));
 
         return true;
     }
 
-    async CreateAccount_Callback(Response, StatusCode)
+    async CreateAccountCallback(Response, StatusCode)
     {
         this.DisableFields(false);
         this.CreateAccountButton.disabled = false;
         this.CreateAccountHandle.classList.remove("is-loading");
         if (StatusCode === 204)
         {
-            /* This is demo application and we only display message to the user.
-             * However, in production, one may want to redirect user to another page. */
+            /* It is demo application and we only display message to the user.
+             * However, in an actual application, one may want to redirect the user to another page. */
             this.Dialog.SetMessageType("AlertSuccess");
             this.Dialog.SetTitle("An account has been created");
             this.Dialog.SetContent("Your account has been created. Please check your email box and follow the instructions to activate the account.");

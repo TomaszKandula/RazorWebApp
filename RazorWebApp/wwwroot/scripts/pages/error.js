@@ -3,8 +3,8 @@
 
 export default class ErrorPage
 {
-    /* This is demo application. You may extend this class to introduce
-    * additional interaction on client side. */
+    /* It is a demo application. You may extend this class to introduce
+    * additional interaction on the client-side. */
     constructor(Container)
     {
         this.Container = Container;
@@ -12,6 +12,7 @@ export default class ErrorPage
 
     Initialize()
     {
-        if (this.Container === null) return null;
+        if (this.Container === null) 
+            return null;
     }
 }
