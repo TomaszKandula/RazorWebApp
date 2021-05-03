@@ -1,11 +1,11 @@
 // Startup module to cache DOM and bind events
 "use strict";
 
-import IndexPage from "./pages";
+import IndexPage from "./pages/index";
 import LoginPage from "./pages/login";
 import LogoutPage from "./pages/logout";
-import RegisterPage from "./pages/Register";
-import ErrorPage from "./pages/Error";
+import RegisterPage from "./pages/register";
+import ErrorPage from "./pages/error";
 
 document.addEventListener('DOMContentLoaded', () =>
 {
